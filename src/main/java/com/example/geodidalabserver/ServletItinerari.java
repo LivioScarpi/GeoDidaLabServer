@@ -109,9 +109,7 @@ public class ServletItinerari extends HttpServlet {
             ps.close();
             con.close();
 
-
             resp.setContentType("application/json");
-// Get the printwriter object from response to write the required json object to the output stream
 
             System.out.println("5");
 
@@ -119,7 +117,6 @@ public class ServletItinerari extends HttpServlet {
 
             System.out.println("6");
 
-// Assuming your json object is **jsonObject**, perform the following, it will return your json object
             out.print(randomId);
 
             System.out.println("7");
@@ -180,7 +177,6 @@ public class ServletItinerari extends HttpServlet {
             System.out.println("4");
 
             resp.setContentType("application/json");
-// Get the printwriter object from response to write the required json object to the output stream
 
             System.out.println("5");
 
@@ -188,7 +184,6 @@ public class ServletItinerari extends HttpServlet {
 
             System.out.println("6");
 
-// Assuming your json object is **jsonObject**, perform the following, it will return your json object
             out.print(jsonItinerario);
 
             System.out.println("7");
@@ -196,8 +191,7 @@ public class ServletItinerari extends HttpServlet {
             out.flush();
 
             System.out.println("8");
-
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

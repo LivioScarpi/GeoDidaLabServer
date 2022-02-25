@@ -22,10 +22,6 @@ public class DatabaseConnection {
                 dbUsername,
                 dbPassword);
 
-        System.out.println("Connection: ");
-
-        System.out.println(con);
-
         return con;
     }
 }

@@ -5,15 +5,6 @@
          version="4.0">
 
     <servlet>
-        <servlet-name>helloServlet</servlet-name>
-        <servlet-class>com.example.geodidalabserver.HelloServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>helloServlet</servlet-name>
-        <url-pattern>/hello-servlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>servletItinerari</servlet-name>
         <servlet-class>com.example.geodidalabserver.ServletItinerari</servlet-class>
     </servlet>

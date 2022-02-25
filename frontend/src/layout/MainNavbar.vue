@@ -7,7 +7,7 @@
   >
     <template>
       <router-link v-popover:popover1 class="navbar-brand text-primary" to="/">
-        <img src="/img/logo.webp" class="img-logo"/>
+        <img src="@/assets/images/logo.webp" class="img-logo"/>
       </router-link>
 
       <!--

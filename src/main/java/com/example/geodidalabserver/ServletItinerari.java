@@ -34,8 +34,6 @@ public class ServletItinerari extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        super.doPost(req, resp);
-
         System.out.println("SONO IN doPost - servletItinerari");
 
         String action = req.getParameter("action");
@@ -111,20 +109,9 @@ public class ServletItinerari extends HttpServlet {
 
             resp.setContentType("application/json");
 
-            System.out.println("5");
-
             PrintWriter out = resp.getWriter();
-
-            System.out.println("6");
-
             out.print(randomId);
-
-            System.out.println("7");
-
             out.flush();
-
-            System.out.println("8");
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,11 +133,7 @@ public class ServletItinerari extends HttpServlet {
 
             ps.setString(1, idItinerario);
 
-            System.out.println("1");
-
             ResultSet results = ps.executeQuery();
-
-            System.out.println("2");
 
             String id = null;
             String jsonItinerario = null;
@@ -169,29 +152,17 @@ public class ServletItinerari extends HttpServlet {
                 System.out.println("Fetching data by column name for row " + results.getRow() + " : " + data);
             }
 
-            System.out.println("3");
-
             // Close all the connections
             ps.close();
             con.close();
-            System.out.println("4");
 
             resp.setContentType("application/json");
 
-            System.out.println("5");
 
             PrintWriter out = resp.getWriter();
-
-            System.out.println("6");
-
             out.print(jsonItinerario);
-
-            System.out.println("7");
-
             out.flush();
 
-            System.out.println("8");
-            
         } catch (Exception e) {
             e.printStackTrace();
         }

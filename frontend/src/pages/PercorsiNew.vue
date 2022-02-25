@@ -14,6 +14,13 @@
       </div>
     </div>
     <div v-if="currentStep === 1">
+
+      <div class="row px-3">
+        <div class="col-12">
+          <h6><b>Tempo a disposizione: </b> {{$store.state.timeAvailable.hour}} ore e {{$store.state.timeAvailable.minutes}} minuti</h6> 
+        </div>
+      </div>
+
       <div class="row px-3">
         <div class="col-lg-2 border-right">
           <h5><b>Menu</b></h5>
@@ -718,7 +725,7 @@
                         <div class="col-10 text-left">
                           {{ it["o:title"] }} ({{
                             item["geo:Titolo_it"][0]["@value"]
-                          }})
+                          }}) (durata {{it["geo:Durata"][0]["@value"]}} minuti)
                         </div>
                       </div>
                     </div>
@@ -837,7 +844,7 @@
                                           </div>
 
                                           <div class="col-5 text-left">
-                                            {{ it["o:title"] }}
+                                            {{ it["o:title"] }} (durata {{it["geo:Durata"][0]["@value"]}} minuti)
                                           </div>
 
                                           <div class="col-6 text-right">

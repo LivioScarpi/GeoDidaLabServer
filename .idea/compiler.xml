@@ -6,11 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="GeoDidaLabServer" />
+        <module name="backend" />
+        <module name="frontend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="GeoDidaLabServer" target="1.8" />
+      <module name="backend" target="1.8" />
+      <module name="frontend" target="11" />
+      <module name="GeoDidaLabServer" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

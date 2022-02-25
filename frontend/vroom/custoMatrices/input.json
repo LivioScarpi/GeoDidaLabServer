@@ -1,0 +1,31 @@
+{
+  "vehicles": [
+    {
+      //profile: "car" per default
+      "id":0,
+      "start_index":0,
+      "end_index":3
+    }
+  ],
+  "jobs": [
+    {
+      "id":1414,
+      "location_index":1
+    },
+    {
+      "id":1515,
+      "location_index":2
+    }
+  ],
+  "matrices": {
+    "car": {    //deve essere lo stesso profilo di uno dei veicoli che sono elencati in vehicles
+      "durations": [    //durations for a custom travel-time matrix that will be used for all checks against timing constraints;
+        [0,2104,197,1299],
+        [2103,0,2255,3152],
+        [197,2256,0,1102],
+        [1299,3153,1102,0]
+      ]
+      //si può definire la matrice costs: for a custom cost matrix that will be used within all route cost evaluations.
+    }
+  }
+}

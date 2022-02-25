@@ -6,53 +6,65 @@
           <card style="border-radius: 13px">
             <div>
               <h4 class="card-title mt-0">Crea un nuovo percorso</h4>
-              <div class="row text-center">
-                <h6 class="col-12">
-                  <b>Seleziona il tempo che hai a disposizione</b>
-                </h6>
-                <div
-                  v-if="!okTimeAvailable"
-                  class="col-12 errorMessage fade-in-text text-center"
-                >
-                  <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
-                </div>
-              </div>
 
-              <div class="row">
-                <div class="col-12">
-                  Hai selezionato di essere disponibile dalle ore
-                  {{ startAvailableTimeValue.HH }} e
-                  {{ startAvailableTimeValue.mm }} alle ore
-                  {{ endAvailableTimeValue.HH }} e
-                  {{ endAvailableTimeValue.mm }}.
-                </div>
-              </div>
+              <n-radio v-model="enabledRadio" label="1">Mattina</n-radio>
+              <n-radio v-model="enabledRadio" label="2">Pomeriggio</n-radio>
+              <n-radio v-model="enabledRadio" label="3"
+                >Tutta la giornata</n-radio
+              >
+              <n-radio v-model="enabledRadio" label="4">
+                Altro (fascia oraria)
+              </n-radio>
 
-              <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
-              <div class="row align-items-center pt-3">
-                <div class="col-12 text-center">
-                  <b>dalle ore</b><br />
-                  <vue-timepicker
-                    v-model="startAvailableTimeValue"
-                    format="HH:mm"
-                  ></vue-timepicker>
+              <div v-if="enabledRadio === '4'">
+                <div class="row text-center mt-4">
+                  <h6 class="col-12">
+                    <b>Seleziona il tempo che hai a disposizione</b>
+                  </h6>
+                  <div
+                    v-if="!okTimeAvailable"
+                    class="col-12 errorMessage fade-in-text text-center"
+                  >
+                    <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+                  </div>
                 </div>
-              </div>
 
-              <div class="row align-items-center pt-3 pb-3">
-                <div class="col-12 text-center">
-                  <b>alle ore</b><br />
-                  <vue-timepicker
-                    v-model="endAvailableTimeValue"
-                    format="HH:mm"
-                  ></vue-timepicker>
+                <div class="row">
+                  <div class="col-12">
+                    Hai selezionato di essere disponibile dalle ore
+                    {{ startAvailableTimeValue.HH }} e
+                    {{ startAvailableTimeValue.mm }} alle ore
+                    {{ endAvailableTimeValue.HH }} e
+                    {{ endAvailableTimeValue.mm }}.
+                  </div>
+                </div>
+
+                <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
+                <div class="row align-items-center pt-3">
+                  <div class="col-12 text-center">
+                    <b>dalle ore</b><br />
+                    <vue-timepicker
+                      v-model="startAvailableTimeValue"
+                      format="HH:mm"
+                    ></vue-timepicker>
+                  </div>
+                </div>
+
+                <div class="row align-items-center pt-3 pb-3">
+                  <div class="col-12 text-center">
+                    <b>alle ore</b><br />
+                    <vue-timepicker
+                      v-model="endAvailableTimeValue"
+                      format="HH:mm"
+                    ></vue-timepicker>
+                  </div>
                 </div>
               </div>
               <Button
                 size="small"
                 type="primary"
                 v-on:click="createPath()"
-                class="mx-1 textButtonColor"
+                class="mx-1 textButtonColor mt-3"
                 >Crea percorso
               </Button>
             </div>
@@ -313,6 +325,8 @@ export default {
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
+
+      enabledRadio: "4",
     };
   },
 
@@ -609,22 +623,12 @@ s
   methods: {
     createPath() {
       console.log("createPath");
-      var hAvailable =
-        this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
-      var minAvailable =
-        this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
 
-      //TODO: remove me
-      //console.log("hAvailable: " + hAvailable + ", minAvailable: " + minAvailable)
-
-      if (hAvailable > 0) {
-        this.okTimeAvailable = true;
-        //this.currentStep++;
-
-        //router.push({ path: "/creapercorso" });
-
-        var timeMinutes = hAvailable * 60 + minAvailable; //converto l'orario inserito in minuti
+      if (this.enabledRadio === "1") {
+        var timeMinutes = 6 * 60; //6 ore in minuti
         var timeAvailable = {
+          hour: 6,
+          minutes: 0,
           milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
         };
 
@@ -632,12 +636,66 @@ s
 
         router.push({
           name: "creapercorso",
-          /*params: {
+        });
+      } else if (this.enabledRadio === "2") {
+        var timeMinutes = 1 * 60; //6 ore in minuti
+        var timeAvailable = {
+          hour: 1,
+          minutes: 0,
+          milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
+        };
+
+        this.$store.state.timeAvailable = timeAvailable;
+
+        router.push({
+          name: "creapercorso",
+        });
+      } else if (this.enabledRadio === "3") {
+        var timeMinutes = 12 * 60; //6 ore in minuti
+        var timeAvailable = {
+          hour: 12,
+          minutes: 0,
+          milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
+        };
+
+        this.$store.state.timeAvailable = timeAvailable;
+
+        router.push({
+          name: "creapercorso",
+        });
+      } else if (this.enabledRadio === "4") {
+        var hAvailable =
+          this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
+        var minAvailable =
+          this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
+
+        //TODO: remove me
+        //console.log("hAvailable: " + hAvailable + ", minAvailable: " + minAvailable)
+
+        if (hAvailable > 0) {
+          this.okTimeAvailable = true;
+          //this.currentStep++;
+
+          //router.push({ path: "/creapercorso" });
+
+          var timeMinutes = hAvailable * 60 + minAvailable; //converto l'orario inserito in minuti
+          var timeAvailable = {
+            hour: hAvailable,
+            minutes: minAvailable,
+            milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
+          };
+
+          this.$store.state.timeAvailable = timeAvailable;
+
+          router.push({
+            name: "creapercorso",
+            /*params: {
             timeAvailable,
           },*/
-        });
-      } else {
-        this.okTimeAvailable = false;
+          });
+        } else {
+          this.okTimeAvailable = false;
+        }
       }
     },
 

@@ -231,8 +231,8 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 8,
-      center: [45.07083355146427, 7.685076212373219],
+      zoom: 16,
+      center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
       geojson: null,
@@ -312,7 +312,7 @@ export default {
       },
       endAvailableTimeValue: {
         HH: "10",
-        mm: "30",
+        mm: "15",
       },
       okCheckedInterestType: true,
       okTimeAvailable: true,
@@ -427,7 +427,7 @@ s
     Common.getElemsByClass(this, 130, (res) => {
       store.state.esperimenti = res.body;
       store.commit("setActivitiesInPOIPivot");
-      store.commit("setAvailableActivitiesInRemainingTime");
+      //store.commit("setAvailableActivitiesInRemainingTime");
 
       store.commit("setAllExpertiseLevels");
       //store.commit('setAllSchoolLevels');
@@ -664,15 +664,33 @@ s
           name: "creapercorso",
         });
       } else if (this.enabledRadio === "4") {
-        var hAvailable =
-          this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
-        var minAvailable =
-          this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
+        var timeStartHourAndMinutes = this.startAvailableTimeValue.HH + ":" + this.startAvailableTimeValue.mm + ":00";
+        var timeEndHourAndMinutes = this.endAvailableTimeValue.HH + ":" + this.endAvailableTimeValue.mm + ":00";
+
+        console.log(timeStartHourAndMinutes);
+        console.log(timeEndHourAndMinutes);
+
+        var timeStart = new Date("Mon Jan 01 2007 " + timeStartHourAndMinutes + " GMT+0530").getTime();
+        var timeEnd = new Date("Mon Jan 01 2007 " + timeEndHourAndMinutes + " GMT+0530").getTime();
+        var hourDiff = timeEnd - timeStart; //in ms
+        var secDiff = hourDiff / 1000; //in s
+        var minDiff = hourDiff / 60 / 1000; //in minutes
+        var hDiff = hourDiff / 3600 / 1000; //in hours
+        var humanReadable = {};
+        humanReadable.hours = Math.floor(hDiff);
+        humanReadable.minutes = minDiff - 60 * humanReadable.hours;
+        console.log(humanReadable); //{hours: 0, minutes: 30}
+        
+        var hAvailable = humanReadable.hours;
+        var minAvailable = humanReadable.minutes;
 
         //TODO: remove me
         //console.log("hAvailable: " + hAvailable + ", minAvailable: " + minAvailable)
 
-        if (hAvailable > 0) {
+        console.log("hAvailable: " + hAvailable);
+        console.log("minAvailable: " + minAvailable);
+
+        if (hAvailable > 0 || minAvailable >= 10) {
           this.okTimeAvailable = true;
           //this.currentStep++;
 

@@ -99,8 +99,36 @@ const store = new Vuex.Store({
             }
         },
 
-        setAvailableActivitiesInRemainingTime(state){
+        setAvailableActivitiesInRemainingTime(state, {activityInItinerary}) {
             state.availableActivitiesInRemainingTime = state.POIpivot;
+
+            console.log("ACTIVITY IN ITINERARY STORE");
+            console.log(activityInItinerary);
+
+            console.log(state.availableActivitiesInRemainingTime);
+            
+            Array.prototype.forEach.call(state.availableActivitiesInRemainingTime, poiPivot => {
+                
+                var hasActivitiesInItinerary = false;
+
+                Array.prototype.forEach.call(poiPivot.mis, attivita => {
+
+                    console.log(attivita);
+
+                    attivita.insertedInItinerary = activityInItinerary.includes(attivita["o:title"]);
+
+                    if(attivita.insertedInItinerary) {
+                        hasActivitiesInItinerary = true;
+                    }
+                })
+
+                poiPivot.hasActivitiesInItinerary = hasActivitiesInItinerary;
+
+            })
+
+            console.log(state.availableActivitiesInRemainingTime);
+
+            console.log("FINE setAvailableActivitiesInRemainingTime");  
         },
 
         setActivitiesInPOIPivot(state) {
@@ -131,7 +159,7 @@ const store = new Vuex.Store({
                     attivita.activityVisibleWithInterestsFilters = true;
                     attivita.activityVisibleWithDifficultiesFilters = true;
 
-                    attivita.durataMillisecondi = attivita["geo:Durata"][0]["@value"]  * 60000; //converto i minuti in millisecondi
+                    attivita.durataMillisecondi = attivita["geo:Durata"][0]["@value"] * 60000; //converto i minuti in millisecondi
                 })
 
                 console.log(misurazioni);
@@ -239,7 +267,7 @@ const store = new Vuex.Store({
                 var poiInItinerario = state.POI.filter(x => x["geo:appartiene_a_itinerario"][0]["display_title"] === itinerario["o:title"]);
 
                 //ordino i POI in base alla loro posizione nell'itinerario
-                poiInItinerario.sort((a,b) => (a["geo:Posizione_itinerario"][0]["@value"] > b["geo:Posizione_itinerario"][0]["@value"]) ? 1 : ((b["geo:Posizione_itinerario"][0]["@value"] > a["geo:Posizione_itinerario"][0]["@value"]) ? -1 : 0))
+                poiInItinerario.sort((a, b) => (a["geo:Posizione_itinerario"][0]["@value"] > b["geo:Posizione_itinerario"][0]["@value"]) ? 1 : ((b["geo:Posizione_itinerario"][0]["@value"] > a["geo:Posizione_itinerario"][0]["@value"]) ? -1 : 0))
 
                 //aggiungo i poi all'itinerario
                 itinerario.poi = poiInItinerario;

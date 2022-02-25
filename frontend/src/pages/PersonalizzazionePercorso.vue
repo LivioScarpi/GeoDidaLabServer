@@ -4,19 +4,29 @@
       <div class="col-12">
         <!--TODO: sistemare pagine e step-->
         <i
-            class="bi bi-arrow-left ml-3"
-            style="font-size: 2rem; color: black; cursor: pointer"
-            v-on:click="goBack()"
+          class="bi bi-arrow-left ml-3"
+          style="font-size: 2rem; color: black; cursor: pointer"
+          v-on:click="goBack()"
         ></i>
         <h4 class="text-center mt-0">
           <b>{{ stepTitle[currentStep].pageTitle }}</b>
           {{ $store.state.timeAvailable.milliseconds }} -
-          {{ itinerario.totalTimeMilliseconds }} ; tempo rimanente:
+          {{ totalTimeMillisecondsItinerario }} ; tempo rimanente:
           {{ remainingTime }}
         </h4>
       </div>
     </div>
     <div v-if="currentStep === 1">
+      <div class="row px-3">
+        <div class="col-12">
+          <h6>
+            <b>Tempo a disposizione: </b>
+            {{ $store.state.timeAvailable.hour }} ore e
+            {{ $store.state.timeAvailable.minutes }} minuti
+          </h6>
+        </div>
+      </div>
+
       <div class="row px-3">
         <div class="col-lg-2 border-right">
           <div class="row">
@@ -25,37 +35,44 @@
               <!--<i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i>-->
               <div v-if="someActivitiesSelected" class="mb-4">
                 <div
-                    v-for="(item, index) in this.itinerario.poi"
-                    :key="'availableActivitiesPOI' + (index + 200)"
+                  v-for="(item, index) in this.filteredPOI"
+                  :key="'availableActivitiesPOI' + (index + 200)"
                 >
                   <div
-                      v-for="(it, ind) in item.activitiesInPOI"
-                      :key="'availableActivities' + (ind + 200)"
-                      class="pl-2"
+                    v-for="(it, ind) in item.mis"
+                    :key="'availableActivities' + (ind + 200)"
+                    class="pl-2"
                   >
                     <div
-                        v-if="
+                      v-if="
                         item.poiName !== 'Punto di partenza' &&
-                        item.poiName !== 'Punto di arrivo'
+                        item.poiName !== 'Punto di arrivo' &&
+                        it.insertedInItinerary
                       "
                     >
                       <!-- v-if="it.selected"-->
                       <div class="row border-bottom py-2 mr-1">
                         <div class="col-2">
                           <i
-                              class="bi bi-trash"
-                              style="
+                            class="bi bi-trash"
+                            style="
                               cursor: pointer;
                               color: indianred;
                               font-size: 1.2rem;
                             "
-                              @click="
-                              changeSelection(item.poiName, it.activityName)
+                            @click="
+                              changeSelection(
+                                item['geo:Titolo_it'][0]['@value'],
+                                it['o:title']
+                              )
                             "
                           ></i>
                         </div>
                         <div class="col-10 text-left">
-                          {{ it.activityName }} ({{ item.poiName }})
+                          {{ it["o:title"] }} ({{
+                            item["geo:Titolo_it"][0]["@value"]
+                          }}) (durata
+                          {{ it["geo:Durata"][0]["@value"] }} minuti)
                         </div>
                       </div>
                     </div>
@@ -76,7 +93,7 @@
                     <div class="col-12">
                       <h5 class="mt-0">
                         <b
-                        >Elenco dei luoghi e delle attività che puoi
+                          >Elenco dei luoghi e delle attività che puoi
                           aggiungere</b
                         >
                       </h5>
@@ -84,8 +101,8 @@
                       <div>
                         <div v-if="somePOIVisible">
                           <div
-                              v-for="(item, index) in this.filteredPOI"
-                              :key="'filteredPOI' + (index + 300)"
+                            v-for="(item, index) in this.filteredPOI"
+                            :key="'filteredPOI' + (index + 300)"
                           >
                             <collapse v-if="item.poiVisibleWithFilters">
                               <!--
@@ -95,29 +112,31 @@
                               -->
 
                               <collapse-item
-                                  :title="item['geo:Titolo_it'][0]['@value']"
-                                  name="1"
-                                  class="test"
-                                  style="color: black"
+                                :title="item['geo:Titolo_it'][0]['@value']"
+                                name="1"
+                                class="test"
+                                style="color: black"
                               >
                                 <div v-if="item['mis'].length > 0">
                                   <!--questo v-if non ha molto senso: il POI non viene proprio mostrato se non ci sono attività visibili-->
                                   <div v-if="item.poiVisibleWithFilters">
                                     <div
-                                        v-for="(it, ind) in item.mis"
-                                        :key="
+                                      v-for="(it, ind) in item.mis"
+                                      :key="
                                         'filteredPOIactivities' + (ind + 300)
                                       "
-                                        class="pl-3"
+                                      class="pl-3"
                                     >
                                       <div
-                                          v-if="
-                                          it.activityVisibleWithDifficultiesFilters &&
-                                          it.activityVisibleWithInterestsFilters
+                                        v-if="
+                                          !it.insertedInItinerary &&
+                                          it['geo:Durata'][0]['@value'] *
+                                            60000 <
+                                            remainingTime
                                         "
                                       >
                                         <div
-                                            class="
+                                          class="
                                             row
                                             mt-0
                                             border-bottom
@@ -127,21 +146,17 @@
                                           "
                                         >
                                           <div class="col-1">
-                                            <div v-if="it.selected">
-                                              <!--<Button size="small" type="primary" round
-                                                      v-on:click="changeSelection(item['geo:Titolo_it'][0]['@value'], it['o:title'])"
-                                                      class="buttonAlignRight m-2">Deseleziona
-                                              </Button>-->
+                                            <!--<div v-if="it.selected">
                                               <i
-                                                  class="
+                                                class="
                                                   bi bi-bookmark-check-fill
                                                 "
-                                                  style="
+                                                style="
                                                   font-size: 1.3rem;
                                                   color: cornflowerblue;
                                                   cursor: pointer;
                                                 "
-                                                  v-on:click="
+                                                v-on:click="
                                                   changeSelection(
                                                     item['geo:Titolo_it'][0][
                                                       '@value'
@@ -150,21 +165,16 @@
                                                   )
                                                 "
                                               ></i>
-                                            </div>
-                                            <div v-else>
-                                              <!--
-                                              <Button size="small" type="primary" round
-                                                      v-on:click="changeSelection(item['geo:Titolo_it'][0]['@value'], it['o:title'])"
-                                                      class="buttonAlignRight m-2">Seleziona
-                                              </Button>-->
+                                            </div>-->
+                                            <div>
                                               <i
-                                                  class="bi bi-bookmark-check"
-                                                  style="
+                                                class="bi bi-bookmark-check"
+                                                style="
                                                   font-size: 1.3rem;
                                                   color: cornflowerblue;
                                                   cursor: pointer;
                                                 "
-                                                  v-on:click="
+                                                v-on:click="
                                                   changeSelection(
                                                     item['geo:Titolo_it'][0][
                                                       '@value'
@@ -177,42 +187,44 @@
                                           </div>
 
                                           <div class="col-5 text-left">
-                                            {{ it["o:title"] }}
+                                            {{ it["o:title"] }} (durata
+                                            {{ it["geo:Durata"][0]["@value"] }}
+                                            minuti)
                                           </div>
 
                                           <div class="col-6 text-right">
                                             <!--TODO: sistemare la key-->
 
                                             <ul
-                                                id="difficultiesLevelIcons"
-                                                class="ulDiffIcons"
+                                              id="difficultiesLevelIcons"
+                                              class="ulDiffIcons"
                                             >
                                               <li
-                                                  v-for="(
+                                                v-for="(
                                                   difficulty, index
                                                 ) in it['geo:ha_difficolta']"
-                                                  :key="
+                                                :key="
                                                   'geo:ha_difficolta' + index
                                                 "
-                                                  class="difficultiesLevelsIcons"
+                                                class="difficultiesLevelsIcons"
                                               >
                                                 <svg
-                                                    v-if="
+                                                  v-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] ===
                                                     'Scuola dell\'Infanzia'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="30px"
-                                                    height="29px"
-                                                    viewBox="0 0 50 29"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="30px"
+                                                  height="29px"
+                                                  viewBox="0 0 50 29"
+                                                  version="1.1"
                                                 >
                                                   <g id="scuolaDellInfanzia">
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
                                                         fill: rgb(0, 0, 0);
                                                         fill-opacity: 1;
@@ -223,13 +235,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -238,13 +250,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -253,13 +265,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -268,13 +280,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -283,30 +295,30 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                   </g>
                                                 </svg>
 
                                                 <svg
-                                                    v-else-if="
+                                                  v-else-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] === 'Scuola Primaria'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="30px"
-                                                    height="29px"
-                                                    viewBox="0 0 50 29"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="30px"
+                                                  height="29px"
+                                                  viewBox="0 0 50 29"
+                                                  version="1.1"
                                                 >
                                                   <g id="scuolaPrimaria">
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 3;
                                                         stroke-linecap: butt;
@@ -315,11 +327,11 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
                                                         fill: #000000;
                                                         fill-opacity: 1;
@@ -330,13 +342,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -345,13 +357,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -360,13 +372,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -375,33 +387,33 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                   </g>
                                                 </svg>
 
                                                 <svg
-                                                    v-else-if="
+                                                  v-else-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] ===
                                                     'Scuola Secondaria di Primo Grado'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="30px"
-                                                    height="29px"
-                                                    viewBox="0 0 50 29"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="30px"
+                                                  height="29px"
+                                                  viewBox="0 0 50 29"
+                                                  version="1.1"
                                                 >
                                                   <g
-                                                      id="scuolaSecondariaDiPrimoGrado"
+                                                    id="scuolaSecondariaDiPrimoGrado"
                                                   >
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 3;
                                                         stroke-linecap: butt;
@@ -410,13 +422,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -425,11 +437,11 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
                                                         fill: #000000;
                                                         fill-opacity: 1;
@@ -440,13 +452,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -455,13 +467,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -470,33 +482,33 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                   </g>
                                                 </svg>
 
                                                 <svg
-                                                    v-else-if="
+                                                  v-else-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] ===
                                                     'Scuola Secondaria di Secondo Grado'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="30px"
-                                                    height="29px"
-                                                    viewBox="0 0 50 29"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="30px"
+                                                  height="29px"
+                                                  viewBox="0 0 50 29"
+                                                  version="1.1"
                                                 >
                                                   <g
-                                                      id="scuolaSecondariaDiSecondoGrado"
+                                                    id="scuolaSecondariaDiSecondoGrado"
                                                   >
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 3;
                                                         stroke-linecap: butt;
@@ -505,13 +517,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -520,13 +532,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -535,11 +547,11 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
                                                         fill: #000000;
                                                         fill-opacity: 1;
@@ -550,13 +562,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -565,30 +577,30 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                   </g>
                                                 </svg>
 
                                                 <svg
-                                                    v-else-if="
+                                                  v-else-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] === 'Università'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="30px"
-                                                    height="29px"
-                                                    viewBox="0 0 50 29"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="30px"
+                                                  height="29px"
+                                                  viewBox="0 0 50 29"
+                                                  version="1.1"
                                                 >
                                                   <g id="Universita">
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 3;
                                                         stroke-linecap: butt;
@@ -597,13 +609,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 15.011734 156.007543 L 66.992254 156.007543 L 66.992254 185.991379 L 15.011734 185.991379 Z M 15.011734 156.007543 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -612,13 +624,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 78.011797 126.993534 L 129.992317 126.993534 L 129.992317 185.991379 L 78.011797 185.991379 Z M 78.011797 126.993534 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -627,13 +639,13 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 143.992331 98.006466 L 196.000196 98.006466 L 196.000196 184.994612 L 143.992331 184.994612 Z M 143.992331 98.006466 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
-                                                        fill: #FFFFFF;
+                                                        fill: #ffffff;
                                                         fill-opacity: 1;
                                                         stroke-width: 6;
                                                         stroke-linecap: butt;
@@ -642,11 +654,11 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 211.01193 65.005388 L 262.99245 65.005388 L 262.99245 183.997845 L 211.01193 183.997845 Z M 211.01193 65.005388 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         fill-rule: nonzero;
                                                         fill: #000000;
                                                         fill-opacity: 1;
@@ -657,106 +669,106 @@
                                                         stroke-opacity: 1;
                                                         stroke-miterlimit: 4;
                                                       "
-                                                        d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
-                                                        transform="matrix(0.142857,0,0,0.145,0,0)"
+                                                      d="M 278.98856 18.992457 L 330.996425 18.992457 L 330.996425 182.00431 L 278.98856 182.00431 Z M 278.98856 18.992457 "
+                                                      transform="matrix(0.142857,0,0,0.145,0,0)"
                                                     />
                                                   </g>
                                                 </svg>
 
                                                 <svg
-                                                    v-else-if="
+                                                  v-else-if="
                                                     difficulty[
                                                       'display_title'
                                                     ] === 'Per Tutti'
                                                   "
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="23px"
-                                                    height="50px"
-                                                    viewBox="0 5 55 40"
-                                                    version="1.1"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                  width="23px"
+                                                  height="50px"
+                                                  viewBox="0 5 55 40"
+                                                  version="1.1"
                                                 >
                                                   <g id="perTutti">
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 15.78125 4.140625 C 12.1875 7.96875 15 14.84375 20.078125 14.84375 C 25.625 14.765625 28.515625 8.125 24.609375 4.296875 C 22.109375 1.71875 18.125 1.640625 15.78125 4.140625 Z M 15.78125 4.140625 "
+                                                      d="M 15.78125 4.140625 C 12.1875 7.96875 15 14.84375 20.078125 14.84375 C 25.625 14.765625 28.515625 8.125 24.609375 4.296875 C 22.109375 1.71875 18.125 1.640625 15.78125 4.140625 Z M 15.78125 4.140625 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 38.28125 8.359375 C 36.25 9.140625 34.375 11.09375 34.375 12.578125 C 34.375 13.359375 35.15625 15.15625 36.171875 16.71875 C 37.5 18.90625 38.4375 19.453125 40.3125 19.53125 C 46.796875 19.609375 47.421875 10 41.015625 8.359375 C 40.15625 8.125 38.90625 8.125 38.28125 8.359375 Z M 38.28125 8.359375 "
+                                                      d="M 38.28125 8.359375 C 36.25 9.140625 34.375 11.09375 34.375 12.578125 C 34.375 13.359375 35.15625 15.15625 36.171875 16.71875 C 37.5 18.90625 38.4375 19.453125 40.3125 19.53125 C 46.796875 19.609375 47.421875 10 41.015625 8.359375 C 40.15625 8.125 38.90625 8.125 38.28125 8.359375 Z M 38.28125 8.359375 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 6.875 15.15625 C 4.6875 16.796875 3.90625 19.6875 5.078125 22.34375 C 6.953125 26.796875 11.5625 27.109375 13.984375 22.96875 C 16.171875 19.296875 16.015625 17.65625 13.59375 15.703125 C 11.25 13.828125 8.828125 13.671875 6.875 15.15625 Z M 6.875 15.15625 "
+                                                      d="M 6.875 15.15625 C 4.6875 16.796875 3.90625 19.6875 5.078125 22.34375 C 6.953125 26.796875 11.5625 27.109375 13.984375 22.96875 C 16.171875 19.296875 16.015625 17.65625 13.59375 15.703125 C 11.25 13.828125 8.828125 13.671875 6.875 15.15625 Z M 6.875 15.15625 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 27.109375 14.921875 C 26.328125 15.390625 25.3125 16.640625 24.921875 17.734375 C 24.296875 19.375 24.453125 20.078125 25.625 21.40625 C 26.484375 22.34375 27.34375 23.671875 27.578125 24.375 C 28.28125 26.25 31.328125 26.171875 33.90625 24.140625 C 39.296875 19.921875 33.125 11.40625 27.109375 14.921875 Z M 27.109375 14.921875 "
+                                                      d="M 27.109375 14.921875 C 26.328125 15.390625 25.3125 16.640625 24.921875 17.734375 C 24.296875 19.375 24.453125 20.078125 25.625 21.40625 C 26.484375 22.34375 27.34375 23.671875 27.578125 24.375 C 28.28125 26.25 31.328125 26.171875 33.90625 24.140625 C 39.296875 19.921875 33.125 11.40625 27.109375 14.921875 Z M 27.109375 14.921875 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 16.484375 17.421875 C 17.1875 18.90625 17.734375 19.140625 20.15625 18.90625 C 22.8125 18.59375 24.140625 17.65625 24.21875 16.171875 C 24.21875 15.859375 22.265625 15.625 19.921875 15.625 C 15.78125 15.625 15.703125 15.703125 16.484375 17.421875 Z M 16.484375 17.421875 "
+                                                      d="M 16.484375 17.421875 C 17.1875 18.90625 17.734375 19.140625 20.15625 18.90625 C 22.8125 18.59375 24.140625 17.65625 24.21875 16.171875 C 24.21875 15.859375 22.265625 15.625 19.921875 15.625 C 15.78125 15.625 15.703125 15.703125 16.484375 17.421875 Z M 16.484375 17.421875 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 16.5625 21.875 C 14.140625 24.140625 14.21875 28.28125 16.796875 30.3125 L 18.671875 31.796875 L 15.546875 33.046875 C 12.03125 34.453125 10.15625 37.8125 10.15625 42.890625 C 10.15625 45.9375 10.3125 46.09375 13.515625 46.953125 C 16.875 47.8125 27.890625 47.578125 29.53125 46.5625 C 30.078125 46.25 30.46875 44.21875 30.46875 41.796875 C 30.46875 36.796875 28.125 33.359375 24.0625 32.421875 C 21.5625 31.953125 21.5625 31.875 23.203125 31.09375 C 25.390625 30 26.71875 26.328125 25.78125 23.828125 C 24.375 20.234375 19.53125 19.140625 16.5625 21.875 Z M 16.5625 21.875 "
+                                                      d="M 16.5625 21.875 C 14.140625 24.140625 14.21875 28.28125 16.796875 30.3125 L 18.671875 31.796875 L 15.546875 33.046875 C 12.03125 34.453125 10.15625 37.8125 10.15625 42.890625 C 10.15625 45.9375 10.3125 46.09375 13.515625 46.953125 C 16.875 47.8125 27.890625 47.578125 29.53125 46.5625 C 30.078125 46.25 30.46875 44.21875 30.46875 41.796875 C 30.46875 36.796875 28.125 33.359375 24.0625 32.421875 C 21.5625 31.953125 21.5625 31.875 23.203125 31.09375 C 25.390625 30 26.71875 26.328125 25.78125 23.828125 C 24.375 20.234375 19.53125 19.140625 16.5625 21.875 Z M 16.5625 21.875 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 36.484375 22.96875 C 35.3125 25.546875 35.3125 25.703125 36.71875 26.171875 C 38.984375 26.875 41.40625 30.703125 41.40625 33.515625 C 41.40625 36.25 41.640625 36.328125 46.5625 35.078125 L 50 34.21875 L 50 30.390625 C 50 23.515625 47.03125 20.3125 40.78125 20.3125 C 38.125 20.3125 37.65625 20.625 36.484375 22.96875 Z M 36.484375 22.96875 "
+                                                      d="M 36.484375 22.96875 C 35.3125 25.546875 35.3125 25.703125 36.71875 26.171875 C 38.984375 26.875 41.40625 30.703125 41.40625 33.515625 C 41.40625 36.25 41.640625 36.328125 46.5625 35.078125 L 50 34.21875 L 50 30.390625 C 50 23.515625 47.03125 20.3125 40.78125 20.3125 C 38.125 20.3125 37.65625 20.625 36.484375 22.96875 Z M 36.484375 22.96875 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 2.65625 28.359375 C 0.859375 29.921875 0.46875 31.015625 0.15625 34.921875 C 0 37.734375 0.15625 39.84375 0.625 40.15625 C 1.09375 40.390625 3.046875 40.859375 4.921875 41.09375 L 8.515625 41.640625 L 9.375 38.359375 C 10.234375 35.15625 12.109375 32.578125 14.0625 31.875 C 14.921875 31.640625 14.921875 31.09375 13.984375 29.0625 C 12.96875 26.71875 12.65625 26.5625 8.828125 26.5625 C 5.703125 26.5625 4.296875 26.953125 2.65625 28.359375 Z M 2.65625 28.359375 "
+                                                      d="M 2.65625 28.359375 C 0.859375 29.921875 0.46875 31.015625 0.15625 34.921875 C 0 37.734375 0.15625 39.84375 0.625 40.15625 C 1.09375 40.390625 3.046875 40.859375 4.921875 41.09375 L 8.515625 41.640625 L 9.375 38.359375 C 10.234375 35.15625 12.109375 32.578125 14.0625 31.875 C 14.921875 31.640625 14.921875 31.09375 13.984375 29.0625 C 12.96875 26.71875 12.65625 26.5625 8.828125 26.5625 C 5.703125 26.5625 4.296875 26.953125 2.65625 28.359375 Z M 2.65625 28.359375 "
                                                     />
                                                     <path
-                                                        style="
+                                                      style="
                                                         stroke: none;
                                                         fill-rule: nonzero;
                                                         fill: rgb(0%, 0%, 0%);
                                                         fill-opacity: 1;
                                                       "
-                                                        d="M 27.109375 27.890625 C 26.953125 28.671875 26.484375 29.921875 26.171875 30.625 C 25.78125 31.640625 26.015625 32.03125 26.796875 32.03125 C 28.515625 32.03125 31.09375 35.625 31.71875 38.75 C 32.109375 41.015625 32.5 41.40625 34.375 41.40625 C 38.515625 41.40625 40.625 40.078125 40.625 37.578125 C 40.625 33.4375 39.6875 30.546875 37.65625 28.515625 C 36.09375 26.953125 35 26.5625 31.640625 26.5625 C 28.359375 26.5625 27.421875 26.875 27.109375 27.890625 Z M 27.109375 27.890625 "
+                                                      d="M 27.109375 27.890625 C 26.953125 28.671875 26.484375 29.921875 26.171875 30.625 C 25.78125 31.640625 26.015625 32.03125 26.796875 32.03125 C 28.515625 32.03125 31.09375 35.625 31.71875 38.75 C 32.109375 41.015625 32.5 41.40625 34.375 41.40625 C 38.515625 41.40625 40.625 40.078125 40.625 37.578125 C 40.625 33.4375 39.6875 30.546875 37.65625 28.515625 C 36.09375 26.953125 35 26.5625 31.640625 26.5625 C 28.359375 26.5625 27.421875 26.875 27.109375 27.890625 Z M 27.109375 27.890625 "
                                                     />
                                                   </g>
                                                 </svg>
@@ -809,26 +821,26 @@
                     <div class="col-lg-12">
                       <div class="px-4">
                         <l-map
-                            style="height: 500px"
-                            :zoom="zoom"
-                            :center="center"
+                          style="height: 500px"
+                          :zoom="zoom"
+                          :center="center"
                         >
                           <l-tile-layer
-                              :url="url"
-                              :attribution="attribution"
+                            :url="url"
+                            :attribution="attribution"
                           ></l-tile-layer>
                           <l-marker
-                              v-for="(marker, index) in markers"
-                              :lat-lng="marker.marker.getLatLng()"
-                              :key="'marker' + index"
+                            v-for="(marker, index) in markers"
+                            :lat-lng="marker.marker.getLatLng()"
+                            :key="'marker' + index"
                           >
                             <l-icon
-                                v-if="marker.poiSelected"
-                                :icon-url="require('../icons/selectedPOI.png')"
+                              v-if="marker.poiSelected"
+                              :icon-url="require('../icons/selectedPOI.png')"
                             ></l-icon>
                             <l-icon
-                                v-if="!marker.poiSelected"
-                                :icon-url="require('../icons/unselectedPOI.png')"
+                              v-if="!marker.poiSelected"
+                              :icon-url="require('../icons/unselectedPOI.png')"
                             ></l-icon>
                             <l-popup :options="anchorOptions">
                               <div class="px-3">
@@ -840,9 +852,9 @@
                           </l-marker>
 
                           <l-circle-marker
-                              :lat-lng="circle.center"
-                              :radius="circle.radius"
-                              :color="circle.color"
+                            :lat-lng="circle.center"
+                            :radius="circle.radius"
+                            :color="circle.color"
                           >
                             <l-popup>Tu sei qui!</l-popup>
                           </l-circle-marker>
@@ -851,15 +863,15 @@
                             <div class="legend">
                               <h4>Legenda</h4>
                               <i style="background: #e35747"></i
-                              ><span>Luogo selezionato</span><br/>
+                              ><span>Luogo selezionato</span><br />
                               <i style="background: #437fc5"></i
-                              ><span>Luogo non selezionato</span><br/>
+                              ><span>Luogo non selezionato</span><br />
                             </div>
                           </l-control>
 
                           <l-polyline
-                              :lat-lngs="markersPolylines"
-                              color="red"
+                            :lat-lngs="markersPolylines"
+                            color="red"
                           ></l-polyline>
                           <l-geo-json :geojson="geojson"></l-geo-json>
                         </l-map>
@@ -875,8 +887,8 @@
 
       <div class="row">
         <div
-            v-if="!okTimeAvailable"
-            class="col-12 errorMessage fade-in-text text-center"
+          v-if="!okTimeAvailable"
+          class="col-12 errorMessage fade-in-text text-center"
         >
           <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
         </div>
@@ -886,22 +898,22 @@
     <div class="row pt-3">
       <div class="col-12">
         <Button
-            v-if="currentStep >= 1"
-            size="large"
-            type="primary"
-            round
-            v-on:click="incrementStep()"
-            class="buttonAlignRight m-2 textButtonColor"
-        >Avanti
+          v-if="currentStep >= 1"
+          size="large"
+          type="primary"
+          round
+          v-on:click="incrementStep()"
+          class="buttonAlignRight m-2 textButtonColor"
+          >Avanti
         </Button>
         <Button
-            v-if="currentStep >= 1"
-            size="large"
-            type="warning"
-            round
-            v-on:click="goBack()"
-            class="buttonAlignLeft m-2 textButtonColor"
-        >Indietro
+          v-if="currentStep >= 1"
+          size="large"
+          type="warning"
+          round
+          v-on:click="goBack()"
+          class="buttonAlignLeft m-2 textButtonColor"
+          >Indietro
         </Button>
       </div>
     </div>
@@ -920,7 +932,7 @@ import {
   LControl,
   LPolyline,
 } from "vue2-leaflet";
-import {Button} from "element-ui";
+import { Button } from "element-ui";
 import {
   Checkbox,
   Collapse,
@@ -974,9 +986,9 @@ export default {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
-          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 8,
-      center: [45.07083355146427, 7.685076212373219],
+        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 16,
+      center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
       geojson: null,
@@ -1009,7 +1021,7 @@ export default {
           pageTitle: "Seleziona il tempo che hai a disposizione",
         },
         */
-        {pageNumber: 1, pageTitle: "Personalizzazione percorso"},
+        { pageNumber: 1, pageTitle: "Personalizzazione percorso" },
       ],
       startAvailableTimeValue: {
         //oggetto contenente il l'ora di inizio di disponibilità
@@ -1103,7 +1115,7 @@ export default {
         },
       ],
 
-      anchorOptions: {offset: L.point(0, -30)},
+      anchorOptions: { offset: L.point(0, -30) },
 
       //DATI NUOVI
       itinerario: null,
@@ -1115,6 +1127,39 @@ export default {
     console.log(this.$route);
     console.log(this.$store.state.timeAvailable.milliseconds);
 
+    console.log(this.$store.state.itinerarioInCreazione);
+
+    var activitiesInItinerary = []; //this.$store.state.itinerarioInCreazione.poi.map(poi => poi.poiName);
+
+    Array.prototype.forEach.call(
+      this.$store.state.itinerarioInCreazione.poi,
+      (poi) => {
+        Array.prototype.forEach.call(poi.activitiesInPOI, (activity) => {
+          activitiesInItinerary.push(activity.activityName);
+        });
+      }
+    );
+
+    console.log(activitiesInItinerary);
+
+    /*
+    store.commit("setAvailableActivitiesInRemainingTime", {
+      activitiesInItinerary,
+    });
+    */
+
+    this.$store.commit("setAvailableActivitiesInRemainingTime", {
+      activityInItinerary: activitiesInItinerary,
+    });
+
+    console.log("STAMPA DOPO IL COMMIT NELLO STORE");
+    console.log(this.$store.state.availableActivitiesInRemainingTime);
+
+    this.filteredPOI = store.state.availableActivitiesInRemainingTime;
+    console.log("availableActivitiesInRemainingTime");
+
+    console.log(this.filteredPOI);
+
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();
 
@@ -1123,20 +1168,20 @@ export default {
     //console.log("this.selectedInterests.length : " + this.selectedInterests.length);
 
     this.selectAllDifficulties =
-        this.$store.state.expertiseLevels
-            .filter((expLevel) => expLevel.expertiseLevelSelected)
-            .map((expLevel) => expLevel.expertiseLevelName).length ==
-        this.allDifficulties.length
-            ? true
-            : false;
+      this.$store.state.expertiseLevels
+        .filter((expLevel) => expLevel.expertiseLevelSelected)
+        .map((expLevel) => expLevel.expertiseLevelName).length ==
+      this.allDifficulties.length
+        ? true
+        : false;
 
     this.selectAllInterests =
-        this.$store.state.interests
-            .filter((interest) => interest.interestSelected)
-            .map((interest) => interest.interestName).length ==
-        this.allInterests.length
-            ? true
-            : false;
+      this.$store.state.interests
+        .filter((interest) => interest.interestSelected)
+        .map((interest) => interest.interestName).length ==
+      this.allInterests.length
+        ? true
+        : false;
 
     this.startInterests = false;
   },
@@ -1157,11 +1202,6 @@ export default {
 
     console.log("THIS ITINERARIO");
     console.log(this.itinerario);
-
-    this.filteredPOI = store.state.availableActivitiesInRemainingTime;
-    console.log("availableActivitiesInRemainingTime");
-
-    console.log(this.filteredPOI);
 
     /*
     Common.getElemsByClass(this, 121, (res) => {
@@ -1249,9 +1289,9 @@ export default {
     createPath() {
       console.log("createPath");
       var hAvailable =
-          this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
+        this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
       var minAvailable =
-          this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
+        this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
 
       //TODO: remove me
       //console.log("hAvailable: " + hAvailable + ", minAvailable: " + minAvailable)
@@ -1289,7 +1329,7 @@ export default {
     incrementStep() {
       console.log(this.$route);
       console.log(
-          "timeAvailable milliseconds: " +
+        "timeAvailable milliseconds: " +
           this.$store.state.timeAvailable.milliseconds
       );
 
@@ -1328,7 +1368,7 @@ export default {
 
       //oggetto contenente i POI con delle attività selezionate
       var poiWithSelectedActivities = this.filteredPOI.filter(
-          (poi) => poi.poiHasActivitiesSelected
+        (poi) => poi.poiHasActivitiesSelected
       );
 
       //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
@@ -1351,7 +1391,7 @@ export default {
       //creo i jobs per l'oggetto VROOM
       Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
         var activitiesSelected = poi.mis.filter(
-            (activity) => activity.selected
+          (activity) => activity.selected
         );
 
         console.log("activitiesSelected");
@@ -1359,7 +1399,7 @@ export default {
 
         console.log(poi["geo:Titolo_it"][0]["@value"]);
         var poiIDObject = this.idsOfPOI.filter(
-            (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
+          (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
         );
 
         console.log(poiIDObject[0]);
@@ -1368,7 +1408,7 @@ export default {
           var job = {
             id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
             description:
-                poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
+              poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
             service: this.getMilliseconds(activity["geo:Durata"][0]["@value"]),
             location: [
               poi.marker["o-module-mapping:lng"],
@@ -1430,14 +1470,18 @@ export default {
     */
 
     createMarkerArray() {
-      Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
-        console.log(poi);
-        var POIlat = poi["location"][1];
-        var POIlng = poi["location"][0];
+      this.markersPolylines = [];
 
-        var POIcoordinates = [POIlat, POIlng];
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        if (poi.hasActivitiesInItinerary) {
+          console.log(poi);
+          var POIlat = poi.marker["o-module-mapping:lat"];
+          var POIlng = poi.marker["o-module-mapping:lng"];
 
-        this.markersPolylines.push(POIcoordinates);
+          var POIcoordinates = [POIlat, POIlng];
+
+          this.markersPolylines.push(POIcoordinates);
+        }
       });
 
       console.log(this.markersPolylines);
@@ -1446,14 +1490,19 @@ export default {
     initializeMarkersOfFilteredPOI() {
       this.markers = [];
 
-      Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        //if (poi.hasActivitiesInItinerary) {
         this.markers.push({
-          marker: L.marker([poi["location"][1], poi["location"][0]]),
+          marker: L.marker([
+            poi.marker["o-module-mapping:lat"],
+            poi.marker["o-module-mapping:lng"],
+          ]),
           color: "#1585bd",
           strokeColor: "#1b4f88",
           circleColor: "#ffffff",
           POItitle: poi.poiName,
         });
+        //}
       });
 
       this.markersCreated = true;
@@ -1466,15 +1515,18 @@ export default {
       var tmpFilteredPOI = this.filteredPOI;
 
       Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+        console.log("NOME: " + poi["geo:Titolo_it"][0]["@value"]);
+        console.log("POI NAME: " + poiName);
+
         if (poi["geo:Titolo_it"][0]["@value"] === poiName) {
           //TODO: remove me
-          //console.log("POI TROVATO");
+          console.log("POI TROVATO");
           Array.prototype.forEach.call(poi.mis, (activity) => {
             //TODO: remove me
-            //console.log("ACTIVITY TROVATA");
+            console.log("ACTIVITY TROVATA");
 
             if (activity["o:title"] === activityName) {
-              activity.selected = !activity.selected;
+              activity.insertedInItinerary = !activity.insertedInItinerary;
             }
           });
         }
@@ -1482,16 +1534,16 @@ export default {
 
       //imposto se il POI ha delle attività selezionate
       Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
-        var poiHasActivitiesSelected = false;
+        var hasActivitiesInItinerary = false;
 
         Array.prototype.forEach.call(poi.mis, (activity) => {
-          if (activity.selected) {
-            poiHasActivitiesSelected = true;
-            console.log("IL POI ha delle attività selezionate");
+          if (activity.insertedInItinerary) {
+            hasActivitiesInItinerary = true;
+            console.log("IL POI ha delle attività nell'itinerario");
           }
         });
 
-        poi.poiHasActivitiesSelected = poiHasActivitiesSelected;
+        poi.hasActivitiesInItinerary = hasActivitiesInItinerary;
       });
 
       //TODO: funziona -> se si riesce migliorarlo
@@ -1502,7 +1554,9 @@ export default {
       console.log("stampo dopo la selezione");
       console.log(this.filteredPOI);
 
-      this.initializeMarkersOfFilteredPOI();
+      //this.initializeMarkersOfFilteredPOI();
+
+      this.incrementStep();
     },
 
     //funziona chiamata quando si seleziona/deseleziona un interesse
@@ -1548,9 +1602,9 @@ export default {
 
       for (var i = 0; i < this.$store.state.expertiseLevels.length; i++) {
         this.$set(
-            this.$store.state.expertiseLevels[i],
-            "expertiseLevelSelected",
-            this.selectAllDifficulties
+          this.$store.state.expertiseLevels[i],
+          "expertiseLevelSelected",
+          this.selectAllDifficulties
         );
       }
 
@@ -1571,9 +1625,9 @@ export default {
 
       for (var i = 0; i < this.$store.state.interests.length; i++) {
         this.$set(
-            this.$store.state.interests[i],
-            "interestSelected",
-            this.selectAllInterests
+          this.$store.state.interests[i],
+          "interestSelected",
+          this.selectAllInterests
         );
       }
 
@@ -1593,19 +1647,19 @@ export default {
           var expHasCorrectExpertiseLevels = false;
 
           Array.prototype.forEach.call(
-              exp["geo:ha_difficolta"],
-              (difficulty) => {
-                if (
-                    this.selectedDifficulties.includes(difficulty["display_title"])
-                ) {
-                  expHasCorrectExpertiseLevels = true;
-                }
+            exp["geo:ha_difficolta"],
+            (difficulty) => {
+              if (
+                this.selectedDifficulties.includes(difficulty["display_title"])
+              ) {
+                expHasCorrectExpertiseLevels = true;
               }
+            }
           );
 
           //exp.activityVisibleWithFilters = expHasCorrectExpertiseLevels;
           exp.activityVisibleWithDifficultiesFilters =
-              expHasCorrectExpertiseLevels;
+            expHasCorrectExpertiseLevels;
         });
       });
     },
@@ -1652,8 +1706,8 @@ export default {
       for (var i = 0; i < tmpFilteredPOI.length; i++) {
         Array.prototype.forEach.call(tmpFilteredPOI[i].mis, (activity) => {
           if (
-              activity.activityVisibleWithInterestsFilters &&
-              activity.activityVisibleWithDifficultiesFilters
+            activity.activityVisibleWithInterestsFilters &&
+            activity.activityVisibleWithDifficultiesFilters
           ) {
             poiHasActivitiesVisible = true;
             //TODO: remove me
@@ -1665,9 +1719,9 @@ export default {
         //console.log("poiHasActivitiesVisible: " + poiHasActivitiesVisible);
 
         this.$set(
-            tmpFilteredPOI[i],
-            "poiVisibleWithFilters",
-            poiHasActivitiesVisible
+          tmpFilteredPOI[i],
+          "poiVisibleWithFilters",
+          poiHasActivitiesVisible
         );
       }
 
@@ -1730,53 +1784,53 @@ export default {
       var activityInPOIArray = [];
 
       Array.prototype.forEach.call(
-          vroomResponseObject.routes[0].steps,
-          (step, index) => {
-            var activity = step;
+        vroomResponseObject.routes[0].steps,
+        (step, index) => {
+          var activity = step;
 
-            if (activity.type === "start") {
-              activity.description = "Punto di partenza";
-              activity.poiName = "Punto di partenza";
-              activity.activityName = "Punto di partenza";
+          if (activity.type === "start") {
+            activity.description = "Punto di partenza";
+            activity.poiName = "Punto di partenza";
+            activity.activityName = "Punto di partenza";
 
+            poiArray.push({
+              poiName: "Punto di partenza",
+              location: activity.location,
+            });
+          } else if (activity.type === "end") {
+            activity.description = "Punto di arrivo";
+            activity.poiName = "Punto di arrivo";
+            activity.activityName = "Punto di arrivo";
+
+            poiArray.push({
+              poiName: "Punto di arrivo",
+              location: activity.location,
+            });
+          } else {
+            var fields = activity.description.split("_");
+
+            activity.poiName = fields[0];
+            activity.activityName = fields[1];
+
+            //se non esiste già un oggetto poi con lo stesso nome (ovvero rappresentante lo stesso poi), allora lo aggiungo
+            var poiWithSameName = poiArray.filter(
+              (poi) => poi.poiName === fields[0]
+            );
+            if (poiWithSameName.length === 0) {
               poiArray.push({
-                poiName: "Punto di partenza",
+                poiName: fields[0],
                 location: activity.location,
               });
-            } else if (activity.type === "end") {
-              activity.description = "Punto di arrivo";
-              activity.poiName = "Punto di arrivo";
-              activity.activityName = "Punto di arrivo";
-
-              poiArray.push({
-                poiName: "Punto di arrivo",
-                location: activity.location,
-              });
-            } else {
-              var fields = activity.description.split("_");
-
-              activity.poiName = fields[0];
-              activity.activityName = fields[1];
-
-              //se non esiste già un oggetto poi con lo stesso nome (ovvero rappresentante lo stesso poi), allora lo aggiungo
-              var poiWithSameName = poiArray.filter(
-                  (poi) => poi.poiName === fields[0]
-              );
-              if (poiWithSameName.length === 0) {
-                poiArray.push({
-                  poiName: fields[0],
-                  location: activity.location,
-                });
-              }
             }
-
-            activity.index = index;
-
-            //60000 : 1 = tmpPOI.service : x
-            activity.serviceDurationMinutes = activity.service / 60000;
-
-            activityInPOIArray.push(activity);
           }
+
+          activity.index = index;
+
+          //60000 : 1 = tmpPOI.service : x
+          activity.serviceDurationMinutes = activity.service / 60000;
+
+          activityInPOIArray.push(activity);
+        }
       );
 
       console.log("POI ARRAY");
@@ -1784,7 +1838,7 @@ export default {
 
       Array.prototype.forEach.call(poiArray, (poi, index) => {
         var activitiesInPOI = activityInPOIArray.filter(
-            (activity) => activity.poiName === poi.poiName
+          (activity) => activity.poiName === poi.poiName
         );
         poi.activitiesInPOI = activitiesInPOI;
       });
@@ -1806,6 +1860,9 @@ export default {
 
       this.$store.state.itinerarioInCreazione = itineraryObject;
 
+      this.createMarkerArray();
+      this.initializeMarkersOfFilteredPOI();
+
       /*
       axios
           .get('/api/itinerari/8V5p42TU8ri8ULHARZ8d')
@@ -1820,6 +1877,8 @@ export default {
 
        */
 
+      //TODo: query servlet
+      /*
       $.ajax({
         url: "/api/itinerari/8V5p42TU8ri8ULHARZ8d",
         type: "GET",
@@ -1833,23 +1892,23 @@ export default {
           console.log(error);
         },
       });
-
+      */
 
       //TODO: mnavigare all'altra pagina
+
+      /*
       router.push({
         name: "itinerariogenerato",
-        /*params: {
-          itineraryObject,
-        },*/
       });
+      */
     },
   },
 
   computed: {
     selectedInterests() {
       var mappedInterests = this.$store.state.interests
-          .filter((interest) => interest.interestSelected)
-          .map((interest) => interest.interestName);
+        .filter((interest) => interest.interestSelected)
+        .map((interest) => interest.interestName);
 
       if (mappedInterests.length === 0) {
         return this.allInterests;
@@ -1859,8 +1918,8 @@ export default {
     },
     selectedDifficulties() {
       var mappedDifficulties = this.$store.state.expertiseLevels
-          .filter((expLevel) => expLevel.expertiseLevelSelected)
-          .map((expLevel) => expLevel.expertiseLevelName);
+        .filter((expLevel) => expLevel.expertiseLevelSelected)
+        .map((expLevel) => expLevel.expertiseLevelName);
 
       if (mappedDifficulties.length === 0) {
         return this.allDifficulties;
@@ -1873,7 +1932,7 @@ export default {
       //TODO: remove me
       //console.log("somePOIVisile");
       return (
-          this.filteredPOI.filter((poi) => poi.poiVisibleWithFilters).length > 0
+        this.filteredPOI.filter((poi) => poi.poiVisibleWithFilters).length > 0
       );
     },
 
@@ -1890,8 +1949,8 @@ export default {
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
         Array.prototype.forEach.call(poi.mis, (activity) => {
           if (
-              activity.activityVisibleWithInterestsFilters &&
-              activity.activityVisibleWithDifficultiesFilters
+            activity.activityVisibleWithInterestsFilters &&
+            activity.activityVisibleWithDifficultiesFilters
           ) {
             someActivitiesVisible = true;
           }
@@ -1903,9 +1962,26 @@ export default {
 
     remainingTime() {
       return (
-          this.$store.state.timeAvailable.milliseconds -
-          this.itinerario.totalTimeMilliseconds
+        this.$store.state.timeAvailable.milliseconds -
+        this.totalTimeMillisecondsItinerario
       );
+    },
+
+    totalTimeMillisecondsItinerario() {
+      var totalTimeMinutes = 0;
+
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        Array.prototype.forEach.call(poi.mis, (activity) => {
+          if (activity.insertedInItinerary) {
+            console.log("sommo " + activity["geo:Durata"][0]["@value"]);
+            totalTimeMinutes += parseInt(activity["geo:Durata"][0]["@value"]);
+          }
+        });
+      });
+
+      console.log("minuti totali " + totalTimeMinutes);
+
+      return totalTimeMinutes * 60000;
     },
   },
 

@@ -149,8 +149,8 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 8,
-      center: [45.07083355146427, 7.685076212373219],
+      zoom: 16,
+      center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
       geojson: null,

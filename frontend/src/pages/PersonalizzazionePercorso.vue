@@ -823,7 +823,12 @@
                           </div>
                         </div>
                         <div v-else>
-                          Nessuna luogo ha delle attività che rientrano nel tempo rimanente a disposizione. Per visualizzarne alcune occorre rimuovere delle attività attualente presenti nell'itinerrio, cliccando il cestino rosso accanto ad esse nel menu "Attività presenti nell'itinerario".
+                          Nessuna luogo ha delle attività che rientrano nel
+                          tempo rimanente a disposizione. Per visualizzarne
+                          alcune occorre rimuovere delle attività attualente
+                          presenti nell'itinerrio, cliccando il cestino rosso
+                          accanto ad esse nel menu "Attività presenti
+                          nell'itinerario".
                         </div>
                       </div>
                     </div>
@@ -1223,7 +1228,7 @@ export default {
 
     console.log(this.filteredPOI);
 
-    this.createMarkerArray();
+    this.createMarkerArrayItinerary();
     this.initializeMarkersOfFilteredPOI();
 
     //TODO: remove me
@@ -1548,6 +1553,41 @@ export default {
       var vroomItineraryResponse = this.makeQueryVROOM(vroomObject, nextPage);
     },
 
+    createMarkerArrayItinerary() {
+      this.markersPolylines = [];
+
+      //Punto di partenza
+      //this.markersPolylines.push(this.startPoint);
+
+      console.log("CREO LE LINEE TRA I MARKER");
+      console.log(this.$store.state.itinerarioInCreazione);
+
+      Array.prototype.forEach.call(
+        this.$store.state.itinerarioInCreazione.poi,
+        (poi) => {
+          console.log(poi);
+          var POIlat = poi["location"][0];
+          var POIlng = poi["location"][1];
+
+          var POIcoordinates = null;
+
+          //TODO: è un fix temporaneo -> va risolto in un altro punto, da capire dove
+          if (POIlng < POIlat) {
+            POIcoordinates = [POIlat, POIlng];
+          } else {
+            POIcoordinates = [POIlng, POIlat];
+          }
+
+          this.markersPolylines.push(POIcoordinates);
+        }
+      );
+
+      //Punto di arrivo
+      this.markersPolylines.push(this.endPoint);
+
+      console.log(this.markersPolylines);
+    },
+
     createMarkerArray() {
       this.markersPolylines = [];
 
@@ -1569,6 +1609,19 @@ export default {
       //Punto di arrivo
       this.markersPolylines.push(this.endPoint);
 
+      console.log(this.markersPolylines);
+    },
+
+    //collega solo il punto di partenza con il punto di arrivo
+    createMarkerArrayStartToEnd() {
+      this.markersPolylines = [];
+
+      //Punto di partenza
+      this.markersPolylines.push(this.startPoint);
+
+      //Punto di arrivo
+      this.markersPolylines.push(this.endPoint);
+      
       console.log(this.markersPolylines);
     },
 
@@ -1675,8 +1728,8 @@ export default {
 
           totalMilliseconds = totalTimeMinutes * 60000;
 
-          var remainingTime = this.$store.state.timeAvailable.milliseconds -
-              totalMilliseconds;
+          var remainingTime =
+            this.$store.state.timeAvailable.milliseconds - totalMilliseconds;
 
           if (
             parseInt(activity["geo:Durata"][0]["@value"]) * 60000 <
@@ -1711,7 +1764,7 @@ export default {
       } else {
         //nell'itinerario non è stata inserita nessuna attività
         this.initializeMarkersOfFilteredPOI();
-        this.createMarkerArray();
+        this.createMarkerArrayStartToEnd();
       }
     },
 
@@ -2022,7 +2075,10 @@ export default {
 
       this.$store.state.itinerarioInCreazione = itineraryObject;
 
-      this.createMarkerArray();
+      console.log("ITINERARIO IN CREAZIONE - PERSONALIZZAZIONE: ");
+      console.log(this.$store.state.itinerarioInCreazione);
+
+      this.createMarkerArrayItinerary();
       this.initializeMarkersOfFilteredPOI();
 
       /*
@@ -2094,7 +2150,9 @@ export default {
       //TODO: remove me
       //console.log("somePOIVisile");
       return (
-        this.filteredPOI.filter((poi) => poi.hasActivitiesAvailableForRemainingTime).length > 0
+        this.filteredPOI.filter(
+          (poi) => poi.hasActivitiesAvailableForRemainingTime
+        ).length > 0
       );
     },
 

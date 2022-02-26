@@ -69,6 +69,10 @@ export default {
     console.log(this.$route);
 
     this.itinerario = this.$store.state.itinerarioInCreazione; //this.$route.params.itineraryObject;
+
+      console.log("ITINERARIO IN CREAZIONE - PERCORSO VROOM: ");
+      console.log(this.$store.state.itinerarioInCreazione);
+
     console.log(this.itinerario);
     console.log(this.$route);
     //TODO: remove me

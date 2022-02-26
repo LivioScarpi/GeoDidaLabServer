@@ -81,9 +81,18 @@
                   :lat-lng="marker.marker.getLatLng()"
                   :key="'marker' + index"
                 >
-                  <l-icon
-                    :icon-url="require('../../icons/unselectedPOI.png')"
-                  ></l-icon>
+                            <l-icon
+                              v-if="marker.isStartPoint"
+                              :icon-url="require('../../icons/startPoint.png')"
+                            ></l-icon>
+                            <l-icon
+                              v-else-if="marker.poiHasActivitiesInItinerary"
+                              :icon-url="require('../../icons/selectedPOI.png')"
+                            ></l-icon>
+                            <l-icon
+                              v-else-if="!marker.poiHasActivitiesInItinerary"
+                              :icon-url="require('../../icons/unselectedPOI.png')"
+                            ></l-icon>
                   <l-popup :options="anchorOptions">
                     <div class="px-3">
                       <div class="row">
@@ -160,6 +169,9 @@ export default {
       coord: null,
 
       anchorOptions: { offset: L.point(0, -30) },
+
+      startPoint: [45.47561994860321, 7.889627627278735],
+      endPoint: [45.47548295737901, 7.888970990326549],
     };
   },
 
@@ -188,6 +200,9 @@ export default {
 
   methods: {
     createMarkerArray() {
+      //Punto di partenza
+      this.markersPolylines.push(this.startPoint);
+
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         var POIlat = poi["marker"]["o-module-mapping:lat"];
         var POIlng = poi["marker"]["o-module-mapping:lng"];
@@ -197,11 +212,25 @@ export default {
         this.markersPolylines.push(POIcoordinates);
       });
 
+      //Punto di partenza
+      this.markersPolylines.push(this.endPoint);
+
       console.log(this.markersPolylines);
     },
 
     initializeMarkersOfFilteredPOI() {
       this.markers = [];
+
+      //marker punto di partenza
+      this.markers.push({
+        marker: L.marker(this.startPoint),
+        color: "#1585bd",
+        strokeColor: "#1b4f88",
+        circleColor: "#ffffff",
+        POItitle: "Punto di partenza",
+        poiHasActivitiesInItinerary: false,
+        isStartPoint: true,
+      });
 
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         this.markers.push({
@@ -215,6 +244,17 @@ export default {
           POItitle: poi["geo:Titolo_it"][0]["@value"],
           poiSelected: poi.poiHasActivitiesSelected,
         });
+      });
+
+      //marker punto di partenza
+      this.markers.push({
+        marker: L.marker(this.endPoint),
+        color: "#1585bd",
+        strokeColor: "#1b4f88",
+        circleColor: "#ffffff",
+        POItitle: "Punto di partenza",
+        poiHasActivitiesInItinerary: false,
+        isStartPoint: true,
       });
 
       this.markersCreated = true;

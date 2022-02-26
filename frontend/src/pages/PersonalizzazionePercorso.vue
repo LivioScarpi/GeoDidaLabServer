@@ -908,7 +908,7 @@
           size="large"
           type="primary"
           round
-          v-on:click="incrementStep()"
+          v-on:click="incrementStep(true)"
           class="buttonAlignRight m-2 textButtonColor"
           >Avanti
         </Button>
@@ -1335,7 +1335,9 @@ export default {
       this.currentPage = "selectExistingPath";
     },
 
-    incrementStep() {
+    incrementStep(nextPage) {
+      console.log("next page: " + nextPage);
+
       console.log(this.$route);
       console.log(
         "timeAvailable milliseconds: " +
@@ -1350,8 +1352,8 @@ export default {
             profile: "car",
             start_index: 0,
             end_index: 0,
-            start: [7.889627627278735, 45.47561994860321],
-            end: [7.889627627278735, 45.47561994860321],
+            start: [45.47561994860321, 7.889627627278735],
+            end: [45.47548295737901, 7.888970990326549],
             time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
           },
         ],
@@ -1375,11 +1377,12 @@ export default {
 
       console.log("FILTRO I POI");
 
-      //oggetto contenente i POI con delle attività selezionate
+      //oggetto contenente i POI con delle attività nell'itinerario
       var poiWithSelectedActivities = this.filteredPOI.filter(
-        (poi) => poi.poiHasActivitiesSelected
+        (poi) => poi.hasActivitiesInItinerary
       );
 
+      /*
       //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
       if (poiWithSelectedActivities.length === 0) {
         Array.prototype.forEach.call(this.filteredPOI, (poi) => {
@@ -1390,6 +1393,7 @@ export default {
 
         poiWithSelectedActivities = this.filteredPOI;
       }
+      */
 
       //TODO: remove me
       //onsole.log("poi con attività selezionate");
@@ -1400,7 +1404,7 @@ export default {
       //creo i jobs per l'oggetto VROOM
       Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
         var activitiesSelected = poi.mis.filter(
-          (activity) => activity.selected
+          (activity) => activity.insertedInItinerary
         );
 
         console.log("activitiesSelected");
@@ -1420,8 +1424,8 @@ export default {
               poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
             service: this.getMilliseconds(activity["geo:Durata"][0]["@value"]),
             location: [
-              poi.marker["o-module-mapping:lng"],
               poi.marker["o-module-mapping:lat"],
+              poi.marker["o-module-mapping:lng"],
             ],
             location_index: poiIDObject[0].poiID,
           };
@@ -1438,7 +1442,7 @@ export default {
       console.log(vroomObject);
       console.log(JSON.stringify(vroomObject));
 
-      var vroomItineraryResponse = this.makeQueryVROOM(vroomObject);
+      var vroomItineraryResponse = this.makeQueryVROOM(vroomObject, nextPage);
 
       //console.log("DOPO MAKE QUERY VROOM");
       //console.log(vroomItineraryResponse);
@@ -1598,7 +1602,7 @@ export default {
 
       //this.initializeMarkersOfFilteredPOI();
 
-      this.incrementStep();
+      this.incrementStep(false);
     },
 
     //funziona chiamata quando si seleziona/deseleziona un interesse
@@ -1791,7 +1795,7 @@ export default {
       return minutesInt * 60000;
     },
 
-    makeQueryVROOM(vroomObject) {
+    makeQueryVROOM(vroomObject, nextPage) {
       var self = this;
 
       console.log("effettuo la query");
@@ -1804,14 +1808,14 @@ export default {
         console.log("res", res);
         console.log("JSON res", JSON.stringify(res));
 
-        self.createItineraryObject(res);
+        self.createItineraryObject(res, nextPage);
 
         //return res;
         // Do something with the result :)
       });
     },
 
-    createItineraryObject(vroomResponseObject) {
+    createItineraryObject(vroomResponseObject, nextPage) {
       //TODO: implement
 
       console.log("OGGETTO IN INPUT NEL METODO createItineraryObject");
@@ -1829,6 +1833,9 @@ export default {
         vroomResponseObject.routes[0].steps,
         (step, index) => {
           var activity = step;
+
+          console.log("ACTIVITY - STEP");
+          console.log(step);
 
           if (activity.type === "start") {
             activity.description = "Punto di partenza";
@@ -1853,6 +1860,9 @@ export default {
 
             activity.poiName = fields[0];
             activity.activityName = fields[1];
+
+            console.log("ACTIVITY NON INIZIO O FINE");
+            console.log(activity);
 
             //se non esiste già un oggetto poi con lo stesso nome (ovvero rappresentante lo stesso poi), allora lo aggiungo
             var poiWithSameName = poiArray.filter(
@@ -1938,11 +1948,11 @@ export default {
 
       //TODO: mnavigare all'altra pagina
 
-      /*
-      router.push({
-        name: "itinerariogenerato",
-      });
-      */
+      if (nextPage) {
+        router.push({
+          name: "itinerariogenerato",
+        });
+      }
     },
   },
 

@@ -14,10 +14,13 @@
       </div>
     </div>
     <div v-if="currentStep === 1">
-
       <div class="row px-3">
         <div class="col-12">
-          <h6><b>Tempo a disposizione: </b> {{$store.state.timeAvailable.hour}} ore e {{$store.state.timeAvailable.minutes}} minuti</h6> 
+          <h6>
+            <b>Tempo a disposizione: </b>
+            {{ $store.state.timeAvailable.hour }} ore e
+            {{ $store.state.timeAvailable.minutes }} minuti
+          </h6>
         </div>
       </div>
 
@@ -725,7 +728,8 @@
                         <div class="col-10 text-left">
                           {{ it["o:title"] }} ({{
                             item["geo:Titolo_it"][0]["@value"]
-                          }}) (durata {{it["geo:Durata"][0]["@value"]}} minuti)
+                          }}) (durata
+                          {{ it["geo:Durata"][0]["@value"] }} minuti)
                         </div>
                       </div>
                     </div>
@@ -844,7 +848,11 @@
                                           </div>
 
                                           <div class="col-5 text-left">
-                                            {{ it["o:title"] }} (durata {{it["geo:Durata"][0]["@value"]}} minuti)
+                                            {{ it["o:title"] }} (durata
+                                            {{
+                                              it["geo:Durata"][0]["@value"]
+                                            }}
+                                            minuti)
                                           </div>
 
                                           <div class="col-6 text-right">
@@ -1763,6 +1771,9 @@ export default {
       ],
 
       anchorOptions: { offset: L.point(0, -30) },
+
+      startPoint: [45.47561994860321, 7.889627627278735],
+      endPoint: [45.47548295737901, 7.888970990326549],
     };
   },
 
@@ -1930,7 +1941,6 @@ export default {
       console.log(this.$route);
       console.log(
         "timeAvailable milliseconds: " +
-    
           this.$store.state.timeAvailable.milliseconds
       );
 
@@ -1942,8 +1952,8 @@ export default {
             profile: "car",
             start_index: 0,
             end_index: 0,
-            start: [7.889627627278735, 45.47561994860321],
-            end: [7.889627627278735, 45.47561994860321],
+            start: this.startPoint,
+            end: this.endPoint,
             time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
           },
         ],

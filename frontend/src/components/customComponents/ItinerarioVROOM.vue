@@ -23,9 +23,8 @@
               class="ml-2 mb-3"
             >
               <h6>
-                <i class="bi bi-geo-fill mr-2"></i>{{ poi["poiName"] }} -
-                posizione in itinerario:
-                {{ poiIndex }}
+                <i v-if="poi['poiName'] === 'Punto di partenza' || poi['poiName'] === 'Punto di arrivo'" class="bi bi-geo-fill mr-2" style="color: #82b351"></i>
+                <i v-else class="bi bi-geo-fill mr-2" style="color: #437fc5"></i>{{ poiIndex }}. {{ poi["poiName"] }}
               </h6>
 
               <div
@@ -50,7 +49,8 @@
                       poi['poiName'] !== 'Punto di arrivo'
                     "
                   >
-                    - {{ activity["activityName"] }} (
+                  <i class="bi bi-clipboard-check-fill  mr-2"></i>
+                    <!--{{ poiIndex }}.{{activityIndex}} - -->{{ activity["activityName"] }} (
                     <i
                       >durata
                       {{ activity["serviceDurationMinutes"] }} minuti </i

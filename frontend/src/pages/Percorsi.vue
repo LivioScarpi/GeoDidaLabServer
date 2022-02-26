@@ -326,7 +326,7 @@ export default {
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
 
-      enabledRadio: "4",
+      enabledRadio: "1",
     };
   },
 

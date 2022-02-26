@@ -19,11 +19,24 @@
     <div v-if="currentStep === 1">
       <div class="row px-3">
         <div class="col-12">
-          <h6>
-            <b>Tempo a disposizione: </b>
-            {{ $store.state.timeAvailable.hour }} ore e
-            {{ $store.state.timeAvailable.minutes }} minuti
-          </h6>
+          <div class="row">
+            <div class="col-12">
+              <h6>
+                <b>Tempo totale a disposizione: </b>
+                {{ $store.state.timeAvailable.hour }} ore e
+                {{ $store.state.timeAvailable.minutes }} minuti
+              </h6>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <h6>
+                <b>Tempo a disposizione rimanente: </b>
+                {{ remainingTimeHourAndMinutes.hours }} ore e
+                {{ remainingTimeHourAndMinutes.minutes }} minuti
+              </h6>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -867,7 +880,7 @@
                             <div class="legend">
                               <h4>Legenda</h4>
                               <i style="background: #82b351"></i
-                              ><span>Luogo di partenza</span><br />
+                              ><span>Luogo di partenza/arrivo</span><br />
                               <i style="background: #e35747"></i
                               ><span>Luogo selezionato</span><br />
                               <i style="background: #437fc5"></i
@@ -1336,8 +1349,55 @@ export default {
     },
 
     incrementStep(nextPage) {
+      //se c'è almeno un'attività nell'itinerario
+      if (this.poiWithActivitiesInItinerary.length > 0) {
+        this.contructVROOMObject(nextPage);
+      } else {
+        //modal che non fa proseguire l'utente
+        console.log("INSERISCI ALMENO UN'ATTIVITA'");
+      }
+
       console.log("next page: " + nextPage);
 
+      //console.log("DOPO MAKE QUERY VROOM");
+      //console.log(vroomItineraryResponse);
+
+      //var itineraryCorrectObject = this.createItineraryObject(vroomItineraryResponse);
+      /*
+      if (this.currentStep === 1) {
+        //do nothing
+      } else if (this.currentStep === 2) {
+      } else if (this.currentStep === 3) {
+      } else if (this.currentStep === 4) {
+      }
+      */
+    },
+
+    /*
+    initializeMarkersOfFilteredPOI() {
+      this.markers = [];
+
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        if (poi.poiVisibleWithFilters || poi.poiHasActivitiesSelected) {
+          this.markers.push({
+            marker: L.marker([
+              poi.marker["o-module-mapping:lat"],
+              poi.marker["o-module-mapping:lng"],
+            ]),
+            color: "#1585bd",
+            strokeColor: "#1b4f88",
+            circleColor: "#ffffff",
+            POItitle: poi["geo:Titolo_it"][0]["@value"],
+            poiSelected: poi.poiHasActivitiesSelected,
+          });
+        }
+      });
+
+      this.markersCreated = true;
+    },
+    */
+
+    contructVROOMObject(nextPage) {
       console.log(this.$route);
       console.log(
         "timeAvailable milliseconds: " +
@@ -1443,44 +1503,7 @@ export default {
       console.log(JSON.stringify(vroomObject));
 
       var vroomItineraryResponse = this.makeQueryVROOM(vroomObject, nextPage);
-
-      //console.log("DOPO MAKE QUERY VROOM");
-      //console.log(vroomItineraryResponse);
-
-      //var itineraryCorrectObject = this.createItineraryObject(vroomItineraryResponse);
-      /*
-      if (this.currentStep === 1) {
-        //do nothing
-      } else if (this.currentStep === 2) {
-      } else if (this.currentStep === 3) {
-      } else if (this.currentStep === 4) {
-      }
-      */
     },
-
-    /*
-    initializeMarkersOfFilteredPOI() {
-      this.markers = [];
-
-      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
-        if (poi.poiVisibleWithFilters || poi.poiHasActivitiesSelected) {
-          this.markers.push({
-            marker: L.marker([
-              poi.marker["o-module-mapping:lat"],
-              poi.marker["o-module-mapping:lng"],
-            ]),
-            color: "#1585bd",
-            strokeColor: "#1b4f88",
-            circleColor: "#ffffff",
-            POItitle: poi["geo:Titolo_it"][0]["@value"],
-            poiSelected: poi.poiHasActivitiesSelected,
-          });
-        }
-      });
-
-      this.markersCreated = true;
-    },
-    */
 
     createMarkerArray() {
       this.markersPolylines = [];
@@ -1600,9 +1623,23 @@ export default {
       console.log("stampo dopo la selezione");
       console.log(this.filteredPOI);
 
+      /*
+      var poiWithActivitiesInItinerary = this.filteredPOI.filter(
+        (poi) => poi.hasActivitiesInItinerary
+      );
+*/
+      console.log("POI CON DELLE ATTIVITA NELL'ITINERARIO");
+      console.log(this.poiWithActivitiesInItinerary);
+
       //this.initializeMarkersOfFilteredPOI();
 
-      this.incrementStep(false);
+      if (this.poiWithActivitiesInItinerary.length > 0) {
+        this.incrementStep(false);
+      } else {
+        //nell'itinerario non è stata inserita nessuna attività
+        this.initializeMarkersOfFilteredPOI();
+        this.createMarkerArray();
+      }
     },
 
     //funziona chiamata quando si seleziona/deseleziona un interesse
@@ -2019,6 +2056,19 @@ export default {
       );
     },
 
+    remainingTimeHourAndMinutes() {
+      //1 : 60000 = x : remainingTime
+      var minutes = this.remainingTime / 60000;
+
+      var hours = Math.floor(minutes / 60);
+      var remainingMinutes = minutes - hours * 60;
+
+      return {
+        hours: hours,
+        minutes: remainingMinutes,
+      };
+    },
+
     totalTimeMillisecondsItinerario() {
       var totalTimeMinutes = 0;
 
@@ -2034,6 +2084,10 @@ export default {
       console.log("minuti totali " + totalTimeMinutes);
 
       return totalTimeMinutes * 60000;
+    },
+
+    poiWithActivitiesInItinerary() {
+      return this.filteredPOI.filter((poi) => poi.hasActivitiesInItinerary);
     },
   },
 

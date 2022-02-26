@@ -15,7 +15,7 @@
     </div>
     <div v-if="currentStep === 1">
       <div class="row px-3 mb-3">
-        <div class="col-12">
+        <div class="col-12 text-center">
           <h6>
             <b>Tempo a disposizione: </b>
             {{ $store.state.timeAvailable.hour }} ore e

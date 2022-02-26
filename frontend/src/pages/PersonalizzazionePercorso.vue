@@ -20,7 +20,7 @@
       <div class="row px-3 mb-3">
         <div class="col-12">
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 text-center">
               <h6>
                 <b>Tempo totale a disposizione: </b>
                 {{ $store.state.timeAvailable.hour }} ore e
@@ -29,7 +29,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 text-center">
               <h6>
                 <b>Tempo a disposizione rimanente: </b>
                 {{ remainingTimeHourAndMinutes.hours }} ore e
@@ -1621,7 +1621,7 @@ export default {
 
       //Punto di arrivo
       this.markersPolylines.push(this.endPoint);
-      
+
       console.log(this.markersPolylines);
     },
 

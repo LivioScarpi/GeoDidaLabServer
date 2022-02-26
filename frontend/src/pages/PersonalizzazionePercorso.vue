@@ -936,6 +936,43 @@
         </Button>
       </div>
     </div>
+
+    <modal
+      :show.sync="modals.zeroActivitiesInItinerary"
+      headerClasses="justify-content-center"
+    >
+      <h4 slot="header" class="title title-up">Inserisci codice</h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12">
+              <p>
+                Non hai inserito nessuna attività nel tuo itinerario, proseguire
+                comunque?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button
+          size="small"
+          type="danger"
+          v-on:click="modals.zeroActivitiesInItinerary = false"
+          class="mx-1 textButtonColor"
+          >Chiudi
+        </Button>
+
+        <Button
+          size="small"
+          type="primary"
+          v-on:click="incrementStepWithoutActivitiesInItinerary()"
+          class="mx-1 textButtonColor"
+          >Prosegui
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -997,6 +1034,7 @@ export default {
     [Checkbox.name]: Checkbox,
     Collapse,
     CollapseItem,
+    Modal,
 
     //Collapsible
   },
@@ -1093,11 +1131,6 @@ export default {
         "Divulgativo",
       ],
 
-      modals: {
-        //oggetto usato per mostrare i modals
-        insertCodeModal: false,
-      },
-
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
 
       //Test filtri
@@ -1141,6 +1174,11 @@ export default {
 
       startPoint: [45.47561994860321, 7.889627627278735],
       endPoint: [45.47548295737901, 7.888970990326549],
+
+      modals: {
+        //oggetto usato per mostrare i modals
+        zeroActivitiesInItinerary: false,
+      },
     };
   },
 
@@ -1337,15 +1375,12 @@ export default {
       this.currentPage = "selectDefaultPath";
     },
 
-    checkCodeAndGetPath() {
-      console.log("checkCodeAndGetPath");
-      console.log(this.pathCodeInserted);
+    incrementStepWithoutActivitiesInItinerary() {
+      console.log("incrementStepWithoutActivitiesInItinerary");
 
-      this.modals.insertCodeModal = false;
+      this.modals.zeroActivitiesInItinerary = false;
 
-      //TODO: controllare se il codice esiste ed è corretto -> in caso recuperare il percorso e mostrarlo
-
-      this.currentPage = "selectExistingPath";
+      //TODO: selezionare tutte le attività a far generare un percorso qualsiasi a vroom
     },
 
     incrementStep(nextPage) {
@@ -1355,6 +1390,8 @@ export default {
       } else {
         //modal che non fa proseguire l'utente
         console.log("INSERISCI ALMENO UN'ATTIVITA'");
+        this.modals.zeroActivitiesInItinerary = true;
+        console.log("this.modals.insertCodeModal: " + this.modals.zeroActivitiesInItinerary);
       }
 
       console.log("next page: " + nextPage);

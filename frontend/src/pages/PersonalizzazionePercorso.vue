@@ -835,11 +835,11 @@
                             :key="'marker' + index"
                           >
                             <l-icon
-                              v-if="marker.poiSelected"
+                              v-if="marker.poiHasActivitiesInItinerary"
                               :icon-url="require('../icons/selectedPOI.png')"
                             ></l-icon>
                             <l-icon
-                              v-if="!marker.poiSelected"
+                              v-if="!marker.poiHasActivitiesInItinerary"
                               :icon-url="require('../icons/unselectedPOI.png')"
                             ></l-icon>
                             <l-popup :options="anchorOptions">
@@ -1501,9 +1501,13 @@ export default {
           strokeColor: "#1b4f88",
           circleColor: "#ffffff",
           POItitle: poi.poiName,
+          poiHasActivitiesInItinerary: poi.hasActivitiesInItinerary,
         });
         //}
       });
+
+      console.log("MARKERS: ");
+      console.log(this.markers);
 
       this.markersCreated = true;
     },

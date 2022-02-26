@@ -94,11 +94,11 @@
             :show.sync="modals.insertCodeModal"
             headerClasses="justify-content-center"
           >
-            <h4 slot="header" class="title title-up">Inserisci codice</h4>
+            <h4 slot="header" class="title title-up text-center">Inserisci codice</h4>
             <div class="row">
               <div class="col-12">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12 text-center">
                     <p>
                       Inserisci il codice del percorso nel camp sottostante e
                       premi il tasto "Inserisci"

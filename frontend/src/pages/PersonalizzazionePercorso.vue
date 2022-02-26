@@ -941,11 +941,11 @@
       :show.sync="modals.zeroActivitiesInItinerary"
       headerClasses="justify-content-center"
     >
-      <h4 slot="header" class="title title-up">Inserisci codice</h4>
+      <h4 slot="header" class="title title-up text-center">Nessuna attività selezionata!</h4>
       <div class="row">
         <div class="col-12">
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 text-center">
               <p>
                 Non hai inserito nessuna attività nel tuo itinerario, proseguire
                 comunque?
@@ -1581,6 +1581,10 @@ export default {
       });
 
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+
+        console.log("POI");
+        console.log(poi);
+
         //if (poi.hasActivitiesInItinerary) {
         this.markers.push({
           marker: L.marker([
@@ -1590,7 +1594,7 @@ export default {
           color: "#1585bd",
           strokeColor: "#1b4f88",
           circleColor: "#ffffff",
-          POItitle: poi.poiName,
+          POItitle: poi["geo:Titolo_it"][0]["@value"],
           poiHasActivitiesInItinerary: poi.hasActivitiesInItinerary,
           isStartPoint: false,
         });

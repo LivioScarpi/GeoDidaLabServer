@@ -849,9 +849,7 @@
 
                                           <div class="col-5 text-left">
                                             {{ it["o:title"] }} (durata
-                                            {{
-                                              it["geo:Durata"][0]["@value"]
-                                            }}
+                                            {{ it["geo:Durata"][0]["@value"] }}
                                             minuti)
                                           </div>
 
@@ -2430,6 +2428,9 @@ export default {
       console.log(timeAvailable);
 
       this.$store.state.itinerarioInCreazione = itineraryObject;
+
+      console.log("CREAZIONE ITINERARIO PRIMA DEL PUSH");
+      console.log(this.$store.state.itinerarioInCreazione);
 
       router.push({
         name: "personalizzazionepercorso",

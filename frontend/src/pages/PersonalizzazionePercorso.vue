@@ -10,14 +10,14 @@
         ></i>
         <h4 class="text-center mt-0">
           <b>{{ stepTitle[currentStep].pageTitle }}</b>
-          {{ $store.state.timeAvailable.milliseconds }} -
+          <!--{{ $store.state.timeAvailable.milliseconds }} -
           {{ totalTimeMillisecondsItinerario }} ; tempo rimanente:
-          {{ remainingTime }}
+          {{ remainingTime }}-->
         </h4>
       </div>
     </div>
     <div v-if="currentStep === 1">
-      <div class="row px-3">
+      <div class="row px-3 mb-3">
         <div class="col-12">
           <div class="row">
             <div class="col-12">
@@ -117,7 +117,9 @@
                             v-for="(item, index) in this.filteredPOI"
                             :key="'filteredPOI' + (index + 300)"
                           >
-                            <collapse v-if="item.poiVisibleWithFilters">
+                            <collapse
+                              v-if="item.hasActivitiesAvailableForRemainingTime"
+                            >
                               <!--
                               <div v-for="">
                                 <i class="bi bi-reception-4"></i>
@@ -821,8 +823,7 @@
                           </div>
                         </div>
                         <div v-else>
-                          Nessuna attività o luogo corrispondente ai filtri
-                          selezionati
+                          Nessuna luogo ha delle attività che rientrano nel tempo rimanente a disposizione. Per visualizzarne alcune occorre rimuovere delle attività attualente presenti nell'itinerrio, cliccando il cestino rosso accanto ad esse nel menu "Attività presenti nell'itinerario".
                         </div>
                       </div>
                     </div>
@@ -941,7 +942,9 @@
       :show.sync="modals.zeroActivitiesInItinerary"
       headerClasses="justify-content-center"
     >
-      <h4 slot="header" class="title title-up text-center">Nessuna attività selezionata!</h4>
+      <h4 slot="header" class="title title-up text-center">
+        Nessuna attività selezionata!
+      </h4>
       <div class="row">
         <div class="col-12">
           <div class="row">
@@ -1391,7 +1394,10 @@ export default {
         //modal che non fa proseguire l'utente
         console.log("INSERISCI ALMENO UN'ATTIVITA'");
         this.modals.zeroActivitiesInItinerary = true;
-        console.log("this.modals.insertCodeModal: " + this.modals.zeroActivitiesInItinerary);
+        console.log(
+          "this.modals.insertCodeModal: " +
+            this.modals.zeroActivitiesInItinerary
+        );
       }
 
       console.log("next page: " + nextPage);
@@ -1581,7 +1587,6 @@ export default {
       });
 
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
-
         console.log("POI");
         console.log(poi);
 
@@ -1642,18 +1647,52 @@ export default {
         }
       });
 
-      //imposto se il POI ha delle attività selezionate
+      //imposto se il POI ha delle attività selezionate e se ha delle attività che stanno nel tempo rimanente
       Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
         var hasActivitiesInItinerary = false;
+        var hasActivitiesAvailableForRemainingTime = false;
 
         Array.prototype.forEach.call(poi.mis, (activity) => {
           if (activity.insertedInItinerary) {
             hasActivitiesInItinerary = true;
             console.log("IL POI ha delle attività nell'itinerario");
           }
+
+          //calcolo tempo rimanente
+          var totalTimeMinutes = 0;
+          var totalMilliseconds = 0;
+
+          Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+            Array.prototype.forEach.call(poi.mis, (activity) => {
+              if (activity.insertedInItinerary) {
+                console.log("sommo " + activity["geo:Durata"][0]["@value"]);
+                totalTimeMinutes += parseInt(
+                  activity["geo:Durata"][0]["@value"]
+                );
+              }
+            });
+          });
+
+          totalMilliseconds = totalTimeMinutes * 60000;
+
+          var remainingTime = this.$store.state.timeAvailable.milliseconds -
+              totalMilliseconds;
+
+          if (
+            parseInt(activity["geo:Durata"][0]["@value"]) * 60000 <
+              remainingTime &&
+            !activity.insertedInItinerary
+          ) {
+            console.log(
+              "Il POI ha delle attività disponibili nel tepo a disposizione"
+            );
+            hasActivitiesAvailableForRemainingTime = true;
+          }
         });
 
         poi.hasActivitiesInItinerary = hasActivitiesInItinerary;
+        poi.hasActivitiesAvailableForRemainingTime =
+          hasActivitiesAvailableForRemainingTime;
       });
 
       //TODO: funziona -> se si riesce migliorarlo
@@ -1664,15 +1703,8 @@ export default {
       console.log("stampo dopo la selezione");
       console.log(this.filteredPOI);
 
-      /*
-      var poiWithActivitiesInItinerary = this.filteredPOI.filter(
-        (poi) => poi.hasActivitiesInItinerary
-      );
-*/
       console.log("POI CON DELLE ATTIVITA NELL'ITINERARIO");
       console.log(this.poiWithActivitiesInItinerary);
-
-      //this.initializeMarkersOfFilteredPOI();
 
       if (this.poiWithActivitiesInItinerary.length > 0) {
         this.incrementStep(false);
@@ -2062,7 +2094,7 @@ export default {
       //TODO: remove me
       //console.log("somePOIVisile");
       return (
-        this.filteredPOI.filter((poi) => poi.poiVisibleWithFilters).length > 0
+        this.filteredPOI.filter((poi) => poi.hasActivitiesAvailableForRemainingTime).length > 0
       );
     },
 

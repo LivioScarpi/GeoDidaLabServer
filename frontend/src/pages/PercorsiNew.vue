@@ -14,7 +14,7 @@
       </div>
     </div>
     <div v-if="currentStep === 1">
-      <div class="row px-3">
+      <div class="row px-3 mb-3">
         <div class="col-12">
           <h6>
             <b>Tempo a disposizione: </b>

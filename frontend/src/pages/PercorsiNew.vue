@@ -1942,8 +1942,8 @@ export default {
             profile: "car",
             start_index: 0,
             end_index: 0,
-            start: [7.8881649358450625, 45.4763201506589],
-            end: [7.8881649358450625, 45.4763201506589],
+            start: [7.889627627278735, 45.47561994860321],
+            end: [7.889627627278735, 45.47561994860321],
             time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
           },
         ],

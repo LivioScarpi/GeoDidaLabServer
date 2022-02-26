@@ -835,11 +835,15 @@
                             :key="'marker' + index"
                           >
                             <l-icon
-                              v-if="marker.poiHasActivitiesInItinerary"
+                              v-if="marker.isStartPoint"
+                              :icon-url="require('../icons/startPoint.png')"
+                            ></l-icon>
+                            <l-icon
+                              v-else-if="marker.poiHasActivitiesInItinerary"
                               :icon-url="require('../icons/selectedPOI.png')"
                             ></l-icon>
                             <l-icon
-                              v-if="!marker.poiHasActivitiesInItinerary"
+                              v-else-if="!marker.poiHasActivitiesInItinerary"
                               :icon-url="require('../icons/unselectedPOI.png')"
                             ></l-icon>
                             <l-popup :options="anchorOptions">
@@ -862,6 +866,8 @@
                           <l-control>
                             <div class="legend">
                               <h4>Legenda</h4>
+                              <i style="background: #82b351"></i
+                              ><span>Luogo di partenza</span><br />
                               <i style="background: #e35747"></i
                               ><span>Luogo selezionato</span><br />
                               <i style="background: #437fc5"></i
@@ -1119,6 +1125,9 @@ export default {
 
       //DATI NUOVI
       itinerario: null,
+
+      startPoint: [45.47561994860321, 7.889627627278735],
+      endPoint: [45.47548295737901, 7.888970990326549],
     };
   },
 
@@ -1341,8 +1350,8 @@ export default {
             profile: "car",
             start_index: 0,
             end_index: 0,
-            start: [7.8881649358450625, 45.4763201506589],
-            end: [7.8881649358450625, 45.4763201506589],
+            start: [7.889627627278735, 45.47561994860321],
+            end: [7.889627627278735, 45.47561994860321],
             time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
           },
         ],
@@ -1472,6 +1481,9 @@ export default {
     createMarkerArray() {
       this.markersPolylines = [];
 
+      //Punto di partenza
+      this.markersPolylines.push(this.startPoint);
+
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
         if (poi.hasActivitiesInItinerary) {
           console.log(poi);
@@ -1484,11 +1496,25 @@ export default {
         }
       });
 
+      //Punto di arrivo
+      this.markersPolylines.push(this.endPoint);
+
       console.log(this.markersPolylines);
     },
 
     initializeMarkersOfFilteredPOI() {
       this.markers = [];
+
+      //marker punto di partenza
+      this.markers.push({
+        marker: L.marker(this.startPoint),
+        color: "#1585bd",
+        strokeColor: "#1b4f88",
+        circleColor: "#ffffff",
+        POItitle: "Punto di partenza",
+        poiHasActivitiesInItinerary: false,
+        isStartPoint: true,
+      });
 
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
         //if (poi.hasActivitiesInItinerary) {
@@ -1502,8 +1528,20 @@ export default {
           circleColor: "#ffffff",
           POItitle: poi.poiName,
           poiHasActivitiesInItinerary: poi.hasActivitiesInItinerary,
+          isStartPoint: false,
         });
         //}
+      });
+
+      //marker punto di arrivo
+      this.markers.push({
+        marker: L.marker(this.endPoint),
+        color: "#1585bd",
+        strokeColor: "#1b4f88",
+        circleColor: "#ffffff",
+        POItitle: "Punto di arrivo",
+        poiHasActivitiesInItinerary: false,
+        isStartPoint: true,
       });
 
       console.log("MARKERS: ");

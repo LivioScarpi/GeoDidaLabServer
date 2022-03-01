@@ -1,13 +1,18 @@
 module.exports = {
     css: {
-        // Enable CSS source maps.
-        sourceMap: process.env.NODE_ENV !== 'production'
+        sourceMap: true
     },
+
     devServer: {
         proxy: {
             '/api': {target: "http://localost:8081", changeOrigin: true}
         }
     },
+
     outputDir: 'target/dist',
     assetsDir: 'static',
+
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/geodidalab/'
+        : '/geodidalab',
 };

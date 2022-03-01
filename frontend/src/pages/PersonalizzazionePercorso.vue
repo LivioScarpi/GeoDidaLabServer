@@ -823,12 +823,11 @@
                           </div>
                         </div>
                         <div v-else>
-                          Nessuna luogo ha delle attività che rientrano nel
-                          tempo rimanente a disposizione. Per visualizzarne
-                          alcune occorre rimuovere delle attività attualente
-                          presenti nell'itinerrio, cliccando il cestino rosso
-                          accanto ad esse nel menu "Attività presenti
-                          nell'itinerario".
+                          Nessun luogo ha delle attività che rientrano nel tempo
+                          rimanente a disposizione. Per visualizzarne alcune
+                          occorre rimuovere delle attività attualente presenti
+                          nell'itinerrio, cliccando il cestino rosso accanto ad
+                          esse nel menu "Attività presenti nell'itinerario".
                         </div>
                       </div>
                     </div>
@@ -1191,6 +1190,8 @@ export default {
   },
 
   mounted() {
+    var self = this;
+
     console.log("TEMPO DISPONIBILE PERSONALIZZAZIONE: ");
     console.log(this.$route);
     console.log(this.$store.state.timeAvailable.milliseconds);
@@ -1216,9 +1217,16 @@ export default {
     });
     */
 
+       //console.log("Remaining time qua: " + this.remainingTime);
+
+
+
     this.$store.commit("setAvailableActivitiesInRemainingTime", {
       activityInItinerary: activitiesInItinerary,
+      remainingTime: this.remainingTime,
     });
+
+    console.log("Remaining time qua: " + this.remainingTime);
 
     console.log("STAMPA DOPO IL COMMIT NELLO STORE");
     console.log(this.$store.state.availableActivitiesInRemainingTime);

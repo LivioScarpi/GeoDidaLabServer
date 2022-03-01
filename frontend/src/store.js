@@ -99,17 +99,19 @@ const store = new Vuex.Store({
             }
         },
 
-        setAvailableActivitiesInRemainingTime(state, {activityInItinerary}) {
+        setAvailableActivitiesInRemainingTime(state, {activityInItinerary, remainingTime}) {
             state.availableActivitiesInRemainingTime = state.POIpivot;
 
             console.log("ACTIVITY IN ITINERARY STORE");
             console.log(activityInItinerary);
+            console.log(remainingTime);
 
             console.log(state.availableActivitiesInRemainingTime);
             
             Array.prototype.forEach.call(state.availableActivitiesInRemainingTime, poiPivot => {
                 
                 var hasActivitiesInItinerary = false;
+                var hasActivitiesAvailableForRemainingTime = false;
 
                 Array.prototype.forEach.call(poiPivot.mis, attivita => {
 
@@ -120,9 +122,14 @@ const store = new Vuex.Store({
                     if(attivita.insertedInItinerary) {
                         hasActivitiesInItinerary = true;
                     }
+
+                    if((attivita["geo:Durata"][0]["@value"] * 60000 < remainingTime) && !attivita.insertedInItinerary) {
+                        hasActivitiesAvailableForRemainingTime = true;
+                    }
                 })
 
                 poiPivot.hasActivitiesInItinerary = hasActivitiesInItinerary;
+                poiPivot.hasActivitiesAvailableForRemainingTime = hasActivitiesAvailableForRemainingTime;
 
             })
 

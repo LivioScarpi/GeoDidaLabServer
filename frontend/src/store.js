@@ -99,15 +99,12 @@ const store = new Vuex.Store({
             }
         },
 
-        setAvailableActivitiesInRemainingTime(state, {activityInItinerary, remainingTime}) {
+        initializeAvailableActivitiesInRemainingTime(state, {activityInItinerary}) {
             state.availableActivitiesInRemainingTime = state.POIpivot;
 
-            console.log("ACTIVITY IN ITINERARY STORE");
-            console.log(activityInItinerary);
-            console.log(remainingTime);
+            console.log("initializeAvailableActivitiesInRemainingTime");
 
-            console.log(state.availableActivitiesInRemainingTime);
-            
+            //ciclo tutti i POI
             Array.prototype.forEach.call(state.availableActivitiesInRemainingTime, poiPivot => {
                 
                 var hasActivitiesInItinerary = false;
@@ -117,14 +114,60 @@ const store = new Vuex.Store({
 
                     console.log(attivita);
 
+                    //l'attività è nell'itinerario se il suo nome è contenuto in activityInItinerary
                     attivita.insertedInItinerary = activityInItinerary.includes(attivita["o:title"]);
 
                     if(attivita.insertedInItinerary) {
+                        //se un'attività del poi è n itinerario allora il poi ha delle attività inserite nell'itinerario
+                        hasActivitiesInItinerary = true;
+                    }
+                })
+
+                poiPivot.hasActivitiesInItinerary = hasActivitiesInItinerary;
+                poiPivot.hasActivitiesAvailableForRemainingTime = hasActivitiesAvailableForRemainingTime;
+
+            })
+
+            console.log(state.availableActivitiesInRemainingTime);
+
+            console.log("FINE initializeAvailableActivitiesInRemainingTime");  
+        },
+
+        setAvailableActivitiesInRemainingTime(state, {activityInItinerary, remainingTime}) {
+            state.availableActivitiesInRemainingTime = state.POIpivot;
+
+            console.log("ACTIVITY IN ITINERARY STORE");
+            console.log(activityInItinerary);
+            console.log(remainingTime);
+
+            console.log(state.availableActivitiesInRemainingTime);
+            
+            //ciclo tutti i POI
+            Array.prototype.forEach.call(state.availableActivitiesInRemainingTime, poiPivot => {
+                
+                var hasActivitiesInItinerary = false;
+                var hasActivitiesAvailableForRemainingTime = false;
+
+                Array.prototype.forEach.call(poiPivot.mis, attivita => {
+
+                    console.log(attivita);
+
+                    //l'attività è nell'itinerario se il suo nome è contenuto in activityInItinerary
+                    attivita.insertedInItinerary = activityInItinerary.includes(attivita["o:title"]);
+
+                    if(attivita.insertedInItinerary) {
+                        //se un'attività del poi è n itinerario allora il poi ha delle attività inserite nell'itinerario
                         hasActivitiesInItinerary = true;
                     }
 
-                    if((attivita["geo:Durata"][0]["@value"] * 60000 < remainingTime) && !attivita.insertedInItinerary) {
+                    //se il poi ha un'attività non inserita nell'itinerario la cui durata è minore del tempo a disposizione
+                    if((parseInt(attivita["geo:Durata"][0]["@value"]) * 60000 < remainingTime) && !attivita.insertedInItinerary) {
+                        //allora il poi ha delle attività disponibili da scegliere nel tempo a disposizione
                         hasActivitiesAvailableForRemainingTime = true;
+                        console.log("ATTIVITA TROVATA con durata: " + attivita["geo:Durata"][0]["@value"]);
+                        console.log("ATTIVITA TROVATA con durata millisec: " + parseInt(attivita["geo:Durata"][0]["@value"]) * 60000);
+
+                        console.log(attivita["o:title"]);
                     }
                 })
 

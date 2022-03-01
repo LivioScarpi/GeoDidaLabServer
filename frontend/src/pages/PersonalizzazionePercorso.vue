@@ -1211,22 +1211,54 @@ export default {
 
     console.log(activitiesInItinerary);
 
+    this.filteredPOI = store.state.POIpivot;
+
+    console.log(this.filteredPOI);
+    console.log(store.state.POIpivot);
+
     /*
     store.commit("setAvailableActivitiesInRemainingTime", {
       activitiesInItinerary,
     });
     */
 
-       //console.log("Remaining time qua: " + this.remainingTime);
+    //console.log("Remaining time qua: " + this.remainingTime);
 
+    //calcolo tempo rimanente
+    var totalTimeMinutes = 0;
+    var totalMilliseconds = 0;
 
+    Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+      Array.prototype.forEach.call(poi.mis, (activity) => {
+        if (activity.insertedInItinerary) {
+          console.log("sommo " + activity["geo:Durata"][0]["@value"]);
+          totalTimeMinutes += parseInt(activity["geo:Durata"][0]["@value"]);
+        }
+      });
+    });
+
+    totalMilliseconds = totalTimeMinutes * 60000;
+
+    this.$store.commit("initializeAvailableActivitiesInRemainingTime", {
+      activityInItinerary: activitiesInItinerary,
+    });
+
+    var remainingTime = this.getRemainingTime();
+
+    console.log("Remaining time qua 1: " + remainingTime);
 
     this.$store.commit("setAvailableActivitiesInRemainingTime", {
       activityInItinerary: activitiesInItinerary,
-      remainingTime: this.remainingTime,
+      remainingTime: remainingTime,
     });
 
-    console.log("Remaining time qua: " + this.remainingTime);
+    console.log("Remaining time qua 3: ");
+    console.log(this.remainingTimeHourAndMinutes);
+
+    console.log("dempo disponibile milliseconds");
+    console.log(this.$store.state.timeAvailable.milliseconds);
+    console.log("millisecondsTotaliItinerario");
+    //console.log(this.getTotalTimeMillisecondsItinerario());
 
     console.log("STAMPA DOPO IL COMMIT NELLO STORE");
     console.log(this.$store.state.availableActivitiesInRemainingTime);
@@ -2128,6 +2160,41 @@ export default {
         });
       }
     },
+
+    getTotalTimeMillisecondsItinerario() {
+      console.log(
+        "getTotalTimeMillisecondsItinerario - calcolo il tempo dell'itinerario"
+      );
+      var totalTimeMinutes = 0;
+
+      console.log(this.filteredPOI);
+
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        console.log("POI in getTotalTimeMillisecondsItinerario");
+        console.log(poi);
+        Array.prototype.forEach.call(poi.mis, (activity) => {
+          if (activity.insertedInItinerary) {
+            console.log("sommo " + activity["geo:Durata"][0]["@value"]);
+            totalTimeMinutes += parseInt(activity["geo:Durata"][0]["@value"]);
+          }
+        });
+      });
+
+      console.log("minuti totali " + totalTimeMinutes);
+      console.log("getTotalTimeMillisecondsItinerario - prima del return");
+      return totalTimeMinutes * 60000;
+    },
+
+    getRemainingTime() {
+      console.log("getRemainingTime");
+      var result =
+        this.$store.state.timeAvailable.milliseconds -
+        this.getTotalTimeMillisecondsItinerario();
+
+      console.log("getRemainigTime - prima del return");
+
+      return result;
+    },
   },
 
   computed: {
@@ -2209,6 +2276,7 @@ export default {
     },
 
     totalTimeMillisecondsItinerario() {
+      console.log("calcolo il tempo dell'itinerario");
       var totalTimeMinutes = 0;
 
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {

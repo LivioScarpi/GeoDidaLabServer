@@ -16,7 +16,7 @@
 
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
-          <div class="col-10 col-lg-11 pl-0">
+          <div class="col-10 col-lg-11 pl-0 mb-4">
             <div
               v-for="(poi, poiIndex) in itinerario.poi"
               :key="'poiInItinerario' + poiIndex"

@@ -29,7 +29,7 @@
           </svg>
         </div>
 
-        <div v-else>
+        <div v-else class="mb-4">
           <ItinerarioVROOM :itinerario="itinerario" />
         </div>
       </div>

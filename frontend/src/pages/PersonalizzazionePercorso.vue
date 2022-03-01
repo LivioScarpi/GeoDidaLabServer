@@ -111,7 +111,7 @@
                         >
                       </h5>
                       <!--state.POIpivot-->
-                      <div>
+                      <div class="mb-4">
                         <div v-if="somePOIVisible">
                           <div
                             v-for="(item, index) in this.filteredPOI"

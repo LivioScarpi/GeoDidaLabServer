@@ -134,7 +134,7 @@ import {
   LPolyline,
 } from "vue2-leaflet";
 
-import { Button } from "../";
+import { Button } from "element-ui";
 import $ from "jquery";
 
 export default {

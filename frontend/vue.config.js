@@ -5,7 +5,7 @@ module.exports = {
 
     devServer: {
         proxy: {
-            '/api': {target: "http://localost:8081", changeOrigin: true}
+            '/geodidalab/api': {target: "http://localost:8081/", changeOrigin: true}
         }
     },
 

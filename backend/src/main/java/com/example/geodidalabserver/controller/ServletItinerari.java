@@ -129,6 +129,8 @@ public class ServletItinerari extends HttpServlet {
 
             String payloadRequest = getBody(req);
 
+            //String itinerario = req.getParameter("itinerario");
+
             System.out.println("payloadRequest");
             System.out.println(payloadRequest);
 

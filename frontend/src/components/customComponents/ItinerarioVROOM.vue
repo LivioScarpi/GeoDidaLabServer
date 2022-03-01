@@ -316,29 +316,6 @@ export default {
     saveItinerary() {
       console.log("Save itinerary");
 
-      //TODO: mandare JSON al server e recuperare ID con cui è stato salvato sul DB
-
-      //TODO: mostrare modal con il codice
-
-      console.log("ITINERARIO: ");
-      console.log(this.itinerario);
-
-      /*
-      $.ajax({
-        url: "/geodidalab/api/itinerari/8V5p42TU8ri8ULHARZ8d",
-        type: "GET",
-        success: function (result) {
-          //self.geojson = result;
-          console.log("RISPOSTA: ");
-          console.log(result);
-        },
-        error: function (error) {
-          console.log("error: ");
-          console.log(error);
-        },
-      });
-       */
-
       console.log("ITINERARIO: ");
       console.log(this.itinerario);
 

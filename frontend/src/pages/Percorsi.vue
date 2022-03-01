@@ -10,7 +10,8 @@
               <n-radio v-model="enabledRadio" label="1">Mattina</n-radio>
               <n-radio v-model="enabledRadio" label="2">Pomeriggio</n-radio>
               <n-radio v-model="enabledRadio" label="3"
-                >Tutta la giornata</n-radio
+              >Tutta la giornata
+              </n-radio
               >
               <n-radio v-model="enabledRadio" label="4">
                 Altro (fascia oraria)
@@ -22,8 +23,8 @@
                     <b>Seleziona il tempo che hai a disposizione</b>
                   </h6>
                   <div
-                    v-if="!okTimeAvailable"
-                    class="col-12 errorMessage fade-in-text text-center"
+                      v-if="!okTimeAvailable"
+                      class="col-12 errorMessage fade-in-text text-center"
                   >
                     <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
                   </div>
@@ -42,30 +43,30 @@
                 <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
                 <div class="row align-items-center pt-3">
                   <div class="col-12 text-center">
-                    <b>dalle ore</b><br />
+                    <b>dalle ore</b><br/>
                     <vue-timepicker
-                      v-model="startAvailableTimeValue"
-                      format="HH:mm"
+                        v-model="startAvailableTimeValue"
+                        format="HH:mm"
                     ></vue-timepicker>
                   </div>
                 </div>
 
                 <div class="row align-items-center pt-3 pb-3">
                   <div class="col-12 text-center">
-                    <b>alle ore</b><br />
+                    <b>alle ore</b><br/>
                     <vue-timepicker
-                      v-model="endAvailableTimeValue"
-                      format="HH:mm"
+                        v-model="endAvailableTimeValue"
+                        format="HH:mm"
                     ></vue-timepicker>
                   </div>
                 </div>
               </div>
               <Button
-                size="small"
-                type="primary"
-                v-on:click="createPath()"
-                class="mx-1 textButtonColor mt-3"
-                >Crea percorso
+                  size="small"
+                  type="primary"
+                  v-on:click="createPath()"
+                  class="mx-1 textButtonColor mt-3"
+              >Crea percorso
               </Button>
             </div>
           </card>
@@ -81,18 +82,18 @@
                 the bulk of the card's content.
               </p>
               <Button
-                size="small"
-                type="primary"
-                v-on:click="insertPathCode()"
-                class="mx-1 textButtonColor"
-                >Inserisci codice
+                  size="small"
+                  type="primary"
+                  v-on:click="insertPathCode()"
+                  class="mx-1 textButtonColor"
+              >Inserisci codice
               </Button>
             </div>
           </card>
 
           <modal
-            :show.sync="modals.insertCodeModal"
-            headerClasses="justify-content-center"
+              :show.sync="modals.insertCodeModal"
+              headerClasses="justify-content-center"
           >
             <h4 slot="header" class="title title-up text-center">Inserisci codice</h4>
             <div class="row">
@@ -108,10 +109,10 @@
                 <div class="row">
                   <div class="col-12">
                     <form-group-input
-                      class="no-border form-control-lg"
-                      placeholder="Codice..."
-                      v-model="pathCodeInserted"
-                      addon-left-icon="now-ui-icons objects_key-25"
+                        class="no-border form-control-lg"
+                        placeholder="Codice..."
+                        v-model="pathCodeInserted"
+                        addon-left-icon="now-ui-icons objects_key-25"
                     >
                     </form-group-input>
                   </div>
@@ -121,19 +122,19 @@
 
             <template slot="footer">
               <Button
-                size="small"
-                type="danger"
-                v-on:click="modals.insertCodeModal = false"
-                class="mx-1 textButtonColor"
-                >Chiudi
+                  size="small"
+                  type="danger"
+                  v-on:click="modals.insertCodeModal = false"
+                  class="mx-1 textButtonColor"
+              >Chiudi
               </Button>
 
               <Button
-                size="small"
-                type="primary"
-                v-on:click="checkCodeAndGetPath()"
-                class="mx-1 textButtonColor"
-                >Inserisci
+                  size="small"
+                  type="primary"
+                  v-on:click="checkCodeAndGetPath()"
+                  class="mx-1 textButtonColor"
+              >Inserisci
               </Button>
             </template>
           </modal>
@@ -149,11 +150,11 @@
                 the bulk of the card's content.
               </p>
               <Button
-                size="small"
-                type="primary"
-                v-on:click="selectDefaultPath()"
-                class="mx-1 textButtonColor"
-                >Seleziona itinerario
+                  size="small"
+                  type="primary"
+                  v-on:click="selectDefaultPath()"
+                  class="mx-1 textButtonColor"
+              >Seleziona itinerario
               </Button>
             </div>
           </card>
@@ -175,7 +176,7 @@ import {
 } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 import activitiesOfPOI from "../components/customComponents/activitiesOfPOI";
-import { Button } from "element-ui";
+import {Button} from "element-ui";
 import L from "leaflet";
 
 import {
@@ -192,7 +193,7 @@ import moment from "moment";
 import VAlertResource from "v-alert-resource";
 import "v-alert-resource/dist/v-alert-resource.css";
 import Notifications from "@voerro/vue-notifications";
-import { Plugins } from "@capacitor/core";
+import {Plugins} from "@capacitor/core";
 import VueTimepicker from "vue2-timepicker";
 import PercorsoSelezionato from "./PercorsoSelezionato.vue";
 
@@ -210,7 +211,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-const { Geolocation } = Plugins;
+const {Geolocation} = Plugins;
 
 const Common = require("@/Common.vue").default;
 
@@ -230,7 +231,7 @@ export default {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
-        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 16,
       center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
@@ -362,7 +363,7 @@ s
 
         for (var j = 0; j < this.filteredPOI[i].mis.length; j++) {
           var activityDurations = new Array(
-            this.filteredPOI[i].mis[j]["geo:Durata"].length
+              this.filteredPOI[i].mis[j]["geo:Durata"].length
           );
 
           activityDurations[j] = this.filteredPOI[i].mis[j]["geo:Durata"];
@@ -404,11 +405,11 @@ s
         if (poi.hasOwnProperty("o-module-mapping:marker")) {
           // Get module-mapping
           Common.getElemByUrl(
-            self,
-            poi["o-module-mapping:marker"][0]["@id"],
-            (r2) => {
-              poi.marker = r2.body;
-            }
+              self,
+              poi["o-module-mapping:marker"][0]["@id"],
+              (r2) => {
+                poi.marker = r2.body;
+              }
           );
         } else {
           /*Il POI non ha nessuna coordinata*/
@@ -618,7 +619,8 @@ s
     //this.makeRequestsVROOM();
   },
 
-  mounted() {},
+  mounted() {
+  },
 
   methods: {
     createPath() {
@@ -680,7 +682,7 @@ s
         humanReadable.hours = Math.floor(hDiff);
         humanReadable.minutes = minDiff - 60 * humanReadable.hours;
         console.log(humanReadable); //{hours: 0, minutes: 30}
-        
+
         var hAvailable = humanReadable.hours;
         var minAvailable = humanReadable.minutes;
 
@@ -727,12 +729,36 @@ s
 
       this.currentPage = "selectDefaultPath";
 
-      router.push({ path: "/elencopercorsi" });
+      router.push({path: "/elencopercorsi"});
     },
 
     checkCodeAndGetPath() {
       console.log("checkCodeAndGetPath");
       console.log(this.pathCodeInserted);
+
+      $.ajax({
+        url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
+        type: "GET",
+        success: function (result) {
+          //self.geojson = result;
+          console.log("RISPOSTA: ");
+          console.log(result);
+
+          var itinerario = result;
+
+          router.push({
+            name: "percorsoselezionato",
+            params: {
+              itinerario,
+            },
+          });
+        },
+        error: function (error) {
+          console.log("error: ");
+          console.log(error);
+        },
+      });
+
 
       this.modals.insertCodeModal = false;
 
@@ -740,17 +766,15 @@ s
 
       this.currentPage = "selectExistingPath";
 
+      /*
       var path = {
         name: "percorso",
         val: 2,
       };
 
-      router.push({
-        name: "percorsoselezionato",
-        params: {
-          path,
-        },
-      });
+       */
+
+
     },
 
     //OLD
@@ -776,7 +800,7 @@ s
         let all = [];
         values.forEach((value) => {
           combos.forEach((combo) => {
-            all.push({ ...combo, [key]: value });
+            all.push({...combo, [key]: value});
           });
         });
         combos = all;
@@ -876,11 +900,11 @@ s
 
       for (j = 0; j < arrayPermutationTimes.length; j++) {
         obj.services.find((x) => x.id === "lago_licheni").duration =
-          arrayPermutationTimes[j].lago_licheni;
+            arrayPermutationTimes[j].lago_licheni;
         obj.services.find((x) => x.id === "laboratorio").duration =
-          arrayPermutationTimes[j].laboratorio;
+            arrayPermutationTimes[j].laboratorio;
         obj.services.find((x) => x.id === "albero_maggiore").duration =
-          arrayPermutationTimes[j].albero_maggiore;
+            arrayPermutationTimes[j].albero_maggiore;
 
         $.ajax({
           url: "https://graphhopper.com/api/1/vrp?key=1a44f3ca-c8dc-404d-bc70-6aa195d12763",
@@ -961,18 +985,18 @@ s
 
       for (j = 0; j < arrayPermutationTimes.length; j++) {
         obj.jobs.find((x) => x.description === "lago_licheni").service =
-          arrayPermutationTimes[j].lago_licheni;
+            arrayPermutationTimes[j].lago_licheni;
         obj.jobs.find((x) => x.description === "laboratorio").service =
-          arrayPermutationTimes[j].laboratorio;
+            arrayPermutationTimes[j].laboratorio;
         obj.jobs.find((x) => x.description === "albero_maggiore").service =
-          arrayPermutationTimes[j].albero_maggiore;
+            arrayPermutationTimes[j].albero_maggiore;
 
         $.ajax({
           url: "https://api.openrouteservice.org/optimization",
           headers: {
             "Content-Type": "application/json; charset=utf-8",
             Authorization:
-              "5b3ce3597851110001cf624857f877a781484fed8dde10c1a27d44b4",
+                "5b3ce3597851110001cf624857f877a781484fed8dde10c1a27d44b4",
           },
           type: "POST",
           dataType: "json",
@@ -1046,12 +1070,12 @@ s
        */
       } else if (this.currentStep === 3) {
         var hAvailable =
-          this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
+            this.endAvailableTimeValue.HH - this.startAvailableTimeValue.HH;
         var minAvailable =
-          this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
+            this.endAvailableTimeValue.mm - this.startAvailableTimeValue.mm;
 
         console.log(
-          "hAvailable: " + hAvailable + ", minAvailable: " + minAvailable
+            "hAvailable: " + hAvailable + ", minAvailable: " + minAvailable
         );
 
         if (hAvailable > 0) {
@@ -1069,7 +1093,7 @@ s
             var experiments = poi.mis;
 
             if (
-              this.POIhasCorrectExperimentsOfDifficultiesLevels(experiments)
+                this.POIhasCorrectExperimentsOfDifficultiesLevels(experiments)
             ) {
               console.log("IL POI HA ESPERIMENTI DI QUESTA DIFFICOLTA");
               this.filteredPOI.push(poi);
@@ -1082,7 +1106,7 @@ s
           console.log(this.filteredPOI);
 
           var selectedInterests = this.$store.state.interests.filter(
-            (x) => x.interestSelected
+              (x) => x.interestSelected
           );
           var interestsName;
 
@@ -1090,7 +1114,7 @@ s
             interestsName = selectedInterests.map((x) => x.interestName);
           } else {
             interestsName = this.$store.state.interests.map(
-              (x) => x.interestName
+                (x) => x.interestName
             );
           }
 
@@ -1102,9 +1126,9 @@ s
 
           Array.prototype.forEach.call(this.filteredPOI, (poi) => {
             if (
-              interestsName.includes(
-                poi["geo:ha_interesse"][0]["display_title"]
-              )
+                interestsName.includes(
+                    poi["geo:ha_interesse"][0]["display_title"]
+                )
             ) {
               poiWithCorrectInterestDuplicated.push(poi);
             }
@@ -1208,7 +1232,7 @@ s
 
         Array.prototype.forEach.call(poi.mis, (exp) => {
           var difficultyLevelsPOI = exp["geo:ha_difficolta"].map(
-            (d) => d["display_title"]
+              (d) => d["display_title"]
           );
 
           if (difficultyLevelsPOI.indexOf(this.experienceGradeRadio) >= 0) {
@@ -1227,8 +1251,8 @@ s
 
         this.markers.push({
           marker: L.latLng(
-            poi.marker["o-module-mapping:lat"],
-            poi.marker["o-module-mapping:lng"]
+              poi.marker["o-module-mapping:lat"],
+              poi.marker["o-module-mapping:lng"]
           ),
           selected: false,
           color: "#1585bd",

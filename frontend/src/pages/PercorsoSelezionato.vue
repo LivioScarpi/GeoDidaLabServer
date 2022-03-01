@@ -13,24 +13,44 @@
         </h4>
       </div>
     </div>
-    PERCORSO SELEZIONATO - percorso ricevuto :{{ path }}
+
+    <div v-if="itinerario === null" class="loader">
+      <svg class="circular">
+        <circle
+            class="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke-width="5"
+            stroke-miterlimit="10"
+        ></circle>
+      </svg>
+    </div>
+
+    <div v-else class="mb-4">
+      <ItinerarioVROOM :itinerario="itinerario" />
+    </div>
   </div>
 </template>
 
 <script>
 import router from "../router";
 
+import ItinerarioVROOM from "../components/customComponents/ItinerarioVROOM.vue";
 
 export default {
   name: "PercorsoSelezionato",
   //props: ["test"],
 
-  components: {},
+  components: {
+    ItinerarioVROOM
+  },
 
   data() {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      path: null,
+      itinerario: null,
     };
   },
 
@@ -38,7 +58,7 @@ export default {
     console.log("PERCORSO SELEZIONATO");
     console.log(this.$route);
 
-    this.path = this.$route.params.path;
+    this.itinerario = this.$route.params.itinerario;
   },
 
   methods: {

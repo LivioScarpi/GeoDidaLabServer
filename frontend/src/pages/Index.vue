@@ -1,21 +1,21 @@
 <template>
   <div>
-    <div class="page-header clear-filter" filter-color="orange"> <!--filter-color="orange"-->
+    <div class="page-header clear-filter" filter-color="orange">
+      <!--filter-color="orange"-->
       <parallax
-          class="page-header-image"
-          style="background-image:url('~@/assets/images/canoe-scaled.jpg.webp')"
+        class="page-header-image"
+        :style="{'background-image' : 'url(' + imageUrl + ')'}"
       >
       </parallax>
       <div class="container">
         <div class="content-center brand">
           <!--<img class="n-logo" src="img/now-logo.png" alt="" />-->
           <h1 class="h1-seo">GEODIDALAB</h1>
-          <h3>{{description}}</h3>
+          <h3>{{ description }}</h3>
         </div>
       </div>
     </div>
-    <div class="main">
-    </div>
+    <div class="main"></div>
 
     <!--
     <basic-elements></basic-elements>
@@ -54,15 +54,14 @@
     -->
 
     <div class="section">
-        <div class="row justify-content-center">
-          <div class="card-group justify-content-center">
-            <div v-for="item in cardObject" :key="item.title">
-              <card :item="item"></card>
-            </div>
+      <div class="row justify-content-center">
+        <div class="card-group justify-content-center">
+          <div v-for="item in cardObject" :key="item.title">
+            <card :item="item"></card>
           </div>
         </div>
       </div>
-
+    </div>
 
     <!--
     <signup-form></signup-form>
@@ -72,10 +71,10 @@
   </div>
 </template>
 <script>
-import {Parallax} from '@/components';
+import { Parallax } from "@/components";
 import card from "../components/customComponents/card";
 
-require('@/assets/images/canoe-scaled.jpg.webp');
+require("@/assets/images/canoe-scaled.jpg.webp");
 
 /*
 
@@ -94,15 +93,12 @@ import DownloadSection from './components/DownloadSection';
 
  */
 
-
-
-
 export default {
-  name: 'index',
-  bodyClass: 'index-page',
+  name: "index",
+  bodyClass: "index-page",
   components: {
     Parallax,
-    card
+    card,
     /*
     BasicElements,
     Navigation,
@@ -125,27 +121,45 @@ export default {
   data() {
     return {
       cardObject: [
-        {title: "Timeline", message: 'Questa è la card 1', imgSrc: require('@/assets/images/timelineImg2.png'), pageDestination: "/timeline"},
-        {title: "Percorsi", message: 'Questa è la card 2', imgSrc: require('@/assets/images/percorsi.jpg'), pageDestination: "/percorsi"},
-        {title: "Esperimenti", message: 'Questa è la card 3', imgSrc: require('@/assets/images/esperimenti.jpg'), pageDestination: "/esperimenti"},
-        {title: "Strumenti", message: 'Questa è la card 4', imgSrc: require('@/assets/images/strumenti.jpg'), pageDestination: "/strumenti"},
+        {
+          title: "Timeline",
+          message: "Questa è la card 1",
+          imgSrc: require("@/assets/images/timelineImg2.png"),
+          pageDestination: "/timeline",
+        },
+        {
+          title: "Percorsi",
+          message: "Questa è la card 2",
+          imgSrc: require("@/assets/images/percorsi.jpg"),
+          pageDestination: "/percorsi",
+        },
+        {
+          title: "Esperimenti",
+          message: "Questa è la card 3",
+          imgSrc: require("@/assets/images/esperimenti.jpg"),
+          pageDestination: "/esperimenti",
+        },
+        {
+          title: "Strumenti",
+          message: "Questa è la card 4",
+          imgSrc: require("@/assets/images/strumenti.jpg"),
+          pageDestination: "/strumenti",
+        },
       ],
-      description: "Il GeoDidaLab è un laboratorio di educazione\n" +
-          "ambientale e ricerca didattica gestito dal\n" +
-          "Dipartimento di Scienze della Terra\n" +
-          "dell’Università di Torino che dal 2013 propone\n" +
-          "attività didattiche per le scuole di ogni ordine\n" +
-          "e grado, attività di formazione per gli\n" +
-          "insegnanti e promuove progetti di ricerca\n" +
-          "scientifica in ambito geologico-ambientale e\n" +
-          "didattico.",
-    }
+      description:
+        "Il GeoDidaLab è un laboratorio di educazione\n" +
+        "ambientale e ricerca didattica gestito dal\n" +
+        "Dipartimento di Scienze della Terra\n" +
+        "dell’Università di Torino che dal 2013 propone\n" +
+        "attività didattiche per le scuole di ogni ordine\n" +
+        "e grado, attività di formazione per gli\n" +
+        "insegnanti e promuove progetti di ricerca\n" +
+        "scientifica in ambito geologico-ambientale e\n" +
+        "didattico.",
+      imageUrl: require("../assets/images/canoe-scaled.jpg.webp"),
+    };
   },
-
 };
 </script>
 <style>
-
-
-
 </style>

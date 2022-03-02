@@ -77,10 +77,13 @@
                 <div v-else>LA LUNGHEZZA E' 0</div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" v-if="page !== 'percorsi'">
               <div class="col-12">
                 <div class="row align-items-center">
-                  Puoi salvare il tuo itinerario premendo il bottone "Salva itinerario". Ti verrà fornito un codice identificativo del tuo itinerario, salvalo e conservalo per poter poi consultare nuovamente l'itinerario.
+                  Puoi salvare il tuo itinerario premendo il bottone "Salva
+                  itinerario". Ti verrà fornito un codice identificativo del tuo
+                  itinerario, salvalo e conservalo per poter poi consultare
+                  nuovamente l'itinerario.
                   <Button
                     size="large"
                     type="warning"
@@ -90,7 +93,8 @@
                   </Button>
                 </div>
                 <div class="row align-items-center">
-                  Puoi effettuare la tua prenotazione inviando una mail premendo il bottone "Invia mail".
+                  Puoi effettuare la tua prenotazione inviando una mail premendo
+                  il bottone "Invia mail".
                   <Button
                     size="large"
                     type="warning"
@@ -228,7 +232,7 @@ import $ from "jquery";
 
 export default {
   name: "ItinerarioVROOM",
-  props: ["item", "itinerario"],
+  props: ["item", "itinerario", "page"],
 
   components: {
     //Component Leaflet map
@@ -277,6 +281,9 @@ export default {
 
     console.log("itinerario:");
     console.log(this.itinerario);
+
+    console.log("page:");
+    console.log(this.page);
 
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();
@@ -378,7 +385,8 @@ export default {
       var body = "Salve, vi contatto per .....";
 
       var mail = document.createElement("a");
-      mail.href = "mailto:" + emailAddress + "?subject=" + subject + "&body=" + body;
+      mail.href =
+        "mailto:" + emailAddress + "?subject=" + subject + "&body=" + body;
       mail.click();
     },
 

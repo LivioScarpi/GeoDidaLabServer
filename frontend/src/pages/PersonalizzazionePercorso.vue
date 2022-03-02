@@ -2157,6 +2157,9 @@ export default {
       if (nextPage) {
         router.push({
           name: "itinerariogenerato",
+          params: {
+            page: "personalizzazionepercorso",
+          },
         });
       }
     },

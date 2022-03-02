@@ -29,7 +29,7 @@
     </div>
 
     <div v-else class="mb-4">
-      <ItinerarioVROOM :itinerario="itinerario" />
+      <ItinerarioVROOM :itinerario="itinerario" :page="page"/>
     </div>
   </div>
 </template>
@@ -51,6 +51,7 @@ export default {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       itinerario: null,
+      page: null,
     };
   },
 
@@ -59,6 +60,10 @@ export default {
     console.log(this.$route);
 
     this.itinerario = this.$route.params.itinerario;
+    this.page = this.$route.params.page;
+
+        console.log("PAGE PERS: " + this.page);
+
   },
 
   methods: {

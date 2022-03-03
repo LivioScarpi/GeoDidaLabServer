@@ -13,7 +13,7 @@ public class DatabaseConnection {
         String dbDriver = "com.mysql.jdbc.Driver";
         String dbURL = "jdbc:mysql://localhost:3306/";
         // Database name to access
-        String dbName = "geodidalab";
+        String dbName = "openalplab_backend";
         String dbUsername = "root";
         String dbPassword = "root";
 

@@ -139,6 +139,36 @@
               </Button>
             </template>
           </modal>
+
+          <modal
+              :show.sync="modals.itineraryNotReceivedWithError"
+              headerClasses="justify-content-center"
+              @close="modals.itineraryNotReceivedWithError = false"
+          >
+            <h4 slot="header" class="title title-up text-center">Errore!</h4>
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-12 text-center">
+                    <h6 class="itineraryCode">Si è verificato un errore durante recupero del tuo itinerario.</h6>
+                    <p>
+                      Riprovare più tardi.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <template slot="footer">
+              <Button
+                  size="small"
+                  type="danger"
+                  v-on:click="modals.itineraryNotReceivedWithError = false"
+                  class="mx-1"
+              >Chiudi
+              </Button>
+            </template>
+          </modal>
         </div>
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px">
@@ -324,6 +354,7 @@ export default {
       modals: {
         //oggetto usato per mostrare i modals
         insertCodeModal: false,
+        itineraryNotReceivedWithError: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -748,6 +779,8 @@ s
       console.log("checkCodeAndGetPath");
       console.log(this.pathCodeInserted);
 
+      var self = this;
+
       $.ajax({
         url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
         type: "GET",
@@ -769,6 +802,8 @@ s
         error: function (error) {
           console.log("error: ");
           console.log(error);
+
+          self.modals.itineraryNotReceivedWithError = true;
         },
       });
 

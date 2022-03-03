@@ -201,6 +201,36 @@
         </Button>-->
       </template>
     </modal>
+
+    <modal
+        :show.sync="modals.itineraryCodeGeneratedWithError"
+        headerClasses="justify-content-center"
+        @close="modals.itineraryCodeGeneratedWithError = false"
+    >
+      <h4 slot="header" class="title title-up text-center">Errore!</h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h6 class="itineraryCode">Si è verificato un errore durante il salvataggio del tuo itinerario.</h6>
+              <p>
+                Riprovare più tardi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button
+            size="small"
+            type="danger"
+            v-on:click="modals.itineraryCodeGeneratedWithError = false"
+            class="mx-1"
+        >Chiudi
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -270,6 +300,7 @@ export default {
       modals: {
         //oggetto usato per mostrare i modals
         itineraryCodeGenerated: false,
+        itineraryCodeGeneratedWithError: false,
       },
 
       itineraryCode: null,
@@ -370,11 +401,17 @@ export default {
 
           self.itineraryCode = result;
 
+          self.modals.itineraryCodeGeneratedWithError = false;
           self.modals.itineraryCodeGenerated = true;
+
         },
         error: function (error) {
           console.log("error: ");
           console.log(error);
+
+          self.modals.itineraryCodeGenerated = false;
+          self.modals.itineraryCodeGeneratedWithError = true;
+
         },
       });
     },

@@ -314,7 +314,15 @@ const store = new Vuex.Store({
 
             Array.prototype.forEach.call(state.itinerari, itinerario => {
                 //recupero i poi che appartengono all'itinerario corrente
-                var poiInItinerario = state.POI.filter(x => x["geo:appartiene_a_itinerario"][0]["display_title"] === itinerario["o:title"]);
+
+                console.log(state.POI);
+
+                var filteredPOI = state.POI.filter(x => x["geo:appartiene_a_itinerario"] !== undefined && x["geo:Posizione_itinerario"] !== undefined);
+
+                console.log("filteredPOI");
+                console.log(filteredPOI);
+
+                var poiInItinerario = filteredPOI.filter(x => x["geo:appartiene_a_itinerario"][0]["display_title"] === itinerario["o:title"]);
 
                 //ordino i POI in base alla loro posizione nell'itinerario
                 poiInItinerario.sort((a, b) => (a["geo:Posizione_itinerario"][0]["@value"] > b["geo:Posizione_itinerario"][0]["@value"]) ? 1 : ((b["geo:Posizione_itinerario"][0]["@value"] > a["geo:Posizione_itinerario"][0]["@value"]) ? -1 : 0))

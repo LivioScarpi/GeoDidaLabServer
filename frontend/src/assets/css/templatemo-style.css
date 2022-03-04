@@ -163,12 +163,12 @@ html {
 }
 
 .triangle {
-    margin-left: 45%;
+    margin-left: 44.5%;
     width: 0;
     height: 0;
     border-left: 60px solid transparent;
     border-right: 60px solid transparent;
-    border-top: 45px solid #98d361;
+    border-top: 45px solid #e98850;
 }
 
 .cd-container {
@@ -283,10 +283,12 @@ html {
     margin-top: -12px;
 }
 
+/*
 .cd-timeline-img:hover {
-    background-color: #98d361;
+    background-color: #e98850;
     cursor: pointer;
 }
+*/
 
 @media only screen and (min-width: 1170px) {
     .cd-timeline-img {

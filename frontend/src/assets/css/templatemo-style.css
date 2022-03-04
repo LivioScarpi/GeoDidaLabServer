@@ -295,6 +295,7 @@ html {
         width: 60px;
         height: 60px;
         left: 50%;
+        top:10%; /*TODO: ho aggiunto questo*/
         margin-left: -30px;
     /* Force Hardware Acceleration in WebKit */
         -webkit-transform: translateZ(0);

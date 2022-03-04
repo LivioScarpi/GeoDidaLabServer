@@ -39,17 +39,19 @@
                         :key="poiIndex"
                         class="cd-timeline-block"
                       >
-                        <div
-                          class="
-                            cd-timeline-img cd-picture
-                          "
-                        >
-                        <div class="row                             text-center
-                            align-items-center">
-                            <div class="col-12">
-                          <p class="">{{ poiIndex }}</p>
-                            </div>
-                        </div>
+                        <div class="cd-timeline-img cd-picture">
+                          <img
+                            v-if="
+                              poi['poiName'] === 'Punto di partenza' ||
+                              poi['poiName'] === 'Punto di arrivo'
+                            "
+                            src="../../icons/startPoint.png"
+                          />
+                          <img
+                            v-else
+                            src="../../icons/unselectedPOI.png"
+                            alt="Picture"
+                          />
                         </div>
 
                         <div
@@ -62,7 +64,13 @@
                         >
                           <div class="row">
                             <div class="col-12">
-                              <div class="row">
+                              <div
+                                v-if="
+                                  poi['poiName'] !== 'Punto di partenza' &&
+                                  poi['poiName'] !== 'Punto di arrivo'
+                                "
+                                class="row"
+                              >
                                 <!--v-if="poi.image !== undefined"-->
                                 <div class="col-12">
                                   <img
@@ -75,7 +83,19 @@
 
                               <div class="row text-center">
                                 <div class="col-12">
-                                  <h2 class="mb-1 mt-4">{{ poi["poiName"] }}</h2>
+                                  <h2 class="mt-4 mb-0">
+                                    {{ poi["poiName"] }}
+                                  </h2>
+
+                                  <h4
+                                    v-if="
+                                      poi['poiName'] !== 'Punto di partenza' &&
+                                      poi['poiName'] !== 'Punto di arrivo'
+                                    "
+                                    class="mb-3 mt-0"
+                                  >
+                                    Attività
+                                  </h4>
 
                                   <div
                                     v-for="(
@@ -89,20 +109,18 @@
                                         poi['poiName'] !==
                                           'Punto di partenza' &&
                                         poi['poiName'] !== 'Punto di arrivo'
-                                      " class="mb-3"
+                                      "
+                                      class="mb-3"
                                     >
                                       <!--<i
                                         class="bi bi-clipboard-check-fill mr-2"
                                       ></i>-->
-                                      <!--{{ poiIndex }}.{{activityIndex}} - --><h6>{{
-                                        activity["activityName"]
-                                      }}</h6>
+                                      <!--{{ poiIndex }}.{{activityIndex}} - -->
+                                      <h6>{{ activity["activityName"] }}</h6>
                                       (
                                       <i
                                         >durata
-                                        {{
-                                          activity["serviceDurationMinutes"]
-                                        }}
+                                        {{ activity["serviceDurationMinutes"] }}
                                         minuti </i
                                       >)
                                     </div>
@@ -120,7 +138,7 @@
             </div>
           </div>
         </div>
-<!--
+        <!--
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
           <div class="col-10 col-lg-11 pl-0 mb-4">

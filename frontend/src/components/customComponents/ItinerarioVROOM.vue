@@ -24,7 +24,7 @@
         </div>
 
         <div v-if="itineraryCode === null" class="row mb-0 text-center">
-          <div class="col-12">
+          <div class="col-12 px-5">
             Puoi salvare il tuo itinerario premendo il bottone "Salva
             itinerario". Ti verrà fornito un codice identificativo del tuo
             itinerario, salvalo e conservalo per poter poi consultare nuovamente
@@ -44,7 +44,7 @@
         </div>
 
         <div v-if="itineraryCode !== null" class="row mb-0 text-center">
-          <div class="col-12">
+          <div class="col-12 px-5">
             Puoi effettuare la tua prenotazione inviando una mail premendo il
             bottone "Invia mail".
           </div>

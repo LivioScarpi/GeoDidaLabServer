@@ -23,6 +23,44 @@
           </div>
         </div>
 
+        <div v-if="itineraryCode === null" class="row mb-0 text-center">
+          <div class="col-12">
+            Puoi salvare il tuo itinerario premendo il bottone "Salva
+            itinerario". Ti verrà fornito un codice identificativo del tuo
+            itinerario, salvalo e conservalo per poter poi consultare nuovamente
+            l'itinerario.
+          </div>
+        </div>
+
+        <div v-if="itineraryCode === null" class="row mt-3 text-center">
+          <div class="col-12">
+            <Button
+              size="large"
+              v-on:click="saveItinerary()"
+              class="m-2 textButtonColor"
+              >Salva itinerario
+            </Button>
+          </div>
+        </div>
+
+        <div v-if="itineraryCode !== null" class="row mb-0 text-center">
+          <div class="col-12">
+            Puoi effettuare la tua prenotazione inviando una mail premendo il
+            bottone "Invia mail".
+          </div>
+        </div>
+
+        <div v-if="itineraryCode !== null" class="row mt-3 text-center">
+          <div class="col-12">
+            <Button
+              size="large"
+              v-on:click="sendEmail()"
+              class="m-2 textButtonColor"
+              >Invia mail
+            </Button>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-12">
             <div id="first-section1">
@@ -557,6 +595,8 @@ export default {
 <style scoped>
 .textButtonColor {
   color: #2c2c2c;
+  background: #ffaa78;
+  border-color: #ffaa78;
 }
 
 .itineraryCode {

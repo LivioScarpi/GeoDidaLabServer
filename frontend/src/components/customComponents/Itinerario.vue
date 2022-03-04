@@ -2,6 +2,7 @@
   <div id="collapseDiv">
     <div class="row">
       <div class="col-lg-7 col-sm-12">
+        <!--
         <div class="row align-items-center">
           <div class="col-2 col-lg-1 text-center pr-1">
             <i
@@ -12,8 +13,126 @@
           <div class="col-10 col-lg-11">
             <h5 class="mb-0">{{ itinerario["geo:Titolo_it"][0]["@value"] }}</h5>
           </div>
+        </div>-->
+
+
+        <div class="row">
+          <div class="col-12">
+            <div id="first-section1">
+              <div class="container">
+                <!--
+                <div class="row">
+                  <div class="triangle"></div>
+                </div>-->
+                <div class="row">
+                  <div class="col-md-12">
+                    <section id="cd-timeline" class="cd-container">
+                      <div
+                        v-for="(poi, poiIndex) in itinerario.poi"
+                        :key="poiIndex"
+                        class="cd-timeline-block"
+                      >
+                        <div class="cd-timeline-img cd-picture">
+                          <img
+                            v-if="
+                              poi['poiName'] === 'Punto di partenza' ||
+                              poi['poiName'] === 'Punto di arrivo'
+                            "
+                            src="../../icons/startPoint.png"
+                          />
+                          <img
+                            v-else
+                            src="../../icons/unselectedPOI.png"
+                            alt="Picture"
+                          />
+                        </div>
+
+                        <div
+                          class="
+                            cd-timeline-content
+                            service-box-content
+                            pt-0
+                            px-0
+                          "
+                        >
+                          <div class="row">
+                            <div class="col-12">
+                              <div
+                                v-if="
+                                  poi['poiName'] !== 'Punto di partenza' &&
+                                  poi['poiName'] !== 'Punto di arrivo'
+                                "
+                                class="row"
+                              >
+                                <!--v-if="poi.image !== undefined"-->
+                                <div class="col-12">
+                                  <img
+                                    src="@/assets/images/bg3.jpg"
+                                    alt="Picture"
+                                    class="px-0 rounded-top"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="row text-center">
+                                <div class="col-12">
+                                  <h2 class="mt-4 mb-0">
+                                    {{ poi["geo:Titolo_it"][0]["@value"] }}
+                                  </h2>
+
+                                  <h4
+                                    v-if="
+                                      poi['poiName'] !== 'Punto di partenza' &&
+                                      poi['poiName'] !== 'Punto di arrivo'
+                                    "
+                                    class="mb-3 mt-0"
+                                  >
+                                    Attività
+                                  </h4>
+
+                                  <div
+                                    v-for="(
+                                      activity, activityIndex
+                                    ) in poi.activitiesOfPOIPivot"
+                                    :key="'activityInPOI' + activityIndex"
+                                    class="mx-3"
+                                  >
+                                    <div
+                                      v-if="
+                                        poi['poiName'] !==
+                                          'Punto di partenza' &&
+                                        poi['poiName'] !== 'Punto di arrivo'
+                                      "
+                                      class="mb-3"
+                                    >
+                                      <!--<i
+                                        class="bi bi-clipboard-check-fill mr-2"
+                                      ></i>-->
+                                      <!--{{ poiIndex }}.{{activityIndex}} - -->
+                                      <h6>{{ activity["o:title"] }}</h6>
+                                      (
+                                      <i
+                                        >durata
+                                        {{ activity["serviceDurationMinutes"] }}
+                                        minuti </i
+                                      >)
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
+<!--
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
           <div class="col-10 col-lg-11 pl-0">
@@ -59,7 +178,7 @@
               >Seleziona itinerario
             </Button>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="col-lg-5 col-sm-12">
         <div class="row">
@@ -150,7 +269,7 @@ export default {
     LMarker,
     LPopup,
     LIcon,
-    Button,
+    //Button,
   },
 
   data() {

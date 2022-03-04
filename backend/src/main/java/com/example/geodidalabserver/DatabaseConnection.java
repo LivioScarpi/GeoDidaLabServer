@@ -14,8 +14,8 @@ public class DatabaseConnection {
         String dbURL = "jdbc:mysql://localhost:3306/";
         // Database name to access
         String dbName = "openalplab_backend";
-        String dbUsername = "openalplab";
-        String dbPassword = "CRT_2021_geositlab";
+        String dbUsername = "root";
+        String dbPassword = "root";
 
         Class.forName(dbDriver);
         Connection con = DriverManager.getConnection(dbURL + dbName + "?autoReconnect=true&useSSL=false",

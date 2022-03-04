@@ -28,6 +28,66 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12">
+            <div id="first-section1">
+              <div class="container">
+                <div class="row">
+                  <div class="triangle"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <section id="cd-timeline" class="cd-container">
+                      <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-picture">
+                          <img src="../assets/images/timeline/first-icon.png" alt="Picture">
+                        </div>
+
+                        <div class="cd-timeline-content service-box-content">
+                          <h2>AAA Free Web Template</h2>
+                          <p>Timeline is free responsive template by <span class="blue">template</span><span class="green">mo</span>. This layout is based on Bootstrap v3.1.1 and you may use this template for any website. Credit goes to <a rel="nofollow" href="http://unsplash.com">Unsplash</a> for all images.</p>
+                        </div>
+                      </div>
+
+                      <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-movie">
+                          <img src="../assets/images/timeline/second-icon.png" alt="Picture">
+                        </div>
+
+                        <div class="cd-timeline-content service-box-content">
+                          <h2>Top Icons</h2>
+                          <p>You can easily <strong>change top icons</strong> by looking at guidelines from <a rel="nofollow" href="http://fontawesome.info/font-awesome-icon-world-map/">Font Awesome</a>. Example: <strong>&lt;i class=&quot;fa fa-camera&quot;&gt;&lt;/i&gt;</strong></p>
+                        </div>
+                      </div>
+
+                      <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-icon">
+                          <img src="../assets/images/timeline/third-icon.png" alt="Picture">
+                        </div>
+
+                        <div class="cd-timeline-content service-box-content">
+                          <h2>Responsive Design</h2>
+                          <p>Vestibulum ante ipsum priminisieru in faucibus orci luctus et ultrices posuere cubilia Curae unserd Etiam nisl dui, commodo sit amet eget, vel turpis. Suspendisse at est purus.</p>
+                        </div>
+                      </div>
+
+                      <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-location">
+                          <img src="../assets/images/timeline/fourth-icon.png" alt="Picture">
+                        </div>
+
+                        <div class="cd-timeline-content service-box-content">
+                          <h2>Communication</h2>
+                          <p>Phasellus lobortis vitae ipsum vitae luctus. Proin sodales mi a arcu iaculis, in dapibus nunc sodales. Maecenas auctor vel eros a dapibus.</p>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -262,4 +322,10 @@ export default {
 .date-item{
   visibility: hidden;
 }
+
+
+
+/*TODO: da qua*/
+
+
 </style>

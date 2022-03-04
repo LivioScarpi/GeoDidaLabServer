@@ -26,6 +26,11 @@ Vue.use(VueYoutube)
 </script>
 <style>
 
+/*@import './assets/css/bootstrap.min.css';*/
+@import './assets/css/font-awesome.min.css';
+@import './assets/css/templatemo-style.css';
+
+
 /*
 #app {
   height: 100%;

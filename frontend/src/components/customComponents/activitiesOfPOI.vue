@@ -561,8 +561,7 @@
 
     <div class="row text-left">
       <div class="col-12">
-        Durata:
-        {{ it["geo:Durata"][0]["@value"] }}
+        <i class="bi bi-clock mr-2"></i>{{ it["geo:Durata"][0]["@value"] }}
         minuti
       </div>
     </div>

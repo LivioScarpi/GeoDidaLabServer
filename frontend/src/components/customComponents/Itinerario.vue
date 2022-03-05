@@ -77,7 +77,7 @@
                               <div class="row text-center">
                                 <div class="col-12">
                                   <h2 class="mt-4 mb-0">
-                                    {{ poi["geo:Titolo_it"][0]["@value"] }}
+                                    <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["geo:Titolo_it"][0]["@value"] }}
                                   </h2>
 
                                   <h4
@@ -110,12 +110,8 @@
                                       ></i>-->
                                       <!--{{ poiIndex }}.{{activityIndex}} - -->
                                       <h6>{{ activity["o:title"] }}</h6>
-                                      (
-                                      <i
-                                        >durata
-                                        {{ activity["serviceDurationMinutes"] }}
-                                        minuti </i
-                                      >)
+                                      <i class="bi bi-clock mr-2"></i>
+                                        {{parseInt(activity['durataMillisecondi']) * 10 / 600000}} minuti
                                     </div>
                                   </div>
                                 </div>

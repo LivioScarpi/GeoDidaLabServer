@@ -29,6 +29,7 @@ Vue.use(VueYoutube)
 /*@import './assets/css/bootstrap.min.css';*/
 @import './assets/css/font-awesome.min.css';
 @import './assets/css/templatemo-style.css';
+@import url('http://fonts.cdnfonts.com/css/sofia-pro');
 
 
 /*

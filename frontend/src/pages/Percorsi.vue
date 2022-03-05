@@ -1,11 +1,15 @@
 <template>
   <div>
-    <div v-if="currentStep === 0" class="centerTimePicker text-center">
+    <div
+      v-if="currentStep === 0"
+      class="centerTimePicker text-center pt-4"
+      style="background-color: #ffeee6"
+    >
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">Crea un nuovo percorso</h4>
+              <h4 class="card-title mt-0 customTitle">Crea nuovo percorso</h4>
 
               <n-radio v-model="enabledRadio" label="1">Mattina</n-radio>
               <n-radio v-model="enabledRadio" label="2">Pomeriggio</n-radio>
@@ -73,7 +77,7 @@
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">
+              <h4 class="card-title mt-0 customTitle">
                 Inserisci il codice del tuo itinerario
               </h4>
               <p class="card-text">
@@ -141,19 +145,20 @@
           </modal>
 
           <modal
-              :show.sync="modals.itineraryNotReceivedWithError"
-              headerClasses="justify-content-center"
-              @close="modals.itineraryNotReceivedWithError = false"
+            :show.sync="modals.itineraryNotReceivedWithError"
+            headerClasses="justify-content-center"
+            @close="modals.itineraryNotReceivedWithError = false"
           >
             <h4 slot="header" class="title title-up text-center">Errore!</h4>
             <div class="row">
               <div class="col-12">
                 <div class="row">
                   <div class="col-12 text-center">
-                    <h6 class="itineraryCode">Si è verificato un errore durante recupero del tuo itinerario.</h6>
-                    <p>
-                      Riprovare più tardi.
-                    </p>
+                    <h6 class="itineraryCode">
+                      Si è verificato un errore durante recupero del tuo
+                      itinerario.
+                    </h6>
+                    <p>Riprovare più tardi.</p>
                   </div>
                 </div>
               </div>
@@ -161,11 +166,11 @@
 
             <template slot="footer">
               <Button
-                  size="small"
-                  type="danger"
-                  v-on:click="modals.itineraryNotReceivedWithError = false"
-                  class="mx-1"
-              >Chiudi
+                size="small"
+                type="danger"
+                v-on:click="modals.itineraryNotReceivedWithError = false"
+                class="mx-1"
+                >Chiudi
               </Button>
             </template>
           </modal>
@@ -173,7 +178,7 @@
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">
+              <h4 class="card-title mt-0 customTitle">
                 Seleziona un itinerario predefinito
               </h4>
               <p class="card-text">
@@ -1450,4 +1455,9 @@ s
   border-radius: 5px;
 }
 
+.customTitle {
+  font-family: "Sofia Pro";
+  font-style: normal;
+  font-weight: 600;
+}
 </style>

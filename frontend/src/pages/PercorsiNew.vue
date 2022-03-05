@@ -708,8 +708,8 @@
                   >
                     <div v-if="it.selected">
                       <div
-                        class="row border shadow mr-1 mb-3"
-                        style="border-radius: 10px"
+                        class="row border mr-1 mb-3 customShadowOrange"
+                        style="border-radius: 10px;"
                       >
                         <div
                           class="col-2 text-center px-0"
@@ -737,10 +737,24 @@
                           ></i>
                         </div>
                         <div class="col-10 text-left py-2">
-                          {{ it["o:title"] }} ({{
+                          <div class="row">
+                            <div class="col-12">
+{{ it["o:title"] }}</div>
+                          </div>
+                                                    <div class="row">
+                                                      <div class="col-12">
+                            <i class="bi bi-pin-map-fill mr-2"></i>{{
                             item["geo:Titolo_it"][0]["@value"]
-                          }}) (durata
-                          {{ it["geo:Durata"][0]["@value"] }} minuti)
+                          }}
+                                                      </div>
+                          </div>
+
+                          <div class="row">
+                                                      <div class="col-12">
+<i class="bi bi-clock mr-2"></i>{{ it["geo:Durata"][0]["@value"] }} minuti
+                                                      </div>
+
+                        </div>
                         </div>
                       </div>
                     </div>
@@ -788,7 +802,7 @@
                               >
                                 <div
                                   style="border-radius: 5px"
-                                  class="border shadow zoom"
+                                  class="border customShadowBlue zoom"
                                 >
                                   <div class="row">
                                     <div class="col-lg-3 col-4">
@@ -2882,7 +2896,7 @@ export default {
 .zoom:hover {
   transform: scale(
     1.03
-  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  ); 
 }
 
 .containerCard {
@@ -2906,5 +2920,14 @@ export default {
   color: white;
 }
 
+/*.header
+.customShadowOrange {
+  box-shadow: 0 3px 10px #ddb696;
+}
 
+.customShadowBlue:hover {
+  transition: box-shadow .3s;
+  box-shadow: 0 3px 10px #9bc5e7;
+}
+*/
 </style>

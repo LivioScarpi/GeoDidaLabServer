@@ -778,23 +778,28 @@
                               }"
                             >
                               <div
-                                class="header pb-0"
+                                class=" pb-0"
                                 :id="'cardHeader' + index"
-                                @click="openPOIactivities('cardHeader' + index)"
+                                @click="
+                                  openPOIactivities(
+                                    'cardHeader' + index,
+                                    $event
+                                  )
+                                "
                               >
                                 <div
                                   style="border-radius: 5px"
-                                  class="border shadow card zoom"
+                                  class="border shadow zoom"
                                 >
                                   <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-4">
                                       <img
                                         src="@/assets/images/bg3.jpg"
                                         alt="Picture"
                                         class="rounded-left img"
                                       />
                                     </div>
-                                    <div class="col-8 px-0 pb-3">
+                                    <div class="col-lg-9 col-8 px-0">
                                       <div class="row mt-3">
                                         <div class="col-12">
                                           <h6>
@@ -804,9 +809,29 @@
                                           </h6>
                                         </div>
                                       </div>
-                                      <!--
+
                                       <div class="row">
-                                        <div class="col-11">
+                                        <div class="col-12 pr-0">
+                                          <collapse>
+                                            <collapse-item
+                                              title="Mostra descrizione"
+                                            >
+                                              <div
+                                                style="
+                                                  text-align: justify;
+                                                  text-justify: inter-word;
+                                                "
+                                                class="font-weight-normal"
+                                              >
+                                                {{
+                                                  item[
+                                                    "dcterms:description"
+                                                  ][0]["@value"]
+                                                }}
+                                              </div>
+                                            </collapse-item>
+                                          </collapse>
+                                          <!--
                                           <div
                                             class="truncate"
                                             :id="'descriptionPOI' + index"
@@ -816,9 +841,9 @@
                                                 "@value"
                                               ]
                                             }}
-                                          </div>
+                                          </div>-->
                                         </div>
-                                        <div class="col-1">
+                                        <!--<div class="col-1">
                                           <span
                                             :id="'expandTextIcon' + index"
                                             @click="
@@ -843,8 +868,8 @@
                                             style="cursor: pointer"
                                             ><i class="bi bi-chevron-up"></i
                                           ></span>
-                                        </div>
-                                      </div>-->
+                                        </div>-->
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -3228,10 +3253,23 @@ export default {
       });
     },
 
-    expandText(id, expandIcon, collapseIcon) {
+    expandText(id, expandIcon, collapseIcon, cardHeaderID) {
       $("#" + id).addClass("truncated");
       $("#" + expandIcon).hide();
       $("#" + collapseIcon).show();
+
+      /*
+      var header = $("#" + cardHeaderID);
+      console.log(header);
+      //getting the next element
+      var content = header.next();
+      console.log(content);
+
+      //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+      content.slideToggle(500, function () {
+        //execute this after slideToggle is done
+        //change text of header based on visibility of content div
+      });*/
     },
 
     collapseText(id, expandIcon, collapseIcon) {
@@ -3240,18 +3278,24 @@ export default {
       $("#" + collapseIcon).hide();
     },
 
-    openPOIactivities(cardHeaderID) {
-      var header = $("#" + cardHeaderID);
-      console.log(header);
-      //getting the next element
-      var content = header.next();
-      console.log(content);
+    openPOIactivities(cardHeaderID, event) {
+      console.log(event.target);
+      console.log(event.target.tagName.toLowerCase());
 
-      //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
-      content.slideToggle(250, function () {
-        //execute this after slideToggle is done
-        //change text of header based on visibility of content div
-      });
+      //se event.target.tagName.toLowerCase() è === 'a' o === 'i' allora ho cliccato su "mostra descrizione" e non si deve aprire il collapse delle attività
+      if (event.target.tagName.toLowerCase() !== "a" && event.target.tagName.toLowerCase() !== "i") {
+        var header = $("#" + cardHeaderID);
+        console.log(header);
+        //getting the next element
+        var content = header.next();
+        console.log(content);
+
+        //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+        content.slideToggle(250, function () {
+          //execute this after slideToggle is done
+          //change text of header based on visibility of content div
+        });
+      }
     },
   },
 

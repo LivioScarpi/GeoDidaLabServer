@@ -708,24 +708,41 @@
                     class="pl-2"
                   >
                     <div v-if="it.selected">
-                      <div class="row border-bottom py-2 mr-1">
-                        <div class="col-2">
-                          <i
-                            class="bi bi-trash"
-                            style="
-                              cursor: pointer;
-                              color: indianred;
-                              font-size: 1.2rem;
-                            "
-                            @click="
-                              changeSelection(
-                                item['geo:Titolo_it'][0]['@value'],
-                                it['o:title']
-                              )
-                            "
-                          ></i>
+                      <div
+                        class="row border mr-1 mb-2"
+                        style="border-radius: 10px"
+                      >
+                        <div
+                          class="col-2 text-center px-0"
+                          style="
+                            background-color: indianred;
+                            border-top-left-radius: 10px;
+                            border-bottom-left-radius: 10px;
+                          "
+                        >
+                          <div class="row text-center px-0">
+                            <div
+                              class="col-12 text-center px-0"
+                              style="margin: auto"
+                            >
+                              <i
+                                class="bi bi-trash"
+                                style="
+                                  cursor: pointer;
+                                  color: white;
+                                  font-size: 1.2rem;
+                                "
+                                @click="
+                                  changeSelection(
+                                    item['geo:Titolo_it'][0]['@value'],
+                                    it['o:title']
+                                  )
+                                "
+                              ></i>
+                            </div>
+                          </div>
                         </div>
-                        <div class="col-10 text-left">
+                        <div class="col-10 text-left py-2">
                           {{ it["o:title"] }} ({{
                             item["geo:Titolo_it"][0]["@value"]
                           }}) (durata
@@ -871,12 +888,12 @@
                                           class="
                                             row
                                             mt-0
-                                            border-bottom
                                             py-2
                                             text-center
                                             align-items-center
                                           "
-                                        >
+                                          
+                                        > <!--v-bind:class="{'border-bottom ': index === 0}"-->
                                           <div class="col-1">
                                             <div v-if="it.selected">
                                               <!--<Button size="small" type="primary" round
@@ -2253,7 +2270,7 @@
                 <div class="col-lg-6">
                   <div class="row">
                     <div class="col-lg-12">
-                      <div >
+                      <div>
                         <!--c'era un px-4-->
                         <l-map
                           style="height: 500px; border-radius: 10px"

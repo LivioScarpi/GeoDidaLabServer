@@ -3,7 +3,7 @@
     <div v-if="currentStep === 0" class="centerTimePicker text-center">
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px" class="pb-4">
             <div>
               <h4 class="card-title mt-0">Crea un nuovo percorso</h4>
 
@@ -71,7 +71,7 @@
           </card>
         </div>
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px" class="pb-4">
             <div>
               <h4 class="card-title mt-0">
                 Inserisci il codice del tuo itinerario
@@ -171,7 +171,7 @@
           </modal>
         </div>
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px" class="pb-4">
             <div>
               <h4 class="card-title mt-0">
                 Seleziona un itinerario predefinito
@@ -1449,4 +1449,5 @@ s
 .vue__time-picker input.display-time {
   border-radius: 5px;
 }
+
 </style>

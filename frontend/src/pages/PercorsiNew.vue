@@ -709,7 +709,7 @@
                   >
                     <div v-if="it.selected">
                       <div
-                        class="row border mr-1 mb-2"
+                        class="row border shadow mr-1 mb-3"
                         style="border-radius: 10px"
                       >
                         <div
@@ -718,29 +718,24 @@
                             background-color: indianred;
                             border-top-left-radius: 10px;
                             border-bottom-left-radius: 10px;
+                            cursor: pointer;
+
+                            display: flex;
+
+                            justify-content: center;
+                            align-items: center;
+                          "
+                          @click="
+                            changeSelection(
+                              item['geo:Titolo_it'][0]['@value'],
+                              it['o:title']
+                            )
                           "
                         >
-                          <div class="row text-center px-0">
-                            <div
-                              class="col-12 text-center px-0"
-                              style="margin: auto"
-                            >
-                              <i
-                                class="bi bi-trash"
-                                style="
-                                  cursor: pointer;
-                                  color: white;
-                                  font-size: 1.2rem;
-                                "
-                                @click="
-                                  changeSelection(
-                                    item['geo:Titolo_it'][0]['@value'],
-                                    it['o:title']
-                                  )
-                                "
-                              ></i>
-                            </div>
-                          </div>
+                          <i
+                            class="bi bi-trash"
+                            style="color: white; font-size: 1.2rem"
+                          ></i>
                         </div>
                         <div class="col-10 text-left py-2">
                           {{ it["o:title"] }} ({{
@@ -892,8 +887,8 @@
                                             text-center
                                             align-items-center
                                           "
-                                          
-                                        > <!--v-bind:class="{'border-bottom ': index === 0}"-->
+                                        >
+                                          <!--v-bind:class="{'border-bottom ': index === 0}"-->
                                           <div class="col-1">
                                             <div v-if="it.selected">
                                               <!--<Button size="small" type="primary" round

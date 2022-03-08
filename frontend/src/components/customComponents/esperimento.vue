@@ -3,13 +3,46 @@
     <!--TODO: risolvere problema component youtube e CORS policy-->
     <!--prima nel v-i c'era !$device.mobile-->
     <card style="width: 23rem; border-radius: 10px">
-      <img
+      <!--<img
         slot="image"
         class="card-img-top"
         src="@/assets/images/bg3.jpg"
         alt="Card image cap"
         style="border-radius: 10px"
-      />
+      />-->
+      <carousel :per-page="1" navigationEnabled="true" style="height: 320px">
+        <slide v-if="item.media.length !== 0">
+          <img
+            :src="item['media'][0]['o:thumbnail_urls']['large']"
+            class="img"
+          />
+        </slide>
+        <slide v-if="item.mediaYT.length !== 0">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe
+              class="embed-responsive-item"
+              frameborder="0"
+              :src="videoSource()"
+              allowfullscreen
+              style="
+                overflow: hidden;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+                border-radius: 10px;
+              "
+              height="100%"
+              width="100%"
+            ></iframe>
+          </div>
+        </slide>
+      </carousel>
       <div>
         <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
         <div class="row">
@@ -83,7 +116,7 @@
         </div>
       </div>
     </card>
-<!--
+    <!--
     <div v-if="!isLoadingImages && !isLoadingVideos">
       <div class="col-11 ml-auto mr-auto pt-5" v-if="isLarge">
         <div class="cardForm text-black" style="width: 20rem">
@@ -234,6 +267,8 @@ import TabPane from "../Tabs/Tab.vue";
 import Tabs from "../Tabs/Tabs.vue";
 import Card from "../Cards/Card.vue";
 
+import { Carousel, Slide } from "vue-carousel";
+
 const Common = require("@/Common.vue").default;
 
 export default {
@@ -244,6 +279,8 @@ export default {
     TabPane,
     Tabs,
     Card,
+    Carousel,
+    Slide,
   },
 
   data() {
@@ -373,4 +410,15 @@ export default {
 }
 
  */
+
+.VueCarousel-dot-container {
+  margin-top: 0 !important;
+}
+
+.img {
+  align-items: center;
+  height: 100%;
+  object-fit: cover; /* cover makes the image stretch the width and height of the container */
+  border-radius: 10px;
+}
 </style>

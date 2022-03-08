@@ -43,16 +43,18 @@
         </li>
       </ul>
     </div>
+    <div class="col-12">
     <div
       class="tab-content"
       :class="[
         { 'tab-space': !vertical && !noContentSpace },
-        'text-left',
+        'text-left mx-4',
         { 'col-md-8': vertical && !tabContentClasses },
         tabContentClasses
       ]"
     >
       <slot></slot>
+    </div>
     </div>
   </div>
 </template>

@@ -709,7 +709,7 @@
                     <div v-if="it.selected">
                       <div
                         class="row border mr-1 mb-3 customShadowOrange"
-                        style="border-radius: 10px;"
+                        style="border-radius: 10px"
                       >
                         <div
                           class="col-2 text-center px-0"
@@ -739,22 +739,22 @@
                         <div class="col-10 text-left py-2">
                           <div class="row">
                             <div class="col-12">
-{{ it["o:title"] }}</div>
+                              {{ it["o:title"] }}
+                            </div>
                           </div>
-                                                    <div class="row">
-                                                      <div class="col-12">
-                            <i class="bi bi-pin-map-fill mr-2"></i>{{
-                            item["geo:Titolo_it"][0]["@value"]
-                          }}
-                                                      </div>
+                          <div class="row">
+                            <div class="col-12">
+                              <i class="bi bi-pin-map-fill mr-2"></i
+                              >{{ item["geo:Titolo_it"][0]["@value"] }}
+                            </div>
                           </div>
 
                           <div class="row">
-                                                      <div class="col-12">
-<i class="bi bi-clock mr-2"></i>{{ it["geo:Durata"][0]["@value"] }} minuti
-                                                      </div>
-
-                        </div>
+                            <div class="col-12">
+                              <i class="bi bi-clock mr-2"></i
+                              >{{ it["geo:Durata"][0]["@value"] }} minuti
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -974,8 +974,14 @@
                                           <div class="col-lg-10 col-10">
                                             <activitiesOfPOI :it="it" />
                                           </div>
-                                          <hr v-if="ind < (item.mis.length - 1) " style="width:100%;text-align:center" class="ml-3 my-0 py-0">
-
+                                          <hr
+                                            v-if="ind < item.mis.length - 1"
+                                            style="
+                                              width: 100%;
+                                              text-align: center;
+                                            "
+                                            class="ml-3 my-0 py-0"
+                                          />
                                         </div>
                                       </div>
                                     </div>
@@ -2782,8 +2788,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .scuolaDellInfanzia {
   color: black;
 }
@@ -2894,9 +2898,7 @@ export default {
 }
 
 .zoom:hover {
-  transform: scale(
-    1.03
-  ); 
+  transform: scale(1.03);
 }
 
 .containerCard {

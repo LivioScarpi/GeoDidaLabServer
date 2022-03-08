@@ -18,6 +18,8 @@ import $ from 'jquery'
 import store from './store'
 import VueResource from 'vue-resource';
 
+
+
 Vue.use(VueResource);
 Vue.use(VueRouter)
 Vue.use(device)

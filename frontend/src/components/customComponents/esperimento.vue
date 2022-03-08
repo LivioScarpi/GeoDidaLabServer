@@ -374,12 +374,4 @@ export default {
   border-radius: 10px;
 }
 
-.swiper-button-next {
-  color: white;
-}
-
-.swiper-button-prev {
-  color: white;
-  border-color: black;
-}
 </style>

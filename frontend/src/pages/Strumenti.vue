@@ -4,53 +4,32 @@
       <div class="container">
         <h2 class="title">Strumenti</h2>
         <div class="row">
-          <h5 class="description">
-            An artist of considerable range, Ryan — the name taken by
-            Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and
-            records all of his own music, giving it a warm, intimate feel with a
-            solid groove structure. An artist of considerable range.
-          </h5>
+          <h5 class="description">Elenco di strumenti usati al GeoDidaLab!</h5>
         </div>
-        <div class="row pb-4">
+      </div>
+      <div class="mt-4" v-if="allLoaded">
+        <div class="row text-center">
           <div class="col-12">
-          <div v-if="allLoaded">
-            <div v-if="isLarge">
-              <div class="row">
-                <div class="section">
-                  <div class="row justify-content-md-center">
-                    <div v-for="(item, index) in this.$store.state.strumenti" :key="index">
-                      <div class="cardForm text-black p-2">
-                        <div class="card-body">
-                          <strumento :item="item"></strumento>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-else>
-              <div class="row">
-                <div v-for="(item, index) in this.$store.state.strumenti" :key="index">
-                  <div class="cardForm text-black p-2">
-                    <div class="card-body">
-                      <strumentoMobile :item="item"></strumentoMobile>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else class="loader">
-            <svg class="circular">
-              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5"
-                      stroke-miterlimit="10"></circle>
-            </svg>
+            <strumento
+              v-for="(item, index) in this.$store.state.strumenti"
+              :key="index"
+              :item="item"
+            ></strumento>
           </div>
         </div>
-        </div>
-
-
+      </div>
+      <div v-else class="loader">
+        <svg class="circular">
+          <circle
+            class="path"
+            cx="50"
+            cy="50"
+            r="20"
+            fill="none"
+            stroke-width="5"
+            stroke-miterlimit="10"
+          ></circle>
+        </svg>
       </div>
     </div>
   </div>
@@ -58,37 +37,43 @@
 <script>
 //width: small < 768 px
 
-import {Tabs, TabPane} from '@/components';
+import { Tabs, TabPane } from "@/components";
 import strumento from "../components/customComponents/strumento";
 import strumentoMobile from "../components/customComponents/strumentoMobile";
-import $ from 'jquery'
+import $ from "jquery";
 import store from "../store";
 
-const Common = require('@/Common.vue').default
-
+const Common = require("@/Common.vue").default;
 
 export default {
-  name: 'strumenti',
-  bodyClass: 'strumenti-esperimenti-page',
+  name: "strumenti",
+  bodyClass: "strumenti-esperimenti-page",
   components: {
     strumento,
-    strumentoMobile
+    //strumentoMobile
   },
   data() {
     return {
       strumenti: [
-        {name: "Microscopio", description: 'Descrizione strumento', imgSrc: '/img/microscopio.jpg'},
-        {name: "Retino plancton", description: 'Descrizione strumento', imgSrc: '/img/retinoPlancton.jpg'},
+        {
+          name: "Microscopio",
+          description: "Descrizione strumento",
+          imgSrc: "/img/microscopio.jpg",
+        },
+        {
+          name: "Retino plancton",
+          description: "Descrizione strumento",
+          imgSrc: "/img/retinoPlancton.jpg",
+        },
         {
           name: "Sonda multiparametrica",
-          description: 'Descrizione strumento',
-          imgSrc: '/img/sondaMultiparametrica.jpg'
+          description: "Descrizione strumento",
+          imgSrc: "/img/sondaMultiparametrica.jpg",
         },
       ],
       windowWidth: 0,
       allLoaded: false,
-
-    }
+    };
   },
 
   beforeMount() {
@@ -106,7 +91,7 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 123, res => {
+    Common.getElemsByClass(this, 123, (res) => {
       store.state.strumenti = res.body;
       self.allLoaded = true;
 
@@ -122,7 +107,7 @@ export default {
       })
 
        */
-    })
+    });
 
     /*
     if (store.state.strumenti.length === 0) {
@@ -161,14 +146,13 @@ export default {
      */
   },
 
-  mounted(){
-  },
+  mounted() {},
 
   computed: {
     isLarge() {
       return this.windowWidth >= 768;
     },
-  }
+  },
 };
 </script>
 <style></style>

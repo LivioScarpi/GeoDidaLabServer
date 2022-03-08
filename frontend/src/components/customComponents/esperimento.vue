@@ -1,7 +1,7 @@
 <template>
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
-  <card style="width: 23rem; border-radius: 10px" class="mx-2">
+  <card v-if="!isLoadingImages && !isLoadingVideos" style="width: 23rem; border-radius: 10px" class="mx-2">
     <!--<img
         slot="image"
         class="card-img-top"
@@ -10,13 +10,24 @@
         style="border-radius: 10px"
       />-->
 
-<swiper class="swiper" :options="swiperOptions" navigation
-    :pagination="{ clickable: true }">
-    <swiper-slide style="height: 185px"  v-if="item.media !== undefined && item.media.length !== 0">
+    <swiper
+      ref="mySwiper"
+      class="swiper"
+      navigation
+      :pagination="{ clickable: true }"
+      style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
+    >
+      <swiper-slide
+        style="height: 185px"
+        v-if="item.media !== undefined && item.media.length !== 0"
+      >
         <img :src="item['media'][0]['o:thumbnail_urls']['large']" class="img" />
       </swiper-slide>
 
-      <swiper-slide style="height: 185px" v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0">
+      <swiper-slide
+        style="height: 185px"
+        v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
+      >
         <div class="embed-responsive embed-responsive-16by9">
           <iframe
             class="embed-responsive-item"
@@ -42,16 +53,40 @@
         </div>
       </swiper-slide>
 
-    <div class="swiper-button-prev" slot="button-prev"></div>
-    <div class="swiper-button-next" slot="button-next"></div>
-  </swiper>
+      <div
+        v-if="
+          item.media.length > 1 ||
+          item.mediaYT.length > 1 ||
+          (item.media.length === 1 && item.mediaYT.length === 1)
+        "
+        class="swiper-button-prev"
+        slot="button-prev"
+        @click="swiper.slidePrev()"
+      ></div>
+      <div
+        v-if="
+          item.media.length > 1 ||
+          item.mediaYT.length > 1 ||
+          (item.media.length === 1 && item.mediaYT.length === 1)
+        "
+        class="swiper-button-next"
+        slot="button-next"
+        @click="swiper.slideNext()"
+      ></div>
+    </swiper>
 
-
+    <!--
     <carousel :per-page="1" :navigationEnabled="true">
-      <slide style="height: 185px"  v-if="item.media !== undefined && item.media.length !== 0">
+      <slide
+        style="height: 185px"
+        v-if="item.media !== undefined && item.media.length !== 0"
+      >
         <img :src="item['media'][0]['o:thumbnail_urls']['large']" class="img" />
       </slide>
-      <slide style="height: 185px" v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0">
+      <slide
+        style="height: 185px"
+        v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
+      >
         <div class="embed-responsive embed-responsive-16by9">
           <iframe
             class="embed-responsive-item"
@@ -76,7 +111,7 @@
           ></iframe>
         </div>
       </slide>
-    </carousel>
+    </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
       <div class="row">
@@ -148,144 +183,7 @@
       </div>
     </div>
   </card>
-  <!--
-    <div v-if="!isLoadingImages && !isLoadingVideos">
-      <div class="col-11 ml-auto mr-auto pt-5" v-if="isLarge">
-        <div class="cardForm text-black" style="width: 20rem">
-          <div class="card-body">
-            <div class="row justify-content-center align-items-center">
-              <div class="col-12">
-                <div>
-                  <h3 class="title text-left">{{ item["o:title"] }}</h3>
-                  <h5 class="text-left">
-                    <div class="row">
-                      <div class="col-12">
-                      </div>
-                    </div>
-                    <div class="row mb-4">
-                      <div class="col-12">
-                        <b><i>Livelli di difficoltà:</i></b>
-                        <div
-                          v-for="(difficulty, index) in item[
-                            'geo:ha_difficolta'
-                          ]"
-                          v-bind:key="index"
-                        >
-                          <i>{{ difficulty["display_title"] }}</i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="description text-left col-12">
-                        <b>{{ item["dcterms:description"][0]["@value"] }}</b>
-                      </div>
-                    </div>
-                  </h5>
-                </div>
-              </div>
-
-              <div class="col-6">
-                <div class="row pb-3">
-                  <div class="col-12 text-center">
-                    <div v-if="item.media.length !== 0">
-                      <img
-                        :src="item['media'][0]['o:thumbnail_urls']['large']"
-                        alt=""
-                        class="img-raised img_esperimento"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-12">
-                      <div v-if="item.mediaYT.length !== 0">
-                        <div class="embed-responsive embed-responsive-16by9">
-                          <iframe
-                            class="embed-responsive-item"
-                            frameborder="0"
-                            :src="videoSource()"
-                            allowfullscreen
-                            style="padding-bottom: 3%"
-                          ></iframe>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-11 ml-auto mr-auto" v-else>
-        <div class="cardForm text-black p-2">
-          <div class="card-body">
-            <div class="row text-center">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12">
-                    <h3 class="title pt-0 mt-2">{{ item["o:title"] }}</h3>
-                    <h5>
-                      <div class="row">
-                        <div class="col-12">
-                        </div>
-                      </div>
-                      <div class="row mb-4">
-                        <div class="col-12">
-                          <b><i>Livelli di difficoltà:</i></b>
-                          <div
-                            v-for="(difficulty, index) in item[
-                              'geo:ha_difficolta'
-                            ]"
-                            v-bind:key="index"
-                          >
-                            <i>{{ difficulty["display_title"] }}</i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="description col-12">
-                          <b>{{ item["dcterms:description"][0]["@value"] }}</b>
-                        </div>
-                      </div>
-                    </h5>
-                  </div>
-                </div>
-
-                <div class="row pb-3 pt-3">
-                  <div class="col-12 text-center">
-                    <div v-if="item.media.length !== 0">
-                      <img
-                        :src="item['media'][0]['o:thumbnail_urls']['large']"
-                        alt=""
-                        class="img-raised img_esperimento"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <div v-if="item.mediaYT.length !== 0">
-                      <div class="embed-responsive embed-responsive-16by9">
-                        <iframe
-                          class="embed-responsive-item"
-                          frameborder="0"
-                          :src="videoSource()"
-                          allowfullscreen
-                          style="padding-bottom: 3%"
-                        ></iframe>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    -->
+  
 </template>
 
 <script>
@@ -300,8 +198,8 @@ import Card from "../Cards/Card.vue";
 
 import { Carousel, Slide } from "vue-carousel";
 
-import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
-import 'swiper/swiper-bundle.css'
+import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
+import "swiper/swiper-bundle.css";
 
 const Common = require("@/Common.vue").default;
 
@@ -313,13 +211,14 @@ export default {
     TabPane,
     Tabs,
     Card,
-    Carousel,
-    Slide,
-    Swiper, SwiperSlide
+    //Carousel,
+    //Slide,
+    Swiper,
+    SwiperSlide,
   },
 
   directives: {
-    swiper: directive
+    swiper: directive,
   },
 
   data() {
@@ -327,13 +226,12 @@ export default {
       windowWidth: 0,
       isLoadingImages: true,
       isLoadingVideos: true,
-swiperOption: {
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          }
-        }
-      
+      swiperOption: {
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      },
     };
   },
   created() {
@@ -365,6 +263,9 @@ swiperOption: {
     },
   },
   computed: {
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    },
     player() {
       return this.$refs.youtube.player;
     },
@@ -393,6 +294,11 @@ swiperOption: {
       this.item.mediaYT = ytVideoList;
       self.isLoadingVideos = false;
     });
+
+    console.log("MOUNTED");
+    console.log(this);
+    //console.log("Current Swiper instance object", this.swiper);
+    //this.swiper.slideTo(3, 1000, false);
   },
 };
 </script>
@@ -468,4 +374,12 @@ swiperOption: {
   border-radius: 10px;
 }
 
+.swiper-button-next {
+  color: white;
+}
+
+.swiper-button-prev {
+  color: white;
+  border-color: black;
+}
 </style>

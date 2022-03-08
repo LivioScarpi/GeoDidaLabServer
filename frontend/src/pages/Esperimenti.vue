@@ -2,18 +2,21 @@
   <div>
     <div class="section">
       <div class="container">
-        <h2 class="title pt-0">Esperimenti</h2>
+        <h2 class="title pt-0">Attività</h2>
         <h5 class="description mb-0">
-          An artist of considerable range, Ryan — the name taken by
-          Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and
-          records all of his own music, giving it a warm, intimate feel with a
-          solid groove structure. An artist of considerable range.
+          Elenco di tutte le attività da fare a GeoDidaLab!
         </h5>
       </div>
       <div class="mt-4" v-if="allLoaded">
         <div class="row text-center"  >
           <div class="col-12">
             <esperimento
+            class="align-top"
+              v-for="item in this.$store.state.esperimenti"
+              :item="item"
+              :key="item.name"
+            ></esperimento>
+                        <esperimento
             class="align-top"
               v-for="item in this.$store.state.esperimenti"
               :item="item"

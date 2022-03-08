@@ -9,17 +9,16 @@
           records all of his own music, giving it a warm, intimate feel with a
           solid groove structure. An artist of considerable range.
         </h5>
-        <div v-if="allLoaded">
-          <div class="row">
-            <div class="section">
-              <div class="row justify-content-md-center">
-                <div>
-                  <div v-for="item in this.$store.state.esperimenti" :key="item.name">
-                    <esperimento :item="item"></esperimento>
-                  </div>
-                </div>
-              </div>
-            </div>
+      </div>
+      <div class="mt-4" v-if="allLoaded">
+        <div class="row text-center"  >
+          <div class="col-12">
+            <esperimento
+            class="align-top"
+              v-for="item in this.$store.state.esperimenti"
+              :item="item"
+              :key="item.name"
+            ></esperimento>
           </div>
         </div>
       </div>
@@ -27,18 +26,18 @@
   </div>
 </template>
 <script>
-import {Tabs, TabPane} from '@/components';
+import { Tabs, TabPane } from "@/components";
 import esperimento from "../components/customComponents/esperimento";
 import store from "../store";
 import $ from "jquery";
 
-const Common = require('@/Common.vue').default
+const Common = require("@/Common.vue").default;
 
 export default {
-  name: 'esperimenti',
-  bodyClass: 'strumenti-esperimenti-page',
+  name: "esperimenti",
+  bodyClass: "strumenti-esperimenti-page",
   components: {
-    esperimento
+    esperimento,
   },
   data() {
     return {
@@ -47,34 +46,34 @@ export default {
           name: "Campionamento del plancton con retino",
           scientific_sector: "Settore Scientifico",
           school_level: "Livello Scolastico",
-          description: 'Descrizione strumento',
-          imgSrc: '/img/microscopio.jpg',
-          videoID: 'orGM15hwA5A'
+          description: "Descrizione strumento",
+          imgSrc: "/img/microscopio.jpg",
+          videoID: "orGM15hwA5A",
         },
         {
           name: "Misura della trasparenza dell’acqua con disco di Secchi",
           scientific_sector: "Settore Scientifico",
           school_level: "Livello Scolastico",
-          description: 'Descrizione strumento',
-          imgSrc: '/img/microscopio.jpg',
-          videoID: 'orGM15hwA5A'
+          description: "Descrizione strumento",
+          imgSrc: "/img/microscopio.jpg",
+          videoID: "orGM15hwA5A",
         },
         {
           name: "Test K sui licheni ",
           scientific_sector: "Settore Scientifico",
           school_level: "Livello Scolastico",
-          description: 'Descrizione strumento',
-          imgSrc: '/img/microscopio.jpg',
-          videoID: 'orGM15hwA5A'
+          description: "Descrizione strumento",
+          imgSrc: "/img/microscopio.jpg",
+          videoID: "orGM15hwA5A",
         },
       ],
       isLoadingImages: true,
       isLoadingVideos: true,
       allLoaded: false,
-    }
+    };
   },
 
-  mounted(){
+  mounted() {
     console.log("Esperimenti: ");
     console.log(store.state.esperimenti);
   },
@@ -89,18 +88,15 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 130, res => {
+    Common.getElemsByClass(this, 130, (res) => {
       store.state.esperimenti = res.body;
       self.allLoaded = true;
-    })
+    });
   },
 
-  computed: {
-  },
+  computed: {},
 
-  watch: {
-
-  }
+  watch: {},
 };
 </script>
 <style></style>

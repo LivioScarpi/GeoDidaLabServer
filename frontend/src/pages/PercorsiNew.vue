@@ -807,10 +807,23 @@
                                   <div class="row">
                                     <div class="col-lg-3 col-4">
                                       <img
+                                        v-if="item.media.length > 0"
+                                        :src="
+                                          item['media'][0]['o:thumbnail_urls'][
+                                            'large'
+                                          ]
+                                        "
+                                        alt="Picture"
+                                        class="rounded-left img"
+                                      />
+                                      <!--se non è stata caricata nessuna foto del POI pivot-->
+                                      <img
+                                        v-else
                                         src="@/assets/images/bg3.jpg"
                                         alt="Picture"
                                         class="rounded-left img"
                                       />
+                                      <!--item['media'][0]['o:thumbnail_urls']['large']-->
                                     </div>
                                     <div class="col-lg-9 col-8 px-0">
                                       <div class="row mt-3">

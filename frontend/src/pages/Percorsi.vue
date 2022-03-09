@@ -451,8 +451,17 @@ s
         } else {
           /*Il POI non ha nessuna coordinata*/
         }
+
+        /*chiedo l'immagine dei POI*/
+        Common.getElementImages(this, poi, (mediaList) => {
+          poi.media = mediaList;
+          //self.isLoadingImages = false;
+        });
       });
     });
+
+    console.log("DOPO AVER CHIESTO I MEDIA dei POI PIVOT");
+    console.log(store.state.POIpivot);
 
     /**
      * 118 : class id Misurazione

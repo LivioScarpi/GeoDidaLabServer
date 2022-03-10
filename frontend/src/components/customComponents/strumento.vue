@@ -23,7 +23,7 @@
     style="width: 23rem; border-radius: 10px"
     class="mx-2"
   >
-  <!--
+    <!--
     <img
       slot="image"
       class="img"
@@ -31,7 +31,7 @@
       alt="Card image cap"
       style="border-radius: 10px"
     />-->
-    
+
     <swiper
       ref="mySwiperStrumenti"
       class="swiper"
@@ -42,11 +42,11 @@
     >
       <swiper-slide
         style="height: 185px"
-        v-for="(media, index) in item['media']" :key="index"
+        v-for="(media, index) in item['media']"
+        :key="index"
       >
         <img :src="media['o:thumbnail_urls']['large']" class="img" />
       </swiper-slide>
-
 
       <div
         v-if="
@@ -59,9 +59,7 @@
         @click="swiper.slidePrev()"
       ></div>
       <div
-        v-if="
-          item.media.length > 1
-        "
+        v-if="item.media.length > 1"
         class="swiper-button-next"
         slot="button-next"
         @click="swiper.slideNext()"
@@ -146,10 +144,10 @@ export default {
   },
 
   computed: {
-        swiper() {
+    swiper() {
       return this.$refs.mySwiperStrumenti.$swiper;
     },
-  }
+  },
 };
 </script>
 

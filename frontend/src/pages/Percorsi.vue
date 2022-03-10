@@ -77,54 +77,47 @@
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px" class="pb-4">
             <div>
-              <h4 class="card-title mt-0 customTitle">
+              <h4 slot="header" class="title title-up text-center pt-0 mt-0">
                 Inserisci il codice del tuo itinerario
               </h4>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <p>
+                        Inserisci il codice del percorso nel camp sottostante e
+                        premi il tasto "Inserisci"
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-12">
+                      <form-group-input
+                        class="no-border form-control-lg"
+                        placeholder="Codice..."
+                        v-model="pathCodeInserted"
+                        addon-left-icon="now-ui-icons objects_key-25"
+                      >
+                      </form-group-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <Button
                 size="small"
                 type="primary"
-                v-on:click="insertPathCode()"
+                v-on:click="checkCodeAndGetPath()"
                 class="mx-1 textButtonColor"
                 >Inserisci codice
               </Button>
             </div>
           </card>
 
+          <!--
           <modal
             :show.sync="modals.insertCodeModal"
             headerClasses="justify-content-center"
           >
-            <h4 slot="header" class="title title-up text-center">
-              Inserisci codice
-            </h4>
-            <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <p>
-                      Inserisci il codice del percorso nel camp sottostante e
-                      premi il tasto "Inserisci"
-                    </p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <form-group-input
-                      class="no-border form-control-lg"
-                      placeholder="Codice..."
-                      v-model="pathCodeInserted"
-                      addon-left-icon="now-ui-icons objects_key-25"
-                    >
-                    </form-group-input>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <template slot="footer">
               <Button
                 size="small"
@@ -142,7 +135,7 @@
                 >Inserisci
               </Button>
             </template>
-          </modal>
+          </modal>-->
 
           <modal
             :show.sync="modals.itineraryNotReceivedWithError"
@@ -174,7 +167,37 @@
               </Button>
             </template>
           </modal>
+
+          <modal
+            :show.sync="modals.itineraryCodeNotValid"
+            headerClasses="justify-content-center"
+            @close="modals.itineraryCodeNotValid = false"
+          >
+            <h4 slot="header" class="title title-up text-center">Errore!</h4>
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-12 text-center">
+                    <h6 class="itineraryCode">
+                      Il codice inserito non è valido, si prega di inserire un codice corretto.
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <template slot="footer">
+              <Button
+                size="small"
+                type="danger"
+                v-on:click="modals.itineraryCodeNotValid = false"
+                class="mx-1"
+                >Chiudi
+              </Button>
+            </template>
+          </modal>
         </div>
+
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px" class="pb-4">
             <div>
@@ -360,6 +383,7 @@ export default {
         //oggetto usato per mostrare i modals
         insertCodeModal: false,
         itineraryNotReceivedWithError: false,
+        itineraryCodeNotValid: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -793,47 +817,52 @@ s
       console.log("checkCodeAndGetPath");
       console.log(this.pathCodeInserted);
 
-      var self = this;
+      if (this.pathCodeInserted.trim().length !== 0) {
+        var self = this;
 
-      $.ajax({
-        url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
-        type: "GET",
-        success: function (result) {
-          //self.geojson = result;
-          console.log("RISPOSTA: ");
-          console.log(result);
+        $.ajax({
+          url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
+          type: "GET",
+          success: function (result) {
+            //self.geojson = result;
+            console.log("RISPOSTA: ");
+            console.log(result);
 
-          var itinerario = result;
+            var itinerario = result;
 
-          router.push({
-            name: "percorsoselezionato",
-            params: {
-              itinerario,
-              page: "percorsi",
-            },
-          });
-        },
-        error: function (error) {
-          console.log("error: ");
-          console.log(error);
+            router.push({
+              name: "percorsoselezionato",
+              params: {
+                itinerario,
+                page: "percorsi",
+              },
+            });
+          },
+          error: function (error) {
+            console.log("error: ");
+            console.log(error);
 
-          self.modals.itineraryNotReceivedWithError = true;
-        },
-      });
+            self.modals.itineraryNotReceivedWithError = true;
+          },
+        });
 
-      this.modals.insertCodeModal = false;
+        this.modals.insertCodeModal = false;
 
-      //TODO: controllare se il codice esiste ed è corretto -> in caso recuperare il percorso e mostrarlo
+        //TODO: controllare se il codice esiste ed è corretto -> in caso recuperare il percorso e mostrarlo
 
-      this.currentPage = "selectExistingPath";
+        this.currentPage = "selectExistingPath";
 
-      /*
+        /*
       var path = {
         name: "percorso",
         val: 2,
       };
 
        */
+      } else {
+        //il codice inserito contiene solo spazi
+        this.modals.itineraryCodeNotValid = true;
+      }
     },
 
     //OLD

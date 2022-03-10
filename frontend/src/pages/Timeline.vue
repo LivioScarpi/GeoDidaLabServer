@@ -203,6 +203,15 @@ export default {
 
           store.commit("setTimelines");
           this.correctTimelines = this.getCorrectTimelines();
+
+          console.log("TIMELINES");
+          console.log(this.correctTimelines);
+
+          //ordine decrescente: in cima avrò l'evento meno recente
+          this.correctTimelines[0].sort((a,b) => (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0))
+
+          //ordine crescente: in cima avrò l'evento più recente
+          //this.correctTimelines[0].sort((a,b) => (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0))
         });
       });
     });

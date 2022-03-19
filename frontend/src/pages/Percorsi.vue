@@ -2,14 +2,179 @@
   <div>
     <div
       v-if="currentStep === 0"
-      class="centerTimePicker text-center pt-4"
-      style="background-color: #ffeee6"
+      class="centerTimePicker text-center pt-4 px-lg-5"
+      
     >
+      <article class="postcard light orange mx-4">
+        <a class="postcard__img_link">
+          <img
+            class="postcard__img"
+            src="https://picsum.photos/501/500"
+            alt="Image Title"
+          />
+        </a>
+        <div class="postcard__text">
+          <h1 class="postcard__title orange">Crea un nuovo percorso</h1>
+          <!--<div class="postcard__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+          <div class="postcard__bar"></div>
+          <div class="postcard__preview-txt">
+            Creando un nuovo percorso hai la possibilità di inserire le attività
+            che più ti interessano e i posti che più vuoi visitare in modo tale
+            da rendere la tua esperienza ancora più unica!
+          </div>
+          <ul class="postcard__tagbox">
+            <li class="tag__item" v-on:click="enabledRadio = '1'">
+              <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
+              >Mattina
+            </li>
+            <li class="tag__item" v-on:click="enabledRadio = '2'">
+              <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
+              >Pomeriggio
+            </li>
+            <li class="tag__item" v-on:click="enabledRadio = '3'">
+              <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i>Tutta
+              la giornata
+            </li>
+            <li class="tag__item" v-on:click="enabledRadio = '4'">
+              <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i>Altro
+              (fascia oraria personalizzata)
+            </li>
+          </ul>
+
+          <div v-if="enabledRadio === '4'">
+            <div class="row mt-4">
+              <h6 class="col-12">
+                <b>Seleziona il tempo che hai a disposizione</b>
+              </h6>
+              <div
+                v-if="!okTimeAvailable"
+                class="col-12 errorMessage fade-in-text text-center"
+              >
+                <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                Hai selezionato di essere disponibile dalle ore
+                {{ startAvailableTimeValue.HH }} e
+                {{ startAvailableTimeValue.mm }} alle ore
+                {{ endAvailableTimeValue.HH }} e {{ endAvailableTimeValue.mm }}.
+              </div>
+            </div>
+
+            <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
+            <div class="row pt-3">
+              <div class="col-12 text-center">
+                <b>dalle ore</b><br />
+                <vue-timepicker
+                  v-model="startAvailableTimeValue"
+                  format="HH:mm"
+                ></vue-timepicker>
+              </div>
+            </div>
+
+            <div class="row align-items-center pt-3 pb-3">
+              <div class="col-12 text-center">
+                <b>alle ore</b><br />
+                <vue-timepicker
+                  v-model="endAvailableTimeValue"
+                  format="HH:mm"
+                ></vue-timepicker>
+              </div>
+            </div>
+          </div>
+          <Button
+            size="small"
+            type="primary"
+            v-on:click="createPath()"
+            class="mx-1 textButtonColor mt-3"
+            >Crea percorso
+          </Button>
+        </div>
+      </article>
+
+      <article class="postcard light orange mx-4">
+        <a class="postcard__img_link">
+          <img
+            class="postcard__img"
+            src="https://kyusuf.com/images/password-visibility/thumbnail.png"
+            alt="Image Title"
+          />
+        </a>
+        <div class="postcard__text">
+          <h1 class="postcard__title orange">
+            Inserisci il codice del tuo itinerario
+          </h1>
+          <!--<div class="postcard__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+          <div class="postcard__bar"></div>
+          <div class="postcard__preview-txt">
+            Inserisci qua il codice dell'itinerario che hai creato per poterlo
+            visualizzare!
+          </div>
+                    <form-group-input
+                      class="no-border form-control-lg"
+                      placeholder="Codice..."
+                      v-model="pathCodeInserted"
+                      addon-left-icon="now-ui-icons objects_key-25"
+                    >
+                    </form-group-input>
+            <Button
+              size="small"
+              type="primary"
+              v-on:click="checkCodeAndGetPath()"
+              class="mx-1 textButtonColor mt-2"
+              >Inserisci codice
+            </Button>
+          </div>
+      </article>
+
+
+      <article class="postcard light orange mx-4">
+        <a class="postcard__img_link">
+          <img
+            class="postcard__img"
+            src="https://picsum.photos/501/500"
+            alt="Image Title"
+          />
+        </a>
+        <div class="postcard__text">
+          <h1 class="postcard__title orange">
+            Seleziona un itinerario predefinito
+          </h1>
+          <!--<div class="postcard__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+          <div class="postcard__bar"></div>
+          <div class="postcard__preview-txt">
+            Selezionando questa opzione hai la possibilità di scegliere un
+            itinerario tra i vari itinerari predefiniti già creati
+            appositamente, senza il bisogno di doverlo creare da zero.
+          </div>
+                        <Button
+                size="small"
+                type="primary"
+                v-on:click="selectDefaultPath()"
+                class="mx-1 textButtonColor"
+                >Seleziona itinerario
+              </Button>
+        </div>
+      </article>
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px" class="pb-4">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 class="card-title mt-0 customTitle">Crea nuovo percorso</h4>
+              <h4 class="title text-center pt-0 mt-0">Crea nuovo percorso</h4>
 
               <n-radio v-model="enabledRadio" label="1">Mattina</n-radio>
               <n-radio v-model="enabledRadio" label="2">Pomeriggio</n-radio>
@@ -75,9 +240,20 @@
           </card>
         </div>
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px" class="pb-4">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 slot="header" class="title title-up text-center pt-0 mt-0">
+              <div class="row">
+                <div class="col-12 px-0">
+                  <img
+                    class="postcard__img px-0"
+                    src="
+                                    https://kyusuf.com/images/password-visibility/thumbnail.png
+                                  "
+                    alt="Image Title"
+                  />
+                </div>
+              </div>
+              <h4 slot="header" class="title text-center pt-0 mt-3">
                 Inserisci il codice del tuo itinerario
               </h4>
               <div class="row">
@@ -179,7 +355,8 @@
                 <div class="row">
                   <div class="col-12 text-center">
                     <h6 class="itineraryCode">
-                      Il codice inserito non è valido, si prega di inserire un codice corretto.
+                      Il codice inserito non è valido, si prega di inserire un
+                      codice corretto.
                     </h6>
                   </div>
                 </div>
@@ -199,9 +376,9 @@
         </div>
 
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px" class="pb-4">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 class="card-title mt-0 customTitle">
+              <h4 class="title text-center pt-0 mt-0">
                 Seleziona un itinerario predefinito
               </h4>
               <p class="card-text">
@@ -388,7 +565,7 @@ export default {
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
 
-      enabledRadio: "4",
+      enabledRadio: "1",
     };
   },
 

@@ -808,6 +808,18 @@
                                     item["geo:Titolo_it"][0]["@value"]
                                   }}</a>
                                 </h1>
+                                <ul class="postcard__tagbox">
+                                  <li
+                                    class="tag__item"
+                                    v-on:click="visitPlaceClicked(item['geo:Titolo_it'][0]['@value'])"
+                                  >
+                                    <i
+                                      v-if="item.visitPOI"
+                                      class="fas fa-check mr-2"
+                                    ></i
+                                    >Visita luogo
+                                  </li>
+                                </ul>
                                 <!--<div class="postcard__subtitle small">
                                   <time datetime="2020-05-25 12:00:00">
                                     <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
@@ -1301,6 +1313,8 @@ export default {
         } else {
           /*Il POI non ha nessuna coordinata*/
         }
+
+        poi.visitPOI = true;
       });
     });
 
@@ -1539,6 +1553,28 @@ export default {
       });
 
       this.markersCreated = true;
+    },
+
+    visitPlaceClicked(poiName) {
+      console.log("visitPlaceClicked");
+      var tmpFilteredPOI = this.filteredPOI;
+
+      console.log(poiName);
+
+      Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+        if (poi["geo:Titolo_it"][0]["@value"] === poiName) {
+          //TODO: remove me
+          console.log("POI TROVATO");
+          this.$set(poi, "visitPOI", !poi.visitPOI);
+                    console.log(poi.visitPOI);
+
+        }
+      });
+
+            //TODO: funziona -> se si riesce migliorarlo
+      for (var i = 0; i < this.filteredPOI.length; i++) {
+        this.$set(this.filteredPOI, i, tmpFilteredPOI[i]);
+      }
     },
 
     changeSelection(poiName, activityName) {

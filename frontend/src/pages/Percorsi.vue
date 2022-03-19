@@ -3,30 +3,32 @@
     <div
       v-if="currentStep === 0"
       class="centerTimePicker text-center pt-4 px-lg-5"
-      
     >
-      <article class="postcard light orange mx-4">
-        <a class="postcard__img_link">
+      <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
           <img
-            class="postcard__img"
-            src="https://picsum.photos/501/500"
+            class="postcardpercorsi__img"
+            src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
             alt="Image Title"
           />
         </a>
-        <div class="postcard__text">
-          <h1 class="postcard__title orange">Crea un nuovo percorso</h1>
-          <!--<div class="postcard__subtitle small">
+        <div class="postcardpercorsi__text">
+          <h1 class="postcardpercorsi__title orange">Crea un nuovo percorso</h1>
+          <!--<div class="postcardpercorsi__subtitle small">
                 <time datetime="2020-05-25 12:00:00">
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcard__bar"></div>
-          <div class="postcard__preview-txt">
+          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__preview-txt pb-lg-4 pb-3">
             Creando un nuovo percorso hai la possibilità di inserire le attività
             che più ti interessano e i posti che più vuoi visitare in modo tale
             da rendere la tua esperienza ancora più unica!
           </div>
-          <ul class="postcard__tagbox">
+          <div style="text-align: left">
+            Scegli il tempo che hai a disposizione
+          </div>
+          <ul class="postcardpercorsi__tagbox">
             <li class="tag__item" v-on:click="enabledRadio = '1'">
               <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
               >Mattina
@@ -98,78 +100,78 @@
         </div>
       </article>
 
-      <article class="postcard light orange mx-4">
-        <a class="postcard__img_link">
+      <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
           <img
-            class="postcard__img"
+            class="postcardpercorsi__img"
             src="https://kyusuf.com/images/password-visibility/thumbnail.png"
             alt="Image Title"
           />
         </a>
-        <div class="postcard__text">
-          <h1 class="postcard__title orange">
+        <div class="postcardpercorsi__text">
+          <h1 class="postcardpercorsi__title orange">
             Inserisci il codice del tuo itinerario
           </h1>
-          <!--<div class="postcard__subtitle small">
+          <!--<div class="postcardpercorsi__subtitle small">
                 <time datetime="2020-05-25 12:00:00">
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcard__bar"></div>
-          <div class="postcard__preview-txt">
+          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__preview-txt">
             Inserisci qua il codice dell'itinerario che hai creato per poterlo
             visualizzare!
           </div>
-                    <form-group-input
-                      class="no-border form-control-lg"
-                      placeholder="Codice..."
-                      v-model="pathCodeInserted"
-                      addon-left-icon="now-ui-icons objects_key-25"
-                    >
-                    </form-group-input>
-            <Button
-              size="small"
-              type="primary"
-              v-on:click="checkCodeAndGetPath()"
-              class="mx-1 textButtonColor mt-2"
-              >Inserisci codice
-            </Button>
-          </div>
+          <form-group-input
+            class="no-border form-control-lg"
+            placeholder="Codice..."
+            v-model="pathCodeInserted"
+            addon-left-icon="now-ui-icons objects_key-25"
+          >
+          </form-group-input>
+          <Button
+            size="small"
+            type="primary"
+            v-on:click="checkCodeAndGetPath()"
+            class="mx-1 textButtonColor mt-2"
+            >Inserisci codice
+          </Button>
+        </div>
       </article>
 
-
-      <article class="postcard light orange mx-4">
-        <a class="postcard__img_link">
+      <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
           <img
-            class="postcard__img"
+            class="postcardpercorsi__img"
             src="https://picsum.photos/501/500"
             alt="Image Title"
           />
         </a>
-        <div class="postcard__text">
-          <h1 class="postcard__title orange">
+        <div class="postcardpercorsi__text">
+          <h1 class="postcardpercorsi__title orange">
             Seleziona un itinerario predefinito
           </h1>
-          <!--<div class="postcard__subtitle small">
+          <!--<div class="postcardpercorsi__subtitle small">
                 <time datetime="2020-05-25 12:00:00">
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcard__bar"></div>
-          <div class="postcard__preview-txt">
+          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__preview-txt">
             Selezionando questa opzione hai la possibilità di scegliere un
             itinerario tra i vari itinerari predefiniti già creati
             appositamente, senza il bisogno di doverlo creare da zero.
           </div>
-                        <Button
-                size="small"
-                type="primary"
-                v-on:click="selectDefaultPath()"
-                class="mx-1 textButtonColor"
-                >Seleziona itinerario
-              </Button>
+          <Button
+            size="small"
+            type="primary"
+            v-on:click="selectDefaultPath()"
+            class="mx-1 textButtonColor"
+            >Seleziona itinerario
+          </Button>
         </div>
       </article>
+      <!--
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
           <card style="border-radius: 13px; height: 35rem" class="pb-4">
@@ -208,7 +210,6 @@
                   </div>
                 </div>
 
-                <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
                 <div class="row align-items-center pt-3">
                   <div class="col-12 text-center">
                     <b>dalle ore</b><br />
@@ -245,7 +246,7 @@
               <div class="row">
                 <div class="col-12 px-0">
                   <img
-                    class="postcard__img px-0"
+                    class="postcardpercorsi__img px-0"
                     src="
                                     https://kyusuf.com/images/password-visibility/thumbnail.png
                                   "
@@ -289,31 +290,31 @@
             </div>
           </card>
 
-          <!--
-          <modal
-            :show.sync="modals.insertCodeModal"
-            headerClasses="justify-content-center"
-          >
-            <template slot="footer">
-              <Button
-                size="small"
-                type="danger"
-                v-on:click="modals.insertCodeModal = false"
-                class="mx-1 textButtonColor"
-                >Chiudi
-              </Button>
+          
+        </div>
 
+        <div class="col-lg-4 col-sm-12">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
+            <div>
+              <h4 class="title text-center pt-0 mt-0">
+                Seleziona un itinerario predefinito
+              </h4>
+              <p class="card-text">
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
+              </p>
               <Button
                 size="small"
                 type="primary"
-                v-on:click="checkCodeAndGetPath()"
+                v-on:click="selectDefaultPath()"
                 class="mx-1 textButtonColor"
-                >Inserisci
+                >Seleziona itinerario
               </Button>
-            </template>
-          </modal>-->
-
-          <modal
+            </div>
+          </card>
+        </div>
+      </div>-->
+      <modal
             :show.sync="modals.itineraryNotReceivedWithError"
             headerClasses="justify-content-center"
             @close="modals.itineraryNotReceivedWithError = false"
@@ -373,29 +374,6 @@
               </Button>
             </template>
           </modal>
-        </div>
-
-        <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px; height: 35rem" class="pb-4">
-            <div>
-              <h4 class="title text-center pt-0 mt-0">
-                Seleziona un itinerario predefinito
-              </h4>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="selectDefaultPath()"
-                class="mx-1 textButtonColor"
-                >Seleziona itinerario
-              </Button>
-            </div>
-          </card>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -458,7 +436,7 @@ export default {
     [Checkbox.name]: Checkbox,
     Button,
     VueTimepicker,
-    Card,
+    //Card,
     Modal,
     FormGroupInput,
   },
@@ -950,7 +928,7 @@ s
         console.log("hAvailable: " + hAvailable);
         console.log("minAvailable: " + minAvailable);
 
-        if (hAvailable > 0 || minAvailable >= 10) {
+        if (hAvailable > 0 || (hAvailable === 0 && minAvailable >= 10)) {
           this.okTimeAvailable = true;
           //this.currentStep++;
 
@@ -1037,6 +1015,7 @@ s
 
        */
       } else {
+        console.log("il codice inserito contiene solo spazi");
         //il codice inserito contiene solo spazi
         this.modals.itineraryCodeNotValid = true;
       }

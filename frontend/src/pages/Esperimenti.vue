@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="section">
+    <div class="section pt-3">
       <div class="container">
         <h2 class="title pt-0">Attività</h2>
         <h5 class="description mb-0">

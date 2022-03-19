@@ -1,7 +1,7 @@
 <template>
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
-  <card v-if="!isLoadingImages && !isLoadingVideos" style="width: 23rem; border-radius: 10px" class="mx-2">
+  <card v-if="!isLoadingImages && !isLoadingVideos" style="width: 28rem; border-radius: 10px" class="mx-2">
     <!--<img
         slot="image"
         class="card-img-top"
@@ -124,7 +124,7 @@
         >
           <tab-pane>
             <span slot="label">
-              <i class="now-ui-icons design_bullet-list-67"></i>Panoramica
+              <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
             <div class="text-justify description col-12 text-black">
               <div class="row mx-1 mb-2">
@@ -173,7 +173,7 @@
 
           <tab-pane>
             <span slot="label">
-              <i class="now-ui-icons travel_info"></i>Descrizione
+              <i class="now-ui-icons travel_info"></i>DESCRIZIONE
             </span>
             <div class="text-justify description col-12 text-black">
               <b>{{ item["dcterms:description"][0]["@value"] }}</b>

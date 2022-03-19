@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="section p-4">
+    <div class="section pt-3">
       <div class="container">
-        <h2 class="title">Strumenti</h2>
+        <h2 class="title pt-0">Strumenti</h2>
         <div class="row">
-          <h5 class="description">Elenco di strumenti usati al GeoDidaLab!</h5>
+          <h5 class="description mb-0">Elenco di strumenti usati al GeoDidaLab!</h5>
         </div>
       </div>
       <div class="mt-4" v-if="allLoaded">

@@ -2,7 +2,7 @@
   <div class="page-header-custom clear-filter" filter-color="white">
     <div
       v-if="!isLoadingTimelines && !isLoadingEvents"
-      class="content text-black"
+      class="content text-black pt-3"
     >
       <div class="container">
         <div class="row mb-4">

@@ -8,16 +8,16 @@
         </h5>
       </div>
       <div class="mt-4" v-if="allLoaded">
-        <div class="row text-center"  >
+        <div class="row text-center">
           <div class="col-12">
             <esperimento
-            class="align-top"
+              class="align-top"
               v-for="item in this.$store.state.esperimenti"
               :item="item"
               :key="item.name"
             ></esperimento>
-                        <esperimento
-            class="align-top"
+            <esperimento
+              class="align-top"
               v-for="item in this.$store.state.esperimenti"
               :item="item"
               :key="item.name"

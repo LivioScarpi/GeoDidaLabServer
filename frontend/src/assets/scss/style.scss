@@ -56,3 +56,16 @@
   }
 }
 
+.swiper-button-next::after {
+  color: white;
+  background-color: hsla(0, 0%, 41%, 0.274);
+  border-radius: 5px;
+  padding: 100%;
+}
+
+.swiper-button-prev::after {
+  color: white;
+  background-color: hsla(0, 0%, 41%, 0.274);
+  border-radius: 5px;
+  padding: 100%;
+}

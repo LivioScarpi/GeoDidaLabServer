@@ -36,7 +36,7 @@
             @click.prevent="activateTab(tab)"
             :aria-expanded="tab.active"
             class="nav-link"
-            :class="{ active: tab.active, disabled: tab.disabled }"
+            :class="{ 'customColor': tab.active, disabled: tab.disabled }"
           >
             <tab-item-content :tab="tab"> </tab-item-content>
           </a>
@@ -186,3 +186,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+.customColor{
+  color: #252525 !important;
+  /*font-weight: 600;*/
+  background-color: rgb(255, 140, 98) !important;
+}
+</style>

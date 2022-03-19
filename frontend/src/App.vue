@@ -18,6 +18,8 @@ import $ from 'jquery'
 import store from './store'
 import VueResource from 'vue-resource';
 
+
+
 Vue.use(VueResource);
 Vue.use(VueRouter)
 Vue.use(device)
@@ -29,6 +31,7 @@ Vue.use(VueYoutube)
 /*@import './assets/css/bootstrap.min.css';*/
 @import './assets/css/font-awesome.min.css';
 @import './assets/css/templatemo-style.css';
+@import url('http://fonts.cdnfonts.com/css/sofia-pro');
 
 
 /*

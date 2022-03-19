@@ -40,7 +40,7 @@
 
       <li class="nav-item">
         <router-link class="nav-link black-text" to="/esperimenti">
-          <i class="fa fa-thermometer-three-quarters fa-lg px-1"></i> Esperimenti
+          <i class="fa fa-thermometer-three-quarters fa-lg px-1"></i> Attività
         </router-link>
       </li>
 

@@ -361,13 +361,13 @@ export default {
         });
       });
 
-      //marker punto di partenza
+      //marker punto di arrivo
       this.markers.push({
         marker: L.marker(this.endPoint),
         color: "#1585bd",
         strokeColor: "#1b4f88",
         circleColor: "#ffffff",
-        POItitle: "Punto di partenza",
+        POItitle: "Punto di arrivo",
         poiHasActivitiesInItinerary: false,
         isStartPoint: true,
       });

@@ -20,14 +20,14 @@
       style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
     >
       <swiper-slide
-        style="height: 185px"
+        :style="[isLarge ? {'height': '230px'} : {'height': '199px'}]"
         v-if="item.media !== undefined && item.media.length !== 0"
       >
         <img :src="item['media'][0]['o:thumbnail_urls']['large']" class="img" />
       </swiper-slide>
 
       <swiper-slide
-        style="height: 185px"
+        :style="[isLarge ? {'height': '230px'} : {'height': '199px'}]"
         v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
       >
         <div class="embed-responsive embed-responsive-16by9">

@@ -4,7 +4,6 @@
   <card v-if="!isLoadingImages && !isLoadingVideos" 
     :style="[isLarge ? {'max-width': '28rem', 'height': '39rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
     class="mx-2">
-      {{isLarge}}
     <!--<img
         slot="image"
         class="card-img-top"

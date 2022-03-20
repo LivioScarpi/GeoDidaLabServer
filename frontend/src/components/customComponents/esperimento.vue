@@ -1,7 +1,10 @@
 <template>
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
-  <card v-if="!isLoadingImages && !isLoadingVideos" style="width: 28rem; border-radius: 10px" class="mx-2">
+  <card v-if="!isLoadingImages && !isLoadingVideos" 
+    :style="[isLarge ? {'max-width': '28rem', 'height': '39rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
+    class="mx-2">
+      {{isLarge}}
     <!--<img
         slot="image"
         class="card-img-top"
@@ -126,7 +129,7 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
-            <div class="text-justify description col-12 text-black">
+            <div class="text-justify description col-12 text-black text">
               <div class="row mx-1 mb-2">
                 <h6 class="mr-2">Difficoltà:</h6>
                 <h6 class="font-weight-normal">
@@ -372,6 +375,14 @@ export default {
   height: 100%;
   object-fit: cover; /* cover makes the image stretch the width and height of the container */
   border-radius: 10px;
+}
+
+.text {
+  height: 13rem;
+   overflow: scroll;
+   /*text-overflow: ellipsis;*/
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
 }
 
 </style>

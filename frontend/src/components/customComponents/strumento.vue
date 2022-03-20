@@ -20,7 +20,7 @@
 
   <card
     v-if="!isLoadingImages"
-    style="width: 28rem; border-radius: 10px"
+    style="width: 28rem; height: 31rem; border-radius: 10px;"
     class="mx-2"
   >
     <!--
@@ -96,7 +96,7 @@
             <span slot="label">
               <i class="now-ui-icons travel_info"></i>DESCRIZIONE
             </span>
-            <div class="text-justify description col-12 text-black">
+            <div class="text-justify description col-12 text-blacl text">
               <b>{{ item["dcterms:description"][0]["@value"] }}</b>
             </div>
           </tab-pane>
@@ -163,5 +163,14 @@ export default {
   height: 100%;
   object-fit: cover; /* cover makes the image stretch the width and height of the container */
   border-radius: 10px;
+}
+
+.text {
+   overflow: scroll;
+   /*text-overflow: ellipsis;*/
+   display: -webkit-box;
+   -webkit-line-clamp: 4; /* number of lines to show */
+           line-clamp: 4; 
+   -webkit-box-orient: vertical;
 }
 </style>

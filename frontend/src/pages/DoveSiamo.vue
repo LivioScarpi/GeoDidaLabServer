@@ -211,7 +211,7 @@
                       require('../assets/images/geodidalab/ivrea/ivrea1.jpg')
                     "
                     alt=""
-                    class="img-raised"
+                    class="img-raised float-right"
                   />
                 </div>
                 <div class="col-md-6">

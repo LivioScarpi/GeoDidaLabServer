@@ -17,11 +17,12 @@
             </h3>
             <h4 class="description">
               <b>
-              {{
-                this.$store.getters.timelines[0]["dcterms:description"][0][
-                  "@value"
-                ]
-              }}</b>
+                {{
+                  this.$store.getters.timelines[0]["dcterms:description"][0][
+                    "@value"
+                  ]
+                }}</b
+              >
             </h4>
           </div>
         </div>
@@ -52,16 +53,17 @@
             </div>
           </div>
         </div>-->
-        <div class="row">
+        <div class="row"  style="z-index: 299;">
           <div class="col-12">
             <div id="first-section1">
-              <div class="container">
+              <div class="container" >
                 <div class="row">
                   <div class="triangle"></div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <section id="cd-timeline" class="cd-container">
+                    <section id="cd-timeline" class="cd-container"                        
+>
                       <div
                         v-for="(event, index) in correctTimelines[0]"
                         :key="index"
@@ -75,28 +77,36 @@
                           class="
                             cd-timeline-content
                             service-box-content
+                            
                             pt-0
                             px-0
                           "
                         >
-                          <div class="row">
+                          <div class="row postcardpercorsi                             timeline
+                            orange">
                             <div class="col-12">
                               <div v-if="event.image !== null" class="row mb-4">
-                                <div class="col-12">
-                                  <img
-                                    :src="event.image"
-                                    alt="Picture"
-                                    class="px-0 rounded-top"
-                                  />
+                                <div class="col-12 px-0">
+                                  <a class="postcardpercorsi__img_link">
+                                    <img
+                                      :src="event.image"
+                                      alt="Picture"
+                                      class="
+                                        postcardtimeline__img
+                                        px-0 mx-0
+                                        rounded-top
+                                      "
+                                    />
+                                  </a>
                                 </div>
                               </div>
 
                               <div class="row mt-3">
-                                <div class="col-12">
+                                <div class="col-12 mb-3" style="text-align: center">
                                   <h3 class="mb-1">{{ event.year }}</h3>
+                                  <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
 
                                   <h2 class="mb-1">{{ event.title }}</h2>
-
                                   <p class="px-4">
                                     {{ event.description }}
                                   </p>
@@ -208,7 +218,9 @@ export default {
           console.log(this.correctTimelines);
 
           //ordine decrescente: in cima avrò l'evento meno recente
-          this.correctTimelines[0].sort((a,b) => (a.year > b.year) ? 1 : ((b.year > a.year) ? -1 : 0))
+          this.correctTimelines[0].sort((a, b) =>
+            a.year > b.year ? 1 : b.year > a.year ? -1 : 0
+          );
 
           //ordine crescente: in cima avrò l'evento più recente
           //this.correctTimelines[0].sort((a,b) => (a.year < b.year) ? 1 : ((b.year < a.year) ? -1 : 0))

@@ -30,6 +30,9 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
     &.light {
         background-color: #ffffff; //#e1e5ea;
     }
+    &.timeline {
+        background: linear-gradient(70deg, $main-orange-rgb-015, transparent 100%); //#e1e5ea;
+    }
 
     .t-dark {
         color: #18151f;
@@ -68,6 +71,15 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
     .postcardpercorsi__bar {
         width: 50px;
         height: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        background-color: #424242;
+        transition: width 0.2s ease;
+    }
+
+    .postcardtimeline__bar {
+        width: 100px;
+        height: 5px;
         margin: 10px 0;
         border-radius: 5px;
         background-color: #424242;
@@ -127,6 +139,10 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
     &:hover .postcardpercorsi__bar {
         width: 100px;
     }
+
+    &:hover .postcardtimeline__bar {
+        width: 200px;
+    }
 }
 
 @media screen and (min-width: 769px) {
@@ -144,6 +160,12 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
 
         .postcardpercorsi__img {
             max-width: 300px;
+            max-height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .postcardtimeline__img {
+            //max-width: 100%;
             max-height: 100%;
             transition: transform 0.3s ease;
         }
@@ -166,6 +188,10 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
         }
 
         &:hover .postcardpercorsi__img {
+            transform: scale(1.1);
+        }
+
+        &:hover .postcardtimeline__img {
             transform: scale(1.1);
         }
 
@@ -275,6 +301,9 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
     color: $main-orange;
 }
 .orange .postcardpercorsi__bar {
+    background-color: $main-orange;
+}
+.orange .postcardtimeline__bar {
     background-color: $main-orange;
 }
 .orange::before {

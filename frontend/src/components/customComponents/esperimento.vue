@@ -3,7 +3,7 @@
   <!--prima nel v-i c'era !$device.mobile-->
   <card v-if="!isLoadingImages && !isLoadingVideos" 
     :style="[isLarge ? {'max-width': '28rem', 'height': '42rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
-    class="mx-2">
+    class="mx-2 postcardattivita attivita orange">
     <!--<img
         slot="image"
         class="card-img-top"
@@ -116,7 +116,7 @@
     </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-                                        <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
+                                        <div class="postcardattivita__bar margin-auto" style=" display: inline-block;"></div>
 
       <div class="row">
         <tabs

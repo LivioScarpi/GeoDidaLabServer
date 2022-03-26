@@ -20,8 +20,8 @@
 
   <card
     v-if="!isLoadingImages"
-    style="width: 28rem; height: 31rem; border-radius: 10px;"
-    class="mx-2"
+    style="width: 28rem; height: 33rem; border-radius: 10px"
+    class="mx-2 postcardattivita attivita orange"
   >
     <!--
     <img
@@ -68,6 +68,10 @@
 
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
+            <div
+        class="postcardattivita__bar margin-auto"
+        style="display: inline-block"
+      ></div>
       <div class="row">
         <tabs
           type="primary"
@@ -166,11 +170,11 @@ export default {
 }
 
 .text {
-   overflow: scroll;
-   /*text-overflow: ellipsis;*/
-   display: -webkit-box;
-   -webkit-line-clamp: 4; /* number of lines to show */
-           line-clamp: 4; 
-   -webkit-box-orient: vertical;
+  overflow: scroll;
+  /*text-overflow: ellipsis;*/
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* number of lines to show */
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 </style>

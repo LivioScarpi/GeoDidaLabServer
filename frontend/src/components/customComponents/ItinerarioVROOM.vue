@@ -100,8 +100,9 @@
                             px-0
                           "
                         >
-                          <div class="row">
-                            <div class="col-12">
+                          <div class="row postcardpercorsi                             timeline
+                            orange">
+                            <div class="col-12 pb-3">
                               <div
                                 v-if="
                                   poi['poiName'] !== 'Punto di partenza' &&
@@ -110,7 +111,7 @@
                                 class="row"
                               >
                                 <!--v-if="poi.image !== undefined"-->
-                                <div class="col-12">
+                                <div class="col-12 px-0">
                                   <img
                                     src="@/assets/images/bg3.jpg"
                                     alt="Picture"
@@ -124,6 +125,7 @@
                                   <h2 class="mt-4 mb-0">
                                     <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["poiName"] }}
                                   </h2>
+                                  <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
 
                                   <h4
                                     v-if="

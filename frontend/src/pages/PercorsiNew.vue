@@ -1391,33 +1391,33 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 121, (res) => {
-      store.state.POIpivot = res.body;
-      self.isLoadingPOIPivot = false;
+    // Common.getElemsByClass(this, 121, (res) => {
+    //   store.state.POIpivot = res.body;
+    //   self.isLoadingPOIPivot = false;
 
-      //TODO: remove me
-      //console.log(res.body);
+    //   //TODO: remove me
+    //   //console.log(res.body);
 
-      console.log("# poi ottenuti : " + store.state.POIpivot.length);
+    //   console.log("# poi ottenuti : " + store.state.POIpivot.length);
 
-      Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
-        console.log(poi['o:title']);
-        if (poi.hasOwnProperty("o-module-mapping:marker")) {
-          // Get module-mapping
-          Common.getElemByUrl(
-            self,
-            poi["o-module-mapping:marker"][0]["@id"],
-            (r2) => {
-              poi.marker = r2.body;
-            }
-          );
-        } else {
-          /*Il POI non ha nessuna coordinata*/
-        }
+    //   Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
+    //     console.log(poi['o:title']);
+    //     if (poi.hasOwnProperty("o-module-mapping:marker")) {
+    //       // Get module-mapping
+    //       Common.getElemByUrl(
+    //         self,
+    //         poi["o-module-mapping:marker"][0]["@id"],
+    //         (r2) => {
+    //           poi.marker = r2.body;
+    //         }
+    //       );
+    //     } else {
+    //       /*Il POI non ha nessuna coordinata*/
+    //     }
 
-        poi.visitPOI = true;
-      });
-    });
+    //     poi.visitPOI = true;
+    //   });
+    // });
 
     /**
      * 118 : class id Misurazione

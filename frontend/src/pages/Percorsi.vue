@@ -633,6 +633,8 @@ s
           /*Il POI non ha nessuna coordinata*/
         }
 
+        poi.visitPOI = true;
+
         /*chiedo l'immagine dei POI*/
         Common.getElementImages(this, poi, (mediaList) => {
           poi.media = mediaList;
@@ -641,59 +643,59 @@ s
       });
     });
 
-    console.log("DOPO AVER CHIESTO I MEDIA dei POI PIVOT");
-    console.log(store.state.POIpivot);
+    // console.log("DOPO AVER CHIESTO I MEDIA dei POI PIVOT");
+    // console.log(store.state.POIpivot);
 
-    /**
-     * 118 : class id Misurazione
-     * 130 : class id Attivita
-     */
+    // /**
+    //  * 118 : class id Misurazione
+    //  * 130 : class id Attivita
+    //  */
 
-    store.state.loadedActivitiesInPOIPivot = false;
+    // store.state.loadedActivitiesInPOIPivot = false;
 
-    //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
-    Common.getElemsByClass(this, 130, (res) => {
-      store.state.esperimenti = res.body;
-      store.commit("setActivitiesInPOIPivot");
-      //store.commit("setAvailableActivitiesInRemainingTime");
+    // //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
+    // Common.getElemsByClass(this, 130, (res) => {
+    //   store.state.esperimenti = res.body;
+    //   store.commit("setActivitiesInPOIPivot");
+    //   //store.commit("setAvailableActivitiesInRemainingTime");
 
-      store.commit("setAllExpertiseLevels");
-      //store.commit('setAllSchoolLevels');
+    //   store.commit("setAllExpertiseLevels");
+    //   //store.commit('setAllSchoolLevels');
 
-      console.log(store.state.POIpivot);
+    //   console.log(store.state.POIpivot);
 
-      console.log("metto a true loadedActivitiesInPOIPivot");
-      store.state.loadedActivitiesInPOIPivot = true;
+    //   console.log("metto a true loadedActivitiesInPOIPivot");
+    //   store.state.loadedActivitiesInPOIPivot = true;
 
-      self.activitiesLoaded = true;
-      self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
+    //   self.activitiesLoaded = true;
+    //   self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
 
-      //console.log(store.state.schoolLevels);
-    });
+    //   //console.log(store.state.schoolLevels);
+    // });
 
-    //chiedo i livelli di difficoltà
-    Common.getElemsByClass(this, 129, (res) => {
-      store.state.difficultyLevels = res.body;
+    // //chiedo i livelli di difficoltà
+    // Common.getElemsByClass(this, 129, (res) => {
+    //   store.state.difficultyLevels = res.body;
 
-      //self.activitiesLoaded = true;
-      //self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
+    //   //self.activitiesLoaded = true;
+    //   //self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
 
-      console.log(store.state.difficultyLevels);
-    });
+    //   console.log(store.state.difficultyLevels);
+    // });
 
-    //chiedo gli interessi
-    Common.getElemsByClass(this, 128, (res) => {
-      store.state.interestsObject = res.body;
+    // //chiedo gli interessi
+    // Common.getElemsByClass(this, 128, (res) => {
+    //   store.state.interestsObject = res.body;
 
-      //self.activitiesLoaded = true;
-      //self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
+    //   //self.activitiesLoaded = true;
+    //   //self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
 
-      console.log(store.state.interestsObject);
-      store.commit("setAllinterestOfPOI");
-    });
+    //   console.log(store.state.interestsObject);
+    //   store.commit("setAllinterestOfPOI");
+    // });
 
     /**
      * 132 : class id geo:Area

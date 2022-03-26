@@ -2,7 +2,7 @@
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
   <card v-if="!isLoadingImages && !isLoadingVideos" 
-    :style="[isLarge ? {'max-width': '28rem', 'height': '39rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
+    :style="[isLarge ? {'max-width': '28rem', 'height': '42rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
     class="mx-2">
     <!--<img
         slot="image"
@@ -116,6 +116,8 @@
     </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
+                                        <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
+
       <div class="row">
         <tabs
           type="primary"

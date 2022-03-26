@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="section pt-3">
+    <div class="section text-black pt-3">
       <div class="container">
-        <h2 class="title pt-0">Attività</h2>
+        <h2 class="title pt-0">ATTIVITÀ</h2>
         <h5 class="description mb-0">
           Elenco di tutte le attività da fare a GeoDidaLab!
         </h5>

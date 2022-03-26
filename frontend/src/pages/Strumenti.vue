@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="section pt-3">
+    <div class="section text-black pt-3">
       <div class="container">
-        <h2 class="title pt-0">Strumenti</h2>
+        <h2 class="title pt-0">STRUMENTI</h2>
         <div class="row">
           <h5 class="description mb-0">Elenco di strumenti usati al GeoDidaLab!</h5>
         </div>

@@ -1521,7 +1521,7 @@ export default {
     someMethod(event) {
       // do something to let the user decide
       // then redirect if necessary
-            console.log("SONO QUA NELLA FUNZIONE");
+      console.log("SONO QUA NELLA FUNZIONE");
 
       //TODO: funziona -> se si riesce migliorarlo
       for (var i = 0; i < this.$store.state.POIpivot.length; i++) {
@@ -1660,6 +1660,29 @@ export default {
         );
 
         console.log(poiIDObject[0]);
+
+        //TODO: sistemare poiIDObject
+        /*
+        if (poi.visitPOI) {
+          //se l'utente vuole visitare il POI viene aggiunto il Job
+          var visitPOIjob = {
+            id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+            description:
+              poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+            service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
+            location: [
+              poi.marker["o-module-mapping:lng"],
+              poi.marker["o-module-mapping:lat"],
+            ],
+            location_index: poiIDObject[0].poiID,
+          };
+
+
+          vroomObject.jobs.push(visitPOIjob);
+
+          jobID += 1;
+        }
+        */
 
         Array.prototype.forEach.call(activitiesSelected, (activity) => {
           var job = {

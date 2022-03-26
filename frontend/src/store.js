@@ -23,6 +23,7 @@ const store = new Vuex.Store({
         difficultyLevels: [],
         itinerari: [],
         POI: [],
+        aree: [],
 
         loadedActivitiesInPOIPivot: false,
         timeAvailable: null,
@@ -181,6 +182,17 @@ const store = new Vuex.Store({
             console.log("FINE setAvailableActivitiesInRemainingTime");  
         },
 
+        setAreaInPOIPivot(state) {
+            console.log("STORE setAreaInPoiPivot");
+
+            Array.prototype.forEach.call(state.POIpivot, i => {
+                console.log(i["geo:appartiene_a_area"]);
+            })
+
+            console.log("FINE setAreaInPOIPivot");
+            console.log(state.POIpivot);
+        },
+
         setActivitiesInPOIPivot(state) {
             /*
             * cosa vorrei:
@@ -318,9 +330,13 @@ const store = new Vuex.Store({
                 console.log(state.POI);
 
                 var filteredPOI = state.POI.filter(x => x["geo:appartiene_a_itinerario"] !== undefined && x["geo:Posizione_itinerario"] !== undefined);
+                var POIWithNotItinerary = state.POI.filter(x => x["geo:appartiene_a_itinerario"] === undefined || x["geo:Posizione_itinerario"] === undefined);
 
                 console.log("filteredPOI");
                 console.log(filteredPOI);
+
+                console.log("POIWithNotItinerary");
+                console.log(POIWithNotItinerary);
 
                 var poiInItinerario = filteredPOI.filter(x => x["geo:appartiene_a_itinerario"][0]["display_title"] === itinerario["o:title"]);
 

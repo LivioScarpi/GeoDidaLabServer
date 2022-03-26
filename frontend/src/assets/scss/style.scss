@@ -464,5 +464,41 @@ a, a:hover {
 	}
 }
 
+.aree__tagbox {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 14px;
+  margin: 20px 0 0 0;
+  padding: 0;
+  justify-content: start;
 
+  .tag__item__selected {
+    display: inline-block;
+    background: #f09b56cc;
+    border-radius: 3px;
+    padding: 2.5px 10px;
+    margin: 0 5px 5px 0;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
 
+    &:hover {
+      background: #f09b56cc;
+    }
+  }
+
+  .tag__item__unselected {
+    display: inline-block;
+    background: rgba(194, 194, 194, 0.4);
+    border-radius: 3px;
+    padding: 2.5px 10px;
+    margin: 0 5px 5px 0;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background: #f09b56cc;
+    }
+  }
+}

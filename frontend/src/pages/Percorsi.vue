@@ -473,6 +473,8 @@ export default {
         maximumAge: 1000,
       },
 
+      isLoadingAree: true,
+
       isLoadingEsperimenti: true,
       isLoadingPOIPivot: true,
 
@@ -604,12 +606,12 @@ s
   async created() {
     // eseguo la query per gli strumenti solo la prima volta che apro la pagina degli Strumenti
 
-    /**
-     * 121 : class id POI_Pivot
-     */
 
     var self = this;
 
+    /**
+     * 121 : class id POI_Pivot
+     */
     Common.getElemsByClass(this, 121, (res) => {
       store.state.POIpivot = res.body;
       self.isLoadingPOIPivot = false;
@@ -691,6 +693,20 @@ s
 
       console.log(store.state.interestsObject);
       store.commit("setAllinterestOfPOI");
+    });
+
+    /**
+     * 132 : class id geo:Area
+     */
+    Common.getElemsByClass(this, 132, (res) => {
+      console.log("HO OTTENUTO TUTTE LE AREE");
+      store.state.aree = res.body;
+      self.isLoadingAree = false;
+      //store.commit('setAllinterestOfPOI');
+                //store.commit("setAreaInPOIPivot");
+
+
+      console.log(res.body);
     });
 
     //do we support geolocation

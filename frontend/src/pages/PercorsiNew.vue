@@ -776,6 +776,18 @@
                       <h5 class="mt-0">
                         <b>Elenco dei luoghi e delle attività</b>
                       </h5>
+                      <!--TODO: mettere qua le aree-->
+                      <h5>Aree</h5><ul class="aree__tagbox mb-4">
+                        <li
+                          :class="selectedArea === area['o:title'] ? 'tag__item__selected' : 'tag__item__unselected'"
+                          v-for="(area, index) in $store.state.aree"
+                          :key="index"
+                          v-on:click="selectedArea = area['o:title']"
+                        >
+                          <!--<i v-if="item.visitPOI" class="fas fa-check mr-2"></i
+                          >-->{{ area["o:title"] }}
+                        </li>
+                      </ul>
                       <!--state.POIpivot-->
                       <div>
                         <div v-if="somePOIVisible">
@@ -783,7 +795,7 @@
                             v-for="(item, index) in this.filteredPOI"
                             :key="'filteredPOI' + (index + 300)"
                           >
-                            <article class="postcard light orange">
+                            <article class="postcard light orange" v-if="selectedArea === item['geo:appartiene_a_area'][0]['display_title']">
                               <a class="postcard__img_link">
                                 <img
                                   v-if="item.media.length > 0"
@@ -811,7 +823,11 @@
                                 <ul class="postcard__tagbox">
                                   <li
                                     class="tag__item"
-                                    v-on:click="visitPlaceClicked(item['geo:Titolo_it'][0]['@value'])"
+                                    v-on:click="
+                                      visitPlaceClicked(
+                                        item['geo:Titolo_it'][0]['@value']
+                                      )
+                                    "
                                   >
                                     <i
                                       v-if="item.visitPOI"
@@ -940,7 +956,7 @@
                         </div>
                         <div v-else>
                           Nessuna attività o luogo corrispondente ai filtri
-                          selezionati
+                          selezionati nella zona <b>{{selectedArea.toUpperCase()}}</b>
                         </div>
                       </div>
                     </div>
@@ -1001,7 +1017,11 @@
                             </div>
                           </l-control>
 
-                          <l-geo-json v-for="(geoj, index) in geoJsonArray" :key="index" :geojson="geoj"></l-geo-json>
+                          <l-geo-json
+                            v-for="(geoj, index) in geoJsonArray"
+                            :key="index"
+                            :geojson="geoj"
+                          ></l-geo-json>
                         </l-map>
                       </div>
                     </div>
@@ -1173,6 +1193,8 @@ export default {
 
       startDifficulties: true,
       startInterests: true,
+
+      selectedArea: "Ivrea",
 
       //somePOIVisible: false, //variabile usata per capire se alcuni POI sono visibili o meno in bae ai filtri
 
@@ -1376,7 +1398,10 @@ export default {
       //TODO: remove me
       //console.log(res.body);
 
+      console.log("# poi ottenuti : " + store.state.POIpivot.length);
+
       Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
+        console.log(poi['o:title']);
         if (poi.hasOwnProperty("o-module-mapping:marker")) {
           // Get module-mapping
           Common.getElemByUrl(
@@ -1433,6 +1458,19 @@ export default {
       //console.log(store.state.interestsObject);
       store.commit("setAllinterestOfPOI");
     });
+
+    //     /**
+    //  * 132 : class id geo:Area
+    //  */
+    // Common.getElemsByClass(this, 132, (res) => {
+    //   console.log("HO OTTENUTO TUTTE LE AREE");
+    //   store.state.aree = res.body;
+    //   self.isLoadingAree = false;
+    //   //store.commit('setAllinterestOfPOI');
+    //             //store.commit("setAreaInPOIPivot");
+
+    //   console.log(res.body);
+    // });
   },
 
   methods: {
@@ -1642,12 +1680,11 @@ export default {
           //TODO: remove me
           console.log("POI TROVATO");
           this.$set(poi, "visitPOI", !poi.visitPOI);
-                    console.log(poi.visitPOI);
-
+          console.log(poi.visitPOI);
         }
       });
 
-            //TODO: funziona -> se si riesce migliorarlo
+      //TODO: funziona -> se si riesce migliorarlo
       for (var i = 0; i < this.filteredPOI.length; i++) {
         this.$set(this.filteredPOI, i, tmpFilteredPOI[i]);
       }

@@ -777,9 +777,14 @@
                         <b>Elenco dei luoghi e delle attività</b>
                       </h5>
                       <!--TODO: mettere qua le aree-->
-                      <h5>Aree</h5><ul class="aree__tagbox mb-4">
+                      <h5>Aree</h5>
+                      <ul class="aree__tagbox mb-4">
                         <li
-                          :class="selectedArea === area['o:title'] ? 'tag__item__selected' : 'tag__item__unselected'"
+                          :class="
+                            selectedArea === area['o:title']
+                              ? 'tag__item__selected'
+                              : 'tag__item__unselected'
+                          "
                           v-for="(area, index) in $store.state.aree"
                           :key="index"
                           v-on:click="selectedArea = area['o:title']"
@@ -795,7 +800,15 @@
                             v-for="(item, index) in this.filteredPOI"
                             :key="'filteredPOI' + (index + 300)"
                           >
-                            <article class="postcard light orange" v-if="selectedArea === item['geo:appartiene_a_area'][0]['display_title']">
+                            <article
+                              class="postcard light orange"
+                              v-if="
+                                selectedArea ===
+                                item['geo:appartiene_a_area'][0][
+                                  'display_title'
+                                ]
+                              "
+                            >
                               <a class="postcard__img_link">
                                 <img
                                   v-if="item.media.length > 0"
@@ -956,7 +969,8 @@
                         </div>
                         <div v-else>
                           Nessuna attività o luogo corrispondente ai filtri
-                          selezionati nella zona <b>{{selectedArea.toUpperCase()}}</b>
+                          selezionati nella zona
+                          <b>{{ selectedArea.toUpperCase() }}</b>
                         </div>
                       </div>
                     </div>
@@ -1352,6 +1366,8 @@ export default {
   },
 
   mounted() {
+    window.addEventListener("unload", this.someMethod);
+
     console.log("TEMPO DISPONIBILE CREAZIONE: ");
     console.log(this.$route.params);
     console.log(this.$store.state.timeAvailable.milliseconds);
@@ -1390,6 +1406,34 @@ export default {
      */
 
     var self = this;
+
+    /*
+    window.onbeforeunload = function (e) {
+      console.log("SONO QUA NELLA FUNZIONE");
+      if(self.$route.path  == "/creapercorso") {
+        console.log("Sono nell'if");
+        e = e || window.event;
+        //old browsers
+        if (e) {e.returnValue = 'Changes you made may not be saved';}
+        //safari, chrome(chrome ignores text)
+        return 'Changes you made may not be saved';
+      } else { 
+                console.log("Sono nell'else");
+
+        return null;
+      }
+    };
+    */
+
+    /*
+    if (performance.navigation.type == 1) {
+      if(this.$route.path == '/creapercorso') {
+          this.$router.push({path: '/percorsi'})
+        } else {
+          console.log('reload page without redirect');
+      }
+    }
+    */
 
     // Common.getElemsByClass(this, 121, (res) => {
     //   store.state.POIpivot = res.body;
@@ -1474,6 +1518,16 @@ export default {
   },
 
   methods: {
+    someMethod(event) {
+      // do something to let the user decide
+      // then redirect if necessary
+            console.log("SONO QUA NELLA FUNZIONE");
+
+      //TODO: funziona -> se si riesce migliorarlo
+      for (var i = 0; i < this.$store.state.POIpivot.length; i++) {
+        this.$set(this.$store.state.POIpivot, i, this.filteredPOI[i]);
+      }
+    },
     /*
     getIcon(item) {
       return L.divIcon({

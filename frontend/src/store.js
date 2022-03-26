@@ -1,10 +1,15 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
+
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+    plugins: [createPersistedState({
+        storage: window.sessionStorage,
+    })],
     state: {
         count: 1,
         urlCache: {}, // Url => Obj
@@ -226,7 +231,9 @@ const store = new Vuex.Store({
 
                 console.log(misurazioni);
 
+                if(i.mis === undefined) {
                 i.mis = misurazioni;
+            }
 
                 //attributo usato per mostrare o meno il poi sulla vista
                 i.poiVisibleWithFilters = true;
@@ -283,8 +290,12 @@ const store = new Vuex.Store({
 
                 Array.prototype.forEach.call(poiInPivot, poi => {
                     //recupero i poi che appartengono all'itinerario corrente
+                    if(poi.activitiesOfPOIPivot === undefined){
                     poi.activitiesOfPOIPivot = misurazioniInPivot;
+                    }
+                    if(poi.marker === undefined) { 
                     poi.marker = pivot.marker;
+                    }
                 })
             })
 

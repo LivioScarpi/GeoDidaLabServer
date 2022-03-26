@@ -115,16 +115,37 @@ export default {
 
     var self = this;
 
+    //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
+    Common.getElemsByClass(this, 130, (res) => {
+      store.state.esperimenti = res.body;
+      //TODO: remove me
+      //console.log(res.body);
+
+      store.commit("setActivitiesInPOI");
+
+      this.filteredPOI = store.state.POIpivot;
+      //TODO: remove me
+      //console.log(this.filteredPOI);
+      //this.initializeMarkersOfFilteredPOI();
+      store.state.loadedActivitiesInPOIPivot = true;
+
+      self.activitiesLoaded = true;
+      self.isLoadingEsperimenti = false;
+    });
+
     /**
      * 117 : class id Itinerario
      */
 
+    console.log("chiedo gli itinerari");
     //chiedo gli itinerari
     Common.getElemsByClass(this, 117, (res) => {
       store.state.itinerari = res.body;
       console.log(store.state.itinerari);
 
       //chiedo i POI
+          console.log("chiedo i POI");
+
       Common.getElemsByClass(this, 120, (res) => {
         store.state.POI = res.body;
         console.log(store.state.POI);
@@ -134,8 +155,12 @@ export default {
 
         //da qua
         if (store.state.loadedActivitiesInPOIPivot) {
+                    console.log("TRUE store.state.loadedActivitiesInPOIPivot");
+
           store.commit("setActivitiesInPOI");
           store.commit("setPOIinItinerario");
+        } else {
+          console.log("FALSE store.state.loadedActivitiesInPOIPivot");
         }
 
         console.log(store.state.itinerari);

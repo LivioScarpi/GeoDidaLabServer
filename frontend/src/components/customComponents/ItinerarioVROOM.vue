@@ -115,7 +115,7 @@
                                   <img
                                     src="@/assets/images/bg3.jpg"
                                     alt="Picture"
-                                    class="px-0 rounded-top"
+                                    class="px-0 rounded-top postcardtimeline__img"
                                   />
                                 </div>
                               </div>

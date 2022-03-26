@@ -55,8 +55,9 @@
                             px-0
                           "
                         >
-                          <div class="row">
-                            <div class="col-12">
+                          <div class="row postcardpercorsi                             timeline
+                            orange">
+                            <div class="col-12 pb-3">
                               <div
                                 v-if="
                                   poi['poiName'] !== 'Punto di partenza' &&
@@ -65,11 +66,11 @@
                                 class="row"
                               >
                                 <!--v-if="poi.image !== undefined"-->
-                                <div class="col-12">
+                                <div class="col-12 px-0">
                                   <img
                                     src="@/assets/images/bg3.jpg"
                                     alt="Picture"
-                                    class="px-0 rounded-top"
+                                    class="px-0 rounded-top postcardtimeline__img"
                                   />
                                 </div>
                               </div>
@@ -79,6 +80,7 @@
                                   <h2 class="mt-4 mb-0">
                                     <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["geo:Titolo_it"][0]["@value"] }}
                                   </h2>
+                                  <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
 
                                   <h4
                                     v-if="
@@ -318,6 +320,9 @@ export default {
       //Punto di partenza
       this.markersPolylines.push(this.startPoint);
 
+      console.log("ITINERARIO IN INPUT");
+      console.log(this.itinerario);
+
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         var POIlat = poi["marker"]["o-module-mapping:lat"];
         var POIlng = poi["marker"]["o-module-mapping:lng"];
@@ -346,6 +351,9 @@ export default {
         poiHasActivitiesInItinerary: false,
         isStartPoint: true,
       });
+
+            console.log("ITINERARIO IN INPUT QUA");
+      console.log(this.itinerario);
 
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         this.markers.push({

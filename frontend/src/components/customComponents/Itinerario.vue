@@ -15,7 +15,6 @@
           </div>
         </div>-->
 
-
         <div class="row">
           <div class="col-12">
             <div id="first-section1">
@@ -55,8 +54,7 @@
                             px-0
                           "
                         >
-                          <div class="row postcardpercorsi                             timeline
-                            orange">
+                          <div class="row postcardpercorsi timeline orange">
                             <div class="col-12 pb-3">
                               <div
                                 v-if="
@@ -67,25 +65,51 @@
                               >
                                 <!--v-if="poi.image !== undefined"-->
                                 <div class="col-12 px-0">
-                                  <img
-                                    src="@/assets/images/bg3.jpg"
-                                    alt="Picture"
-                                    class="px-0 rounded-top postcardtimeline__img"
-                                  />
+                                    <img
+                                    v-if="poi['media'].length > 0"
+                                      :src="
+                                        poi['media'][0]['o:thumbnail_urls'][
+                                          'large'
+                                        ]
+                                      "
+                                      alt="Picture"
+                                      class="
+                                        px-0
+                                        rounded-top
+                                        postcardtimeline__img
+                                      "
+                                      style="width: 100%"
+                                    />
+
+                                    <img
+                                    v-else
+                                      src="@/assets/images/bg3.jpg"
+                                      alt="Picture"
+                                      class="
+                                        px-0
+                                        rounded-top
+                                        postcardtimeline__img
+                                      "
+                                    />
                                 </div>
                               </div>
 
                               <div class="row text-center">
                                 <div class="col-12">
                                   <h2 class="mt-4 mb-0">
-                                    <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["geo:Titolo_it"][0]["@value"] }}
+                                    <i class="bi bi-pin-map-fill mr-2"></i
+                                    >{{ poi["geo:Titolo_it"][0]["@value"] }}
                                   </h2>
-                                  <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
+                                  <div
+                                    class="postcardtimeline__bar margin-auto"
+                                    style="display: inline-block"
+                                  ></div>
 
                                   <h4
                                     v-if="
                                       poi['poiName'] !== 'Punto di partenza' &&
-                                      poi['poiName'] !== 'Punto di arrivo'
+                                      poi['poiName'] !== 'Punto di arrivo' &&
+                                      poi.activitiesOfPOIPivot.length !== 0
                                     "
                                     class="mb-3 mt-0"
                                   >
@@ -113,7 +137,14 @@
                                       <!--{{ poiIndex }}.{{activityIndex}} - -->
                                       <h6>{{ activity["o:title"] }}</h6>
                                       <i class="bi bi-clock mr-2"></i>
-                                        {{parseInt(activity['durataMillisecondi']) * 10 / 600000}} minuti
+                                      {{
+                                        (parseInt(
+                                          activity["durataMillisecondi"]
+                                        ) *
+                                          10) /
+                                        600000
+                                      }}
+                                      minuti
                                     </div>
                                   </div>
                                 </div>
@@ -130,7 +161,7 @@
           </div>
         </div>
 
-<!--
+        <!--
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
           <div class="col-10 col-lg-11 pl-0">
@@ -198,18 +229,18 @@
                   :lat-lng="marker.marker.getLatLng()"
                   :key="'marker' + index"
                 >
-                            <l-icon
-                              v-if="marker.isStartPoint"
-                              :icon-url="require('../../icons/startPoint.png')"
-                            ></l-icon>
-                            <l-icon
-                              v-else-if="marker.poiHasActivitiesInItinerary"
-                              :icon-url="require('../../icons/selectedPOI.png')"
-                            ></l-icon>
-                            <l-icon
-                              v-else-if="!marker.poiHasActivitiesInItinerary"
-                              :icon-url="require('../../icons/unselectedPOI.png')"
-                            ></l-icon>
+                  <l-icon
+                    v-if="marker.isStartPoint"
+                    :icon-url="require('../../icons/startPoint.png')"
+                  ></l-icon>
+                  <l-icon
+                    v-else-if="marker.poiHasActivitiesInItinerary"
+                    :icon-url="require('../../icons/selectedPOI.png')"
+                  ></l-icon>
+                  <l-icon
+                    v-else-if="!marker.poiHasActivitiesInItinerary"
+                    :icon-url="require('../../icons/unselectedPOI.png')"
+                  ></l-icon>
                   <l-popup :options="anchorOptions">
                     <div class="px-3">
                       <div class="row">
@@ -352,7 +383,7 @@ export default {
         isStartPoint: true,
       });
 
-            console.log("ITINERARIO IN INPUT QUA");
+      console.log("ITINERARIO IN INPUT QUA");
       console.log(this.itinerario);
 
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {

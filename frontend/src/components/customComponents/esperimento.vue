@@ -1,9 +1,24 @@
 <template>
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
-  <card v-if="!isLoadingImages && !isLoadingVideos" 
-    :style="[isLarge ? {'max-width': '28rem', 'height': '42rem', 'max-height': '43rem', 'border-radius': '10px'} : {'max-width': '28rem', 'max-sheight': '45rem', 'border-radius': '10px'}]"
-    class="mx-2 postcardattivita attivita orange">
+  <card
+    v-if="!isLoadingImages && !isLoadingVideos"
+    :style="[
+      isLarge
+        ? {
+            'max-width': '28rem',
+            height: '42rem',
+            'max-height': '43rem',
+            'border-radius': '10px',
+          }
+        : {
+            'max-width': '28rem',
+            'max-sheight': '45rem',
+            'border-radius': '10px',
+          },
+    ]"
+    class="mx-2 postcardattivita attivita orange"
+  >
     <!--<img
         slot="image"
         class="card-img-top"
@@ -20,14 +35,14 @@
       style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
     >
       <swiper-slide
-        :style="[isLarge ? {'height': '230px'} : {'height': '199px'}]"
+        :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
         v-if="item.media !== undefined && item.media.length !== 0"
       >
         <img :src="item['media'][0]['o:thumbnail_urls']['large']" class="img" />
       </swiper-slide>
 
       <swiper-slide
-        :style="[isLarge ? {'height': '230px'} : {'height': '199px'}]"
+        :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
         v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
       >
         <div class="embed-responsive embed-responsive-16by9">
@@ -116,7 +131,10 @@
     </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-                                        <div class="postcardattivita__bar margin-auto" style=" display: inline-block;"></div>
+      <div
+        class="postcardattivita__bar margin-auto"
+        style="display: inline-block"
+      ></div>
 
       <div class="row">
         <tabs
@@ -187,7 +205,6 @@
       </div>
     </div>
   </card>
-  
 </template>
 
 <script>
@@ -380,10 +397,9 @@ export default {
 
 .text {
   height: 13rem;
-   overflow: scroll;
-   /*text-overflow: ellipsis;*/
-   display: -webkit-box;
-   -webkit-box-orient: vertical;
+  overflow: scroll;
+  /*text-overflow: ellipsis;*/
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
-
 </style>

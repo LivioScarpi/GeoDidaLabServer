@@ -296,6 +296,8 @@ const store = new Vuex.Store({
                     if(poi.marker === undefined) { 
                     poi.marker = pivot.marker;
                     }
+
+                    poi.media = pivot.media;
                 })
             })
 

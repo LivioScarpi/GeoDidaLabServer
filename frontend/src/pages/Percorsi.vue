@@ -19,7 +19,7 @@
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__bar" style="height: 16px"></div>
           <div class="postcardpercorsi__preview-txt pb-lg-4 pb-3">
             Creando un nuovo percorso hai la possibilità di inserire le attività
             che più ti interessano e i posti che più vuoi visitare in modo tale
@@ -117,7 +117,7 @@
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__bar" style="height: 20px"></div>
           <div class="postcardpercorsi__preview-txt">
             Inserisci qua il codice dell'itinerario che hai creato per poterlo
             visualizzare!
@@ -156,7 +156,7 @@
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcardpercorsi__bar"></div>
+          <div class="postcardpercorsi__bar" style="height: 8px"></div>
           <div class="postcardpercorsi__preview-txt">
             Selezionando questa opzione hai la possibilità di scegliere un
             itinerario tra i vari itinerari predefiniti già creati
@@ -315,65 +315,64 @@
         </div>
       </div>-->
       <modal
-            :show.sync="modals.itineraryNotReceivedWithError"
-            headerClasses="justify-content-center"
-            @close="modals.itineraryNotReceivedWithError = false"
-          >
-            <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        :show.sync="modals.itineraryNotReceivedWithError"
+        headerClasses="justify-content-center"
+        @close="modals.itineraryNotReceivedWithError = false"
+      >
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
             <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <h6 class="itineraryCode">
-                      Si è verificato un errore durante recupero del tuo
-                      itinerario.
-                    </h6>
-                    <p>Riprovare più tardi.</p>
-                  </div>
-                </div>
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Si è verificato un errore durante recupero del tuo itinerario.
+                </h6>
+                <p>Riprovare più tardi.</p>
               </div>
             </div>
+          </div>
+        </div>
 
-            <template slot="footer">
-              <Button
-                size="small"
-                type="danger"
-                v-on:click="modals.itineraryNotReceivedWithError = false"
-                class="mx-1"
-                >Chiudi
-              </Button>
-            </template>
-          </modal>
+        <template slot="footer">
+          <Button
+            size="small"
+            type="danger"
+            v-on:click="modals.itineraryNotReceivedWithError = false"
+            class="mx-1"
+            >Chiudi
+          </Button>
+        </template>
+      </modal>
 
-          <modal
-            :show.sync="modals.itineraryCodeNotValid"
-            headerClasses="justify-content-center"
-            @close="modals.itineraryCodeNotValid = false"
-          >
-            <h4 slot="header" class="title title-up text-center">Errore!</h4>
+      <modal
+        :show.sync="modals.itineraryCodeNotValid"
+        headerClasses="justify-content-center"
+        @close="modals.itineraryCodeNotValid = false"
+      >
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
             <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <h6 class="itineraryCode">
-                      Il codice inserito non è valido, si prega di inserire un
-                      codice corretto.
-                    </h6>
-                  </div>
-                </div>
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Il codice inserito non è valido, si prega di inserire un
+                  codice corretto.
+                </h6>
               </div>
             </div>
+          </div>
+        </div>
 
-            <template slot="footer">
-              <Button
-                size="small"
-                type="danger"
-                v-on:click="modals.itineraryCodeNotValid = false"
-                class="mx-1"
-                >Chiudi
-              </Button>
-            </template>
-          </modal>
+        <template slot="footer">
+          <Button
+            size="small"
+            type="danger"
+            v-on:click="modals.itineraryCodeNotValid = false"
+            class="mx-1"
+            >Chiudi
+          </Button>
+        </template>
+      </modal>
     </div>
   </div>
 </template>
@@ -606,7 +605,6 @@ s
   async created() {
     // eseguo la query per gli strumenti solo la prima volta che apro la pagina degli Strumenti
 
-
     var self = this;
 
     /**
@@ -705,8 +703,7 @@ s
       store.state.aree = res.body;
       self.isLoadingAree = false;
       //store.commit('setAllinterestOfPOI');
-                //store.commit("setAreaInPOIPivot");
-
+      //store.commit("setAreaInPOIPivot");
 
       console.log(res.body);
     });

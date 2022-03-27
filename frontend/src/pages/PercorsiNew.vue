@@ -1278,7 +1278,7 @@ export default {
         },
         {
           poiName: "Parco della Polveriera",
-          poiID: 2,
+          poiID: 3,
         },
       ],
 

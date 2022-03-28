@@ -1122,6 +1122,8 @@ import activitiesOfPOI from "../components/customComponents/activitiesOfPOI";
 import $ from "jquery";
 import TabPane from "../components/Tabs/Tab.vue";
 import Tabs from "../components/Tabs/Tabs.vue";
+import "../utils/costMatrices";
+import { costMatrix } from "../utils/costMatrices";
 
 export default {
   name: "PercorsiNew",
@@ -1268,6 +1270,7 @@ export default {
       },
 
       idsOfPOI: [
+        /*
         {
           poiName: "Laboratorio GeoDidaLab",
           poiID: 1,
@@ -1280,6 +1283,37 @@ export default {
           poiName: "Parco della Polveriera",
           poiID: 3,
         },
+        */
+      ],
+
+      correctIdsOfPOI: [
+        { poiName: "Laboratorio GeoDidaLab", poiID: 0 },
+        { poiName: "Lago San Michele", poiID: 1 },
+        { poiName: "Parco della Polveriera", poiID: 2 },
+        { poiName: "Dosso Montonato", poiID: 3 },
+        { poiName: "Affioramento MN459", poiID: 4 },
+        { poiName: "Sinagoga", poiID: 5 },
+        { poiName: "Chiesa Sant'Ulderico", poiID: 6 },
+        { poiName: "Trattamenti superficiali Piazza Ottinetti", poiID: 7 },
+        { poiName: "Museo Civico P.A. Garda", poiID: 8 },
+        { poiName: "Teatro Civico Giuseppe Giacosa", poiID: 9 },
+        { poiName: "Affioramento MN465", poiID: 10 },
+        { poiName: "Affioramento MN464", poiID: 11 },
+        { poiName: "Affioramento MN463", poiID: 12 },
+        { poiName: "Affioramento MN460", poiID: 13 },
+        { poiName: "Affioramento MN461", poiID: 14 },
+        { poiName: "Affioramento MN462", poiID: 15 },
+        { poiName: "Cattedrale Santa Maria Assunta - Duomo", poiID: 16 },
+        { poiName: "Tempio dell'Immacolata dei Miracoli", poiID: 17 },
+        { poiName: "Affioramento MN458", poiID: 18 },
+        { poiName: "Affioramento MN466", poiID: 19 },
+        { poiName: "Santuario Monte Stella", poiID: 20 },
+        { poiName: "Cappella dei Tre Re", poiID: 21 },
+        { poiName: "Anfiteatro romano", poiID: 22 },
+        { poiName: "Torre Santo Stefano", poiID: 23 },
+        { poiName: "Palazzine Olivetti", poiID: 24 },
+        { poiName: "Lo sfioratore di Mazzè", poiID: 25 },
+        { poiName: "Il Lago di Candia", poiID: 26 },
       ],
 
       anchorOptions: { offset: L.point(0, -30) },
@@ -1605,18 +1639,8 @@ export default {
         ],
         matrices: {
           car: {
-            durations: [
-              [0, 600, 1200, 500],
-              [600, 0, 500, 1200],
-              [1200, 500, 0, 600],
-              [500, 1200, 600, 0],
-            ],
-            costs: [
-              [0, 600, 1200, 500],
-              [600, 0, 500, 1200],
-              [1200, 500, 0, 600],
-              [500, 1200, 600, 0],
-            ],
+            durations: costMatrix,
+            costs: costMatrix,
           },
         },
       };
@@ -1645,6 +1669,11 @@ export default {
 
       var jobID = 1;
 
+      var placeID = 0;
+      var currentPlaceID = 0;
+
+      var customObjTmp = [];
+
       //creo i jobs per l'oggetto VROOM
       Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
         var activitiesSelected = poi.mis.filter(
@@ -1655,34 +1684,55 @@ export default {
         console.log(activitiesSelected);
 
         console.log(poi["geo:Titolo_it"][0]["@value"]);
-        var poiIDObject = this.idsOfPOI.filter(
+        var poiIDObject = this.correctIdsOfPOI.filter(
           (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
         );
 
         console.log(poiIDObject[0]);
+        currentPlaceID = poiIDObject[0].poiID;
+
+        /*
+        if (poiIDObject.length === 0) {
+          console.log("il POI NON c'è");
+          this.idsOfPOI.push({
+            poiName: poi["geo:Titolo_it"][0]["@value"],
+            poiID: placeID,
+          });
+
+          customObjTmp.push({
+            poiName: poi["geo:Titolo_it"][0]["@value"],
+            poiID: placeID,
+          });
+
+          currentPlaceID = placeID;
+
+          placeID += 1;
+        } else {
+          console.log("il POI c'è");
+
+          currentPlaceID = this.poiIDObject[0].poiID;
+        }
+        */
 
         //TODO: sistemare poiIDObject
-        /*
+
         if (poi.visitPOI) {
           //se l'utente vuole visitare il POI viene aggiunto il Job
           var visitPOIjob = {
             id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-            description:
-              poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+            description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
             service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
             location: [
               poi.marker["o-module-mapping:lng"],
               poi.marker["o-module-mapping:lat"],
             ],
-            location_index: poiIDObject[0].poiID,
+            location_index: currentPlaceID,
           };
-
 
           vroomObject.jobs.push(visitPOIjob);
 
           jobID += 1;
         }
-        */
 
         Array.prototype.forEach.call(activitiesSelected, (activity) => {
           var job = {
@@ -1694,7 +1744,7 @@ export default {
               poi.marker["o-module-mapping:lng"],
               poi.marker["o-module-mapping:lat"],
             ],
-            location_index: poiIDObject[0].poiID,
+            location_index: currentPlaceID,
           };
 
           console.log("JOB creato");
@@ -1708,6 +1758,9 @@ export default {
       console.log("VROOM OBJECT");
       console.log(vroomObject);
       console.log(JSON.stringify(vroomObject));
+
+      console.log("OGGETTO CON GLI ID");
+      console.log(JSON.stringify(customObjTmp));
 
       var vroomItineraryResponse = this.makeQueryVROOM(vroomObject);
 

@@ -696,8 +696,88 @@
             <div class="col-lg-12">
               <h5 class="mt-0"><b>Attività selezionate</b></h5>
               <!--<i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i>-->
+              <div v-for="(area, index) in $store.state.aree" :key="index">
+                <collapse>
+                  <collapse-item :title="area['o:title']" :name="area['o:title']">
+
+                <div v-if="area.areaHasActivitiesSelected">
+                  <div
+                    v-for="(item, index) in filteredPOI"
+                    :key="'availableActivitiesPOI' + (index + 200)"
+                  >
+                    <!-- <div
+                      v-if="item['geo:appartiene_a_area'][0]['display_title'] == area['o:title']"
+                    > -->
+                    <div
+                      v-for="(it, ind) in item.mis"
+                      :key="'availableActivities' + (ind + 200)"
+                      class=""
+                    >
+                      <div v-if="it.selected">
+                        <div
+                          class="row border mr-1 mb-3 postcard orange"
+                          style="border-radius: 10px"
+                        >
+                          <div
+                            class="col-2 text-center px-0"
+                            style="
+                              background-color: indianred;
+                              border-top-left-radius: 10px;
+                              border-bottom-left-radius: 10px;
+                              cursor: pointer;
+
+                              display: flex;
+
+                              justify-content: center;
+                              align-items: center;
+                            "
+                            @click="
+                              changeSelection(
+                                item['geo:Titolo_it'][0]['@value'],
+                                it['o:title']
+                              )
+                            "
+                          >
+                            <i
+                              class="bi bi-trash"
+                              style="color: white; font-size: 1.2rem"
+                            ></i>
+                          </div>
+                          <div class="col-10 text-left py-2">
+                            <div class="row">
+                              <div class="col-12">
+                                {{ it["o:title"] }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <i class="bi bi-pin-map-fill mr-2"></i
+                                >{{ item["geo:Titolo_it"][0]["@value"] }}
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-12">
+                                <i class="bi bi-clock mr-2"></i
+                                >{{ it["geo:Durata"][0]["@value"] }} minuti
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div v-else>Nessuna attività selezionata in questa area</div>
+                  </collapse-item>
+                  
+                </collapse>
+
+
+              </div>
               <div v-if="someActivitiesSelected" class="mb-4">
-                <div
+                <!-- <div
                   v-for="(item, index) in this.filteredPOI"
                   :key="'availableActivitiesPOI' + (index + 200)"
                 >
@@ -759,7 +839,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
               <div v-else class="mb-4">Nessuna attività selezionata</div>
             </div>
@@ -1853,6 +1933,23 @@ export default {
         });
 
         poi.poiHasActivitiesSelected = poiHasActivitiesSelected;
+      });
+
+      //TODO: impostare se l'area ha delle attività selezionate
+      Array.prototype.forEach.call(this.$store.state.aree, (area) => {
+        console.log(area);
+        var areaHasActivitiesSelected = false;
+
+        Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+          if (
+            poi.poiHasActivitiesSelected &&
+            poi["geo:appartiene_a_area"][0]["display_title"] == area["o:title"]
+          ) {
+            areaHasActivitiesSelected = true;
+          }
+        });
+
+        area.areaHasActivitiesSelected = areaHasActivitiesSelected;
       });
 
       //TODO: funziona -> se si riesce migliorarlo

@@ -698,83 +698,84 @@
               <!--<i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i>-->
               <div v-for="(area, index) in $store.state.aree" :key="index">
                 <collapse>
-                  <collapse-item :title="area['o:title']" :name="area['o:title']">
-
-                <div v-if="area.areaHasActivitiesSelected">
-                  <div
-                    v-for="(item, index) in filteredPOI"
-                    :key="'availableActivitiesPOI' + (index + 200)"
+                  <collapse-item
+                    :title="area['o:title']"
+                    :name="area['o:title']"
                   >
-                    <!-- <div
+                    <div v-if="area.areaHasActivitiesSelected">
+                      <div
+                        v-for="(item, index) in filteredPOI"
+                        :key="'availableActivitiesPOI' + (index + 200)"
+                      >
+                        <!-- <div
                       v-if="item['geo:appartiene_a_area'][0]['display_title'] == area['o:title']"
                     > -->
-                    <div
-                      v-for="(it, ind) in item.mis"
-                      :key="'availableActivities' + (ind + 200)"
-                      class=""
-                    >
-                      <div v-if="it.selected">
                         <div
-                          class="row border mr-1 mb-3 postcard orange"
-                          style="border-radius: 10px"
+                          v-for="(it, ind) in item.mis"
+                          :key="'availableActivities' + (ind + 200)"
+                          class=""
                         >
-                          <div
-                            class="col-2 text-center px-0"
-                            style="
-                              background-color: indianred;
-                              border-top-left-radius: 10px;
-                              border-bottom-left-radius: 10px;
-                              cursor: pointer;
+                          <div v-if="it.selected">
+                            <div
+                              class="row border mr-1 mb-3 postcard orange"
+                              style="border-radius: 10px"
+                            >
+                              <div
+                                class="col-2 text-center px-0"
+                                style="
+                                  background-color: indianred;
+                                  border-top-left-radius: 10px;
+                                  border-bottom-left-radius: 10px;
+                                  cursor: pointer;
 
-                              display: flex;
+                                  display: flex;
 
-                              justify-content: center;
-                              align-items: center;
-                            "
-                            @click="
-                              changeSelection(
-                                item['geo:Titolo_it'][0]['@value'],
-                                it['o:title']
-                              )
-                            "
-                          >
-                            <i
-                              class="bi bi-trash"
-                              style="color: white; font-size: 1.2rem"
-                            ></i>
-                          </div>
-                          <div class="col-10 text-left py-2">
-                            <div class="row">
-                              <div class="col-12">
-                                {{ it["o:title"] }}
+                                  justify-content: center;
+                                  align-items: center;
+                                "
+                                @click="
+                                  changeSelection(
+                                    item['geo:Titolo_it'][0]['@value'],
+                                    it['o:title']
+                                  )
+                                "
+                              >
+                                <i
+                                  class="bi bi-trash"
+                                  style="color: white; font-size: 1.2rem"
+                                ></i>
                               </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-12">
-                                <i class="bi bi-pin-map-fill mr-2"></i
-                                >{{ item["geo:Titolo_it"][0]["@value"] }}
-                              </div>
-                            </div>
+                              <div class="col-10 text-left py-2">
+                                <div class="row">
+                                  <div class="col-12">
+                                    {{ it["o:title"] }}
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-12">
+                                    <i class="bi bi-pin-map-fill mr-2"></i
+                                    >{{ item["geo:Titolo_it"][0]["@value"] }}
+                                  </div>
+                                </div>
 
-                            <div class="row">
-                              <div class="col-12">
-                                <i class="bi bi-clock mr-2"></i
-                                >{{ it["geo:Durata"][0]["@value"] }} minuti
+                                <div class="row">
+                                  <div class="col-12">
+                                    <i class="bi bi-clock mr-2"></i
+                                    >{{ it["geo:Durata"][0]["@value"] }} minuti
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
+                        <!-- </div> -->
                       </div>
                     </div>
-                    <!-- </div> -->
-                  </div>
-                </div>
-                <div v-else>Nessuna attività selezionata in questa area</div>
+                    <div v-else>
+                      Nessuna attività selezionata in questa area
+                    </div>
                   </collapse-item>
-                  
                 </collapse>
-
-
               </div>
               <div v-if="someActivitiesSelected" class="mb-4">
                 <!-- <div
@@ -1396,6 +1397,8 @@ export default {
         { poiName: "Il Lago di Candia", poiID: 26 },
       ],
 
+      totalItinerary: [],
+
       anchorOptions: { offset: L.point(0, -30) },
 
       startPoint: [45.47561994860321, 7.889627627278735],
@@ -1704,74 +1707,86 @@ export default {
           this.$store.state.timeAvailable.milliseconds
       );
 
-      var vroomObject = {
-        jobs: [],
-        vehicles: [
-          {
-            id: 1,
-            profile: "car",
-            start_index: 0,
-            end_index: 0,
-            start: this.startPoint,
-            end: this.endPoint,
-            time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
-          },
-        ],
-        matrices: {
-          car: {
-            durations: costMatrix,
-            costs: costMatrix,
-          },
-        },
-      };
+      //var totalItinerary = [];
 
-      console.log("FILTRO I POI");
-
-      //oggetto contenente i POI con delle attività selezionate
-      var poiWithSelectedActivities = this.filteredPOI.filter(
-        (poi) => poi.poiHasActivitiesSelected
-      );
-
-      //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
-      if (poiWithSelectedActivities.length === 0) {
-        Array.prototype.forEach.call(this.filteredPOI, (poi) => {
-          Array.prototype.forEach.call(poi.mis, (activity) => {
-            activity.selected = true;
-          });
-        });
-
-        poiWithSelectedActivities = this.filteredPOI;
-      }
-
-      //TODO: remove me
-      //onsole.log("poi con attività selezionate");
-      console.log(poiWithSelectedActivities);
-
-      var jobID = 1;
-
-      var placeID = 0;
-      var currentPlaceID = 0;
-
-      var customObjTmp = [];
-
-      //creo i jobs per l'oggetto VROOM
-      Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
-        var activitiesSelected = poi.mis.filter(
-          (activity) => activity.selected
+      Array.prototype.forEach.call(this.$store.state.aree, (area) => {
+        var POIofArea = this.filteredPOI.filter(
+          (poi) =>
+            poi["geo:appartiene_a_area"][0]["display_title"] === area["o:title"]
         );
 
-        console.log("activitiesSelected");
-        console.log(activitiesSelected);
+        console.log("POI OF AREA " + area["o:title"]);
+        console.log(POIofArea);
 
-        console.log(poi["geo:Titolo_it"][0]["@value"]);
-        var poiIDObject = this.correctIdsOfPOI.filter(
-          (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
-        );
+        if (POIofArea.length > 0) {
+          var vroomObject = {
+            jobs: [],
+            vehicles: [
+              {
+                id: 1,
+                profile: "car",
+                start_index: 0,
+                end_index: 0,
+                start: this.startPoint,
+                end: this.endPoint,
+                time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
+              },
+            ],
+            matrices: {
+              car: {
+                durations: costMatrix,
+                costs: costMatrix,
+              },
+            },
+          };
 
-        console.log(poiIDObject[0]);
-        currentPlaceID = poiIDObject[0].poiID;
+          console.log("FILTRO I POI");
 
-        /*
+          //oggetto contenente i POI con delle attività selezionate
+          var poiWithSelectedActivities = POIofArea.filter(
+            (poi) => poi.poiHasActivitiesSelected
+          );
+
+          //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
+          if (poiWithSelectedActivities.length === 0) {
+            Array.prototype.forEach.call(POIofArea, (poi) => {
+              Array.prototype.forEach.call(poi.mis, (activity) => {
+                activity.selected = true;
+              });
+            });
+
+            poiWithSelectedActivities = POIofArea;
+          }
+
+          //TODO: remove me
+          //onsole.log("poi con attività selezionate");
+          console.log(poiWithSelectedActivities);
+
+          var jobID = 1;
+
+          var placeID = 0;
+          var currentPlaceID = 0;
+
+          var customObjTmp = [];
+
+          //creo i jobs per l'oggetto VROOM
+          Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
+            var activitiesSelected = poi.mis.filter(
+              (activity) => activity.selected
+            );
+
+            console.log("activitiesSelected");
+            console.log(activitiesSelected);
+
+            console.log(poi["geo:Titolo_it"][0]["@value"]);
+            var poiIDObject = this.correctIdsOfPOI.filter(
+              (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
+            );
+
+            console.log(poiIDObject[0]);
+            currentPlaceID = poiIDObject[0].poiID;
+
+            /*
         if (poiIDObject.length === 0) {
           console.log("il POI NON c'è");
           this.idsOfPOI.push({
@@ -1794,56 +1809,64 @@ export default {
         }
         */
 
-        //TODO: sistemare poiIDObject
+            //TODO: sistemare poiIDObject
 
-        if (poi.visitPOI) {
-          //se l'utente vuole visitare il POI viene aggiunto il Job
-          var visitPOIjob = {
-            id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-            description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
-            service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
-            location: [
-              poi.marker["o-module-mapping:lng"],
-              poi.marker["o-module-mapping:lat"],
-            ],
-            location_index: currentPlaceID,
-          };
+            if (poi.visitPOI) {
+              //se l'utente vuole visitare il POI viene aggiunto il Job
+              var visitPOIjob = {
+                id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+                description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+                service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
+                location: [
+                  poi.marker["o-module-mapping:lng"],
+                  poi.marker["o-module-mapping:lat"],
+                ],
+                location_index: currentPlaceID,
+              };
 
-          vroomObject.jobs.push(visitPOIjob);
+              vroomObject.jobs.push(visitPOIjob);
 
-          jobID += 1;
+              jobID += 1;
+            }
+
+            Array.prototype.forEach.call(activitiesSelected, (activity) => {
+              var job = {
+                id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+                description:
+                  poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
+                service: this.getMilliseconds(
+                  activity["geo:Durata"][0]["@value"]
+                ),
+                location: [
+                  poi.marker["o-module-mapping:lng"],
+                  poi.marker["o-module-mapping:lat"],
+                ],
+                location_index: currentPlaceID,
+              };
+
+              console.log("JOB creato");
+
+              vroomObject.jobs.push(job);
+
+              jobID += 1;
+            });
+          });
+
+          console.log("VROOM OBJECT");
+          console.log(vroomObject);
+          console.log(JSON.stringify(vroomObject));
+
+          console.log("OGGETTO CON GLI ID");
+          console.log(JSON.stringify(customObjTmp));
+
+          var vroomItineraryResponse = this.makeQueryVROOM(vroomObject, area['o:title']);
+
+          //totalItinerary.push(vroomItineraryResponse);
         }
-
-        Array.prototype.forEach.call(activitiesSelected, (activity) => {
-          var job = {
-            id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-            description:
-              poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
-            service: this.getMilliseconds(activity["geo:Durata"][0]["@value"]),
-            location: [
-              poi.marker["o-module-mapping:lng"],
-              poi.marker["o-module-mapping:lat"],
-            ],
-            location_index: currentPlaceID,
-          };
-
-          console.log("JOB creato");
-
-          vroomObject.jobs.push(job);
-
-          jobID += 1;
-        });
       });
 
-      console.log("VROOM OBJECT");
-      console.log(vroomObject);
-      console.log(JSON.stringify(vroomObject));
-
-      console.log("OGGETTO CON GLI ID");
-      console.log(JSON.stringify(customObjTmp));
-
-      var vroomItineraryResponse = this.makeQueryVROOM(vroomObject);
-
+      console.log("TOTAL ITINERARY");
+      console.log(this.totalItinerary);
       //console.log("DOPO MAKE QUERY VROOM");
       //console.log(vroomItineraryResponse);
 
@@ -2145,10 +2168,12 @@ export default {
       return minutesInt * 60000;
     },
 
-    makeQueryVROOM(vroomObject) {
+    makeQueryVROOM(vroomObject, areaName) {
       var self = this;
+      var itinerary = null;
 
       console.log("effettuo la query");
+      console.log(JSON.stringify(vroomObject));
       $.ajax({
         type: "POST",
         data: JSON.stringify(vroomObject),
@@ -2158,21 +2183,22 @@ export default {
         console.log("res", res);
         console.log("JSON res", JSON.stringify(res));
 
-        self.createItineraryObject(res);
+        itinerary = self.createItineraryObject(res, areaName);
+        //return itinerary;
 
         //return res;
         // Do something with the result :)
       });
     },
 
-    createItineraryObject(vroomResponseObject) {
+    createItineraryObject(vroomResponseObject, areaName) {
       //TODO: implement
 
       console.log("OGGETTO IN INPUT NEL METODO createItineraryObject");
       console.log(vroomResponseObject);
 
       var itineraryObject = {
-        name: "Itinerario",
+        name: "Itinerario_" + areaName,
         poi: null,
         totalTimeMilliseconds: vroomResponseObject.summary.service,
       };
@@ -2274,14 +2300,18 @@ export default {
       console.log("CREAZIONE ITINERARIO PRIMA DEL PUSH");
       console.log(this.$store.state.itinerarioInCreazione);
 
-      router.push({
-        name: "personalizzazionepercorso",
-        /*
-        params: {
-          itineraryObject,
-          //timeAvailable,
-        },*/
-      });
+      // router.push({
+      //   name: "personalizzazionepercorso",
+      //   /*
+      //   params: {
+      //     itineraryObject,
+      //     //timeAvailable,
+      //   },*/
+      // });
+
+      this.totalItinerary.push(itineraryObject);
+
+      //return itineraryObject;
     },
 
     expandText(id, expandIcon, collapseIcon, cardHeaderID) {

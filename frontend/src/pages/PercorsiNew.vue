@@ -696,78 +696,80 @@
             <div class="col-lg-12">
               <h5 class="mt-0"><b>Attività selezionate</b></h5>
               <!--<i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i>-->
-                      <div
-                        v-for="(item, index) in filteredPOI"
-                        :key="'availableActivitiesPOI' + (index + 200)"
-                      >
-                        <!-- <div
+              <div
+                v-for="(item, index) in filteredPOI"
+                :key="'availableActivitiesPOI' + (index + 200)"
+              >
+                <!-- <div
                       v-if="item['geo:appartiene_a_area'][0]['display_title'] == area['o:title']"
                     > -->
-                        <div
-                          v-for="(it, ind) in item.mis"
-                          :key="'availableActivities' + (ind + 200)"
-                          class=""
-                        >
-                          <div v-if="it.selected">
-                            <div
-                              class="row border mr-1 mb-3 postcard orange"
-                              style="border-radius: 10px"
-                            >
-                              <div
-                                class="col-2 text-center px-0"
-                                style="
-                                  background-color: indianred;
-                                  border-top-left-radius: 10px;
-                                  border-bottom-left-radius: 10px;
-                                  cursor: pointer;
+                <div
+                  v-for="(it, ind) in item.mis"
+                  :key="'availableActivities' + (ind + 200)"
+                  class=""
+                >
+                  <div v-if="it.selected">
+                    <div
+                      class="row border mr-1 mb-3 postcard orange"
+                      style="border-radius: 10px"
+                    >
+                      <div
+                        class="col-2 text-center px-0"
+                        style="
+                          background-color: indianred;
+                          border-top-left-radius: 10px;
+                          border-bottom-left-radius: 10px;
+                          cursor: pointer;
 
-                                  display: flex;
+                          display: flex;
 
-                                  justify-content: center;
-                                  align-items: center;
-                                "
-                                @click="
-                                  changeSelection(
-                                    item['geo:Titolo_it'][0]['@value'],
-                                    it['o:title']
-                                  )
-                                "
-                              >
-                                <i
-                                  class="bi bi-trash"
-                                  style="color: white; font-size: 1.2rem"
-                                ></i>
-                              </div>
-                              <div class="col-10 text-left py-2">
-                                <div class="row">
-                                  <div class="col-12">
-                                    {{ it["o:title"] }}
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-12">
-                                    <i class="bi bi-pin-map-fill mr-2"></i
-                                    >{{ item["geo:Titolo_it"][0]["@value"] }}
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-12">
-                                    <i class="bi bi-map mr-2"></i>
-                                    {{ item['geo:appartiene_a_area'][0]['display_title'] }}
-                                  </div>
-                                </div>
-
-                                <div class="row">
-                                  <div class="col-12">
-                                    <i class="bi bi-clock mr-2"></i
-                                    >{{ it["geo:Durata"][0]["@value"] }} minuti
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                          justify-content: center;
+                          align-items: center;
+                        "
+                        @click="
+                          changeSelection(
+                            item['geo:Titolo_it'][0]['@value'],
+                            it['o:title']
+                          )
+                        "
+                      >
+                        <i
+                          class="bi bi-trash"
+                          style="color: white; font-size: 1.2rem"
+                        ></i>
+                      </div>
+                      <div class="col-10 text-left py-2">
+                        <div class="row">
+                          <div class="col-12">
+                            {{ it["o:title"] }}
                           </div>
                         </div>
-                        <!-- </div> -->
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-pin-map-fill mr-2"></i
+                            >{{ item["geo:Titolo_it"][0]["@value"] }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-map mr-2"></i>
+                            {{
+                              item["geo:appartiene_a_area"][0]["display_title"]
+                            }}
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-clock mr-2"></i
+                            >{{ it["geo:Durata"][0]["@value"] }} minuti
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- </div> -->
               </div>
               <div v-if="someActivitiesSelected" class="mb-4">
                 <!-- <div
@@ -965,16 +967,44 @@
                                             >
                                               <!--v-bind:class="{'border-bottom ': index === 0}"-->
                                               <div
-                                                class="col-lg-10 col-10 pl-0"
+                                                class="col-lg-9 col-9 pl-0"
                                               >
                                                 <activitiesOfPOI :it="it" />
                                               </div>
-                                              <div class="col-lg-2 col-2">
-                                                <div v-if="it.selected">
-                                                  <!--<Button size="small" type="primary" round
-                                                        v-on:click="changeSelection(item['geo:Titolo_it'][0]['@value'], it['o:title'])"
-                                                        class="buttonAlignRight m-2">Deseleziona
-                                                </Button>-->
+                                              <div class="col-lg-3 col-3">
+                                                <ul class="activity__tagbox float-right">
+                                                    <li
+                                                    v-if="it.selected"
+                                                      class="tag__item__unselected"
+                                                      v-on:click="
+                                                        changeSelection(
+                                                        item[
+                                                          'geo:Titolo_it'
+                                                        ][0]['@value'],
+                                                        it['o:title']
+                                                      )
+                                                      "
+                                                    >
+                                                      Deseleziona
+                                                    </li>
+                                                    <li
+                                                    v-else
+                                                      class="tag__item__selected"
+                                                      v-on:click="
+                                                        changeSelection(
+                                                        item[
+                                                          'geo:Titolo_it'
+                                                        ][0]['@value'],
+                                                        it['o:title']
+                                                      )
+                                                      "
+                                                    >
+                                                      Seleziona
+                                                    </li>
+                                                  </ul>
+                                                <!-- <div v-if="it.selected">
+
+                                                  
                                                   <i
                                                     class="
                                                       bi bi-bookmark-check-fill
@@ -1011,7 +1041,7 @@
                                                       )
                                                     "
                                                   ></i>
-                                                </div>
+                                                </div> -->
                                               </div>
 
                                               <hr
@@ -1851,7 +1881,10 @@ export default {
           console.log("OGGETTO CON GLI ID");
           console.log(JSON.stringify(customObjTmp));
 
-          var vroomItineraryResponse = this.makeQueryVROOM(vroomObject, area['o:title']);
+          var vroomItineraryResponse = this.makeQueryVROOM(
+            vroomObject,
+            area["o:title"]
+          );
 
           //totalItinerary.push(vroomItineraryResponse);
         }

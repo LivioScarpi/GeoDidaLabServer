@@ -870,7 +870,7 @@
                       </ul>
                       <!--state.POIpivot-->
                       <div>
-                        <div v-if="somePOIVisible">
+                        <div v-if="somePOIVisibleInCurrentArea">
                           <div
                             v-for="(item, index) in this.filteredPOI"
                             :key="'filteredPOI' + (index + 300)"
@@ -879,9 +879,9 @@
                               class="postcard light orange"
                               v-if="
                                 selectedArea ===
-                                item['geo:appartiene_a_area'][0][
-                                  'display_title'
-                                ]
+                                  item['geo:appartiene_a_area'][0][
+                                    'display_title'
+                                  ] && item.poiVisibleWithFilters
                               "
                             >
                               <a class="postcard__img_link">
@@ -933,15 +933,32 @@
                                 <div class="postcard__preview-txt">
                                   {{ item["dcterms:description"][0]["@value"] }}
                                 </div>
+                                <h6>Interessi: </h6>
+                                <template
+                                  v-for="(interest, index) in item[
+                                    'geo:ha_interesse'
+                                  ]"
+                                  style="display: inline-block"
+                                >
+                                  {{ interest["display_title"] }}
+                                  <template v-if="index < item[
+                                    'geo:ha_interesse'
+                                  ].length - 2">,</template>
 
+                                  <template v-if="index === item[
+                                    'geo:ha_interesse'
+                                  ].length - 2"> e </template>
+                                </template>
+                        
                                 <collapse>
                                   <collapse-item
                                     title="Mostra attività"
                                     name="1"
-                                    class="mt-2"
+                                    class="mt-3"
                                   >
+
                                     <div v-if="item['mis'].length > 0">
-                                      <div v-if="item.poiVisibleWithFilters">
+                                      <div v-if="item.poiHasSomeActivitiesVisible">
                                         <div
                                           v-for="(it, ind) in item.mis"
                                           :key="
@@ -966,42 +983,47 @@
                                               "
                                             >
                                               <!--v-bind:class="{'border-bottom ': index === 0}"-->
-                                              <div
-                                                class="col-lg-9 col-9 pl-0"
-                                              >
+                                              <div class="col-lg-9 col-9 pl-0">
                                                 <activitiesOfPOI :it="it" />
                                               </div>
                                               <div class="col-lg-3 col-3">
-                                                <ul class="activity__tagbox float-right">
-                                                    <li
+                                                <ul
+                                                  class="
+                                                    activity__tagbox
+                                                    float-right
+                                                  "
+                                                >
+                                                  <li
                                                     v-if="it.selected"
-                                                      class="tag__item__unselected"
-                                                      v-on:click="
-                                                        changeSelection(
+                                                    class="
+                                                      tag__item__unselected
+                                                    "
+                                                    v-on:click="
+                                                      changeSelection(
                                                         item[
                                                           'geo:Titolo_it'
                                                         ][0]['@value'],
                                                         it['o:title']
                                                       )
-                                                      "
-                                                    >
-                                                      Deseleziona
-                                                    </li>
-                                                    <li
+                                                    "
+                                                  >
+                                                    Deseleziona
+                                                  </li>
+                                                  <li
                                                     v-else
-                                                      class="tag__item__selected"
-                                                      v-on:click="
-                                                        changeSelection(
+                                                    class="tag__item__selected"
+                                                    v-on:click="
+                                                      changeSelection(
                                                         item[
                                                           'geo:Titolo_it'
                                                         ][0]['@value'],
                                                         it['o:title']
                                                       )
-                                                      "
-                                                    >
-                                                      Seleziona
-                                                    </li>
-                                                  </ul>
+                                                    "
+                                                  >
+                                                    Seleziona
+                                                  </li>
+                                                </ul>
                                                 <!-- <div v-if="it.selected">
 
                                                   
@@ -2095,24 +2117,40 @@ export default {
     filterPOIofCorrectDifficulty() {
       //filtro i POI in base alla difficoltà
       Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+        var poiHasSomeActivitiesVisible = false;
         Array.prototype.forEach.call(poi.mis, (exp) => {
           var expHasCorrectExpertiseLevels = false;
 
-          Array.prototype.forEach.call(
-            exp["geo:ha_difficolta"],
-            (difficulty) => {
-              if (
-                this.selectedDifficulties.includes(difficulty["display_title"])
-              ) {
-                expHasCorrectExpertiseLevels = true;
-              }
-            }
+          console.log(exp["o:title"]);
+
+          if (this.selectedDifficulties.includes(exp["geo:ha_difficolta"][0]["display_title"])) {
+            console.log("l'attività ha la difficoltà giusta!");
+            expHasCorrectExpertiseLevels = true;
+            poiHasSomeActivitiesVisible = true;
+          }
+
+          // Array.prototype.forEach.call(
+          //   exp["geo:ha_difficolta"],
+          //   (difficulty) => {
+          //     if (
+          //       this.selectedDifficulties.includes(difficulty["display_title"])
+          //     ) {
+          //       console.log("l'attività ha la difficoltà giusta!");
+          //       expHasCorrectExpertiseLevels = true;
+          //     }
+          //   }
+          // );
+
+          console.log(
+            "expHasCorrectExpertiseLevels: " + expHasCorrectExpertiseLevels
           );
 
           //exp.activityVisibleWithFilters = expHasCorrectExpertiseLevels;
           exp.activityVisibleWithDifficultiesFilters =
             expHasCorrectExpertiseLevels;
         });
+
+        poi.poiHasSomeActivitiesVisible = poiHasSomeActivitiesVisible;
       });
     },
 
@@ -2149,31 +2187,57 @@ export default {
     },
 
     setPOIVisibilityWithInterestsSelected() {
-      var poiHasActivitiesVisible = false;
       var tmpFilteredPOI = this.filteredPOI;
 
       //TODO: remove me
       //console.log("setPOIVisibilityWithInterestsSelected");
 
       for (var i = 0; i < tmpFilteredPOI.length; i++) {
-        Array.prototype.forEach.call(tmpFilteredPOI[i].mis, (activity) => {
-          if (
-            activity.activityVisibleWithInterestsFilters &&
-            activity.activityVisibleWithDifficultiesFilters
-          ) {
-            poiHasActivitiesVisible = true;
-            //TODO: remove me
-            //console.log("IL POI HA ALMENO UN'ACTIVITY VISIBILE");
+        var poiInterests = tmpFilteredPOI[i]["geo:ha_interesse"];
+        var poiInterestsName = poiInterests.map(
+          (interest) => interest.display_title
+        );
+        var poiHasCorrectInterests = false;
+              var poiHasActivitiesVisible = false;
+
+
+        console.log(
+          "INTERESSI DEL POI: " +
+            tmpFilteredPOI[i]["geo:Titolo_it"][0]["@value"]
+        );
+        console.log(poiInterestsName);
+
+        Array.prototype.forEach.call(poiInterestsName, (interest) => {
+          if (this.selectedInterests.includes(interest)) {
+            poiHasCorrectInterests = true;
           }
         });
 
+
+        if (!poiHasCorrectInterests) {
+          console.log("GUARDO LE SUE ATTIVITA'");
+          Array.prototype.forEach.call(tmpFilteredPOI[i].mis, (activity) => {
+            if (
+              activity.activityVisibleWithInterestsFilters &&
+              activity.activityVisibleWithDifficultiesFilters
+            ) {
+              console.log("HA UN'ATTIVITA CORRETTA");
+
+              poiHasActivitiesVisible = true;
+              //TODO: remove me
+              //console.log("IL POI HA ALMENO UN'ACTIVITY VISIBILE");
+            }
+          });
+        }
+
         //TODO: remove me
-        //console.log("poiHasActivitiesVisible: " + poiHasActivitiesVisible);
+        console.log("poiHasCorrectInterests: " + poiHasCorrectInterests);
+        console.log("poiHasActivitiesVisible: " + poiHasActivitiesVisible);
 
         this.$set(
           tmpFilteredPOI[i],
           "poiVisibleWithFilters",
-          poiHasActivitiesVisible
+          poiHasCorrectInterests || poiHasActivitiesVisible
         );
       }
 
@@ -2417,6 +2481,14 @@ export default {
       //console.log("somePOIVisile");
       return (
         this.filteredPOI.filter((poi) => poi.poiVisibleWithFilters).length > 0
+      );
+    },
+
+    somePOIVisibleInCurrentArea() {
+      //TODO: remove me
+      //console.log("somePOIVisile");
+      return (
+        this.filteredPOI.filter((poi) => poi['geo:appartiene_a_area'][0]['display_title'] === this.selectedArea).filter((poi) => poi.poiVisibleWithFilters).length > 0
       );
     },
 

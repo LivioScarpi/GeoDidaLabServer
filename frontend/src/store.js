@@ -232,14 +232,17 @@ const store = new Vuex.Store({
                 console.log(misurazioni);
 
                 if(i.mis === undefined) {
-                i.mis = misurazioni;
-            }
+                    i.mis = misurazioni;
+                }
 
                 //attributo usato per mostrare o meno il poi sulla vista
                 i.poiVisibleWithFilters = true;
 
                 //attributo usato per sapere se ci sono attività selezionate in questo POI
                 i.poiHasActivitiesSelected = false;
+
+                //attributo usato per sapere se ci sono delle attività visibili
+                i.poiHasSomeActivitiesVisible = true;
             })
 
             console.log("FINE setActivitiesInPOIPivot");

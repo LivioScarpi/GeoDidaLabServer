@@ -12,95 +12,167 @@
             alt="Image Title"
           />
         </a>
-        <div class="postcardpercorsi__text">
-          <h1 class="postcardpercorsi__title orange">Crea un nuovo percorso</h1>
-          <!--<div class="postcardpercorsi__subtitle small">
+
+        <div class="postcardpercorsi__text pt-3">
+          <ul class="userchoice__tagbox mb-3">
+            <li
+              v-on:click="enabledRadioCreatePathOrInsertCode = '1'"
+              :class="
+                (enabledRadioCreatePathOrInsertCode === '1'
+                  ? 'mr-1 tag__item__selected'
+                  : 'mr-1 tag__item__unselected')
+              "
+            >
+              <!-- <i
+                v-if="enabledRadioCreatePathOrInsertCode === '1'"
+                class="fas fa-check mr-2"
+              ></i> -->
+              Crea un nuovo percorso
+            </li>
+            <li
+              :class="
+                (enabledRadioCreatePathOrInsertCode === '2'
+                  ? 'ml-2 tag__item__selected'
+                  : 'ml-2 tag__item__unselected')
+              "
+              v-on:click="enabledRadioCreatePathOrInsertCode = '2'"
+            >
+              <!-- <i
+                v-if="enabledRadioCreatePathOrInsertCode === '2'"
+                class="fas fa-check mr-2"
+              ></i> -->
+              Inserisci un codice
+            </li>
+          </ul>
+          <div
+            v-if="enabledRadioCreatePathOrInsertCode === '1'"
+            class="postcardpercorsi__preview-txt"
+          >
+            <h1 class="postcardpercorsi__title orange">
+              Crea un nuovo percorso
+            </h1>
+            <!--<div class="postcardpercorsi__subtitle small">
                 <time datetime="2020-05-25 12:00:00">
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcardpercorsi__bar" style="height: 16px"></div>
-          <div class="postcardpercorsi__preview-txt pb-lg-4 pb-3">
-            Creando un nuovo percorso hai la possibilità di inserire le attività
-            che più ti interessano e i posti che più vuoi visitare in modo tale
-            da rendere la tua esperienza ancora più unica!
-          </div>
-          <div style="text-align: left">
-            Scegli il tempo che hai a disposizione
-          </div>
-          <ul class="postcardpercorsi__tagbox">
-            <li class="tag__item" v-on:click="enabledRadio = '1'">
-              <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
-              >Mattina
-            </li>
-            <li class="tag__item" v-on:click="enabledRadio = '2'">
-              <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
-              >Pomeriggio
-            </li>
-            <li class="tag__item" v-on:click="enabledRadio = '3'">
-              <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i>Tutta
-              la giornata
-            </li>
-            <li class="tag__item" v-on:click="enabledRadio = '4'">
-              <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i>Altro
-              (fascia oraria personalizzata)
-            </li>
-          </ul>
+            <div class="postcardpercorsi__bar" style="height: 4px"></div>
+            <div class="pb-lg-4 pb-3">
+              Creando un nuovo percorso hai la possibilità di inserire le
+              attività che più ti interessano e i posti che più vuoi visitare in
+              modo tale da rendere la tua esperienza ancora più unica!
+            </div>
+            <div style="text-align: left">
+              Scegli il tempo che hai a disposizione
+            </div>
+            <ul class="postcardpercorsi__tagbox">
+              <li class="tag__item" v-on:click="enabledRadio = '1'">
+                <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
+                >Mattina
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '2'">
+                <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
+                >Pomeriggio
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '3'">
+                <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
+                >Tutta la giornata
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '4'">
+                <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
+                >Altro (fascia oraria personalizzata)
+              </li>
+            </ul>
 
-          <div v-if="enabledRadio === '4'">
-            <div class="row mt-4">
-              <h6 class="col-12">
-                <b>Seleziona il tempo che hai a disposizione</b>
-              </h6>
-              <div
-                v-if="!okTimeAvailable"
-                class="col-12 errorMessage fade-in-text text-center"
+            <div v-if="enabledRadio === '4'">
+              <div class="row mt-4">
+                <h6 class="col-12">
+                  <b>Seleziona il tempo che hai a disposizione</b>
+                </h6>
+                <div
+                  v-if="!okTimeAvailable"
+                  class="col-12 errorMessage fade-in-text text-center"
+                >
+                  <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  Hai selezionato di essere disponibile dalle ore
+                  {{ startAvailableTimeValue.HH }} e
+                  {{ startAvailableTimeValue.mm }} alle ore
+                  {{ endAvailableTimeValue.HH }} e
+                  {{ endAvailableTimeValue.mm }}.
+                </div>
+              </div>
+
+              <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
+              <div class="row pt-3">
+                <div class="col-12 text-center">
+                  <b>dalle ore</b><br />
+                  <vue-timepicker
+                    v-model="startAvailableTimeValue"
+                    format="HH:mm"
+                  ></vue-timepicker>
+                </div>
+              </div>
+
+              <div class="row align-items-center pt-3 pb-3">
+                <div class="col-12 text-center">
+                  <b>alle ore</b><br />
+                  <vue-timepicker
+                    v-model="endAvailableTimeValue"
+                    format="HH:mm"
+                  ></vue-timepicker>
+                </div>
+              </div>
+            </div>
+            <Button
+              size="small"
+              type="primary"
+              v-on:click="createPath()"
+              class="textButtonColor mt-3"
+              style="width: 100%"
+              >Crea percorso
+            </Button>
+          </div>
+          <div v-else>
+            <div class="">
+              <h1 class="postcardpercorsi__title orange">
+                Inserisci il codice del tuo itinerario
+              </h1>
+              <!--<div class="postcardpercorsi__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+              <div class="postcardpercorsi__bar" style="height: 4px"></div>
+              <div class="postcardpercorsi__preview-txt mb-3">
+                Inserisci qua il codice dell'itinerario che hai creato per
+                poterlo visualizzare!
+              </div>
+              <form-group-input
+                class="no-border form-control-lg px-0"
+                placeholder="Codice..."
+                v-model="pathCodeInserted"
+                addon-left-icon="now-ui-icons objects_key-25"
               >
-                <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-12">
-                Hai selezionato di essere disponibile dalle ore
-                {{ startAvailableTimeValue.HH }} e
-                {{ startAvailableTimeValue.mm }} alle ore
-                {{ endAvailableTimeValue.HH }} e {{ endAvailableTimeValue.mm }}.
-              </div>
-            </div>
-
-            <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
-            <div class="row pt-3">
-              <div class="col-12 text-center">
-                <b>dalle ore</b><br />
-                <vue-timepicker
-                  v-model="startAvailableTimeValue"
-                  format="HH:mm"
-                ></vue-timepicker>
-              </div>
-            </div>
-
-            <div class="row align-items-center pt-3 pb-3">
-              <div class="col-12 text-center">
-                <b>alle ore</b><br />
-                <vue-timepicker
-                  v-model="endAvailableTimeValue"
-                  format="HH:mm"
-                ></vue-timepicker>
-              </div>
+              </form-group-input>
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="checkCodeAndGetPath()"
+                class="textButtonColor mt-3"
+                style="width: 100%"
+                >Inserisci codice
+              </Button>
             </div>
           </div>
-          <Button
-            size="small"
-            type="primary"
-            v-on:click="createPath()"
-            class="mx-1 textButtonColor mt-3"
-            >Crea percorso
-          </Button>
         </div>
       </article>
 
-      <article class="postcardpercorsi light orange mx-4">
+      <!-- <article class="postcardpercorsi light orange mx-4">
         <a class="postcardpercorsi__img_link">
           <img
             class="postcardpercorsi__img"
@@ -112,11 +184,6 @@
           <h1 class="postcardpercorsi__title orange">
             Inserisci il codice del tuo itinerario
           </h1>
-          <!--<div class="postcardpercorsi__subtitle small">
-                <time datetime="2020-05-25 12:00:00">
-                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                </time>
-              </div>-->
           <div class="postcardpercorsi__bar" style="height: 20px"></div>
           <div class="postcardpercorsi__preview-txt">
             Inserisci qua il codice dell'itinerario che hai creato per poterlo
@@ -137,7 +204,7 @@
             >Inserisci codice
           </Button>
         </div>
-      </article>
+      </article> -->
 
       <article class="postcardpercorsi light orange mx-4">
         <a class="postcardpercorsi__img_link">
@@ -545,6 +612,7 @@ export default {
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
 
       enabledRadio: "1",
+      enabledRadioCreatePathOrInsertCode: "1",
     };
   },
 

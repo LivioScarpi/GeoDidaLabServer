@@ -696,13 +696,6 @@
             <div class="col-lg-12">
               <h5 class="mt-0"><b>Attività selezionate</b></h5>
               <!--<i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i>-->
-              <div v-for="(area, index) in $store.state.aree" :key="index">
-                <collapse>
-                  <collapse-item
-                    :title="area['o:title']"
-                    :name="area['o:title']"
-                  >
-                    <div v-if="area.areaHasActivitiesSelected">
                       <div
                         v-for="(item, index) in filteredPOI"
                         :key="'availableActivitiesPOI' + (index + 200)"
@@ -757,6 +750,12 @@
                                     >{{ item["geo:Titolo_it"][0]["@value"] }}
                                   </div>
                                 </div>
+                                <div class="row">
+                                  <div class="col-12">
+                                    <i class="bi bi-map mr-2"></i>
+                                    {{ item['geo:appartiene_a_area'][0]['display_title'] }}
+                                  </div>
+                                </div>
 
                                 <div class="row">
                                   <div class="col-12">
@@ -769,13 +768,6 @@
                           </div>
                         </div>
                         <!-- </div> -->
-                      </div>
-                    </div>
-                    <div v-else>
-                      Nessuna attività selezionata in questa area
-                    </div>
-                  </collapse-item>
-                </collapse>
               </div>
               <div v-if="someActivitiesSelected" class="mb-4">
                 <!-- <div

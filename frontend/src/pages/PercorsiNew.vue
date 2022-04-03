@@ -132,7 +132,7 @@
                             >
                               <div class="row">
                                 <div class="col-12">
-                                  {{ item.expertiseLevelName }} (
+                                  {{ item.expertiseLevelName }} <!--(-->
                                   <svg
                                     v-if="
                                       item.expertiseLevelName ===
@@ -679,7 +679,7 @@
                                       />
                                     </g>
                                   </svg>
-                                  )
+                                  <!--)-->
                                 </div>
                               </div>
                             </n-checkbox>

@@ -933,7 +933,7 @@
                                 <div class="postcard__preview-txt">
                                   {{ item["dcterms:description"][0]["@value"] }}
                                 </div>
-                                <h6>Interessi: </h6>
+                                <h6>Interessi:</h6>
                                 <template
                                   v-for="(interest, index) in item[
                                     'geo:ha_interesse'
@@ -941,24 +941,34 @@
                                   style="display: inline-block"
                                 >
                                   {{ interest["display_title"] }}
-                                  <template v-if="index < item[
-                                    'geo:ha_interesse'
-                                  ].length - 2">,</template>
+                                  <template
+                                    v-if="
+                                      index <
+                                      item['geo:ha_interesse'].length - 2
+                                    "
+                                    >,</template
+                                  >
 
-                                  <template v-if="index === item[
-                                    'geo:ha_interesse'
-                                  ].length - 2"> e </template>
+                                  <template
+                                    v-if="
+                                      index ===
+                                      item['geo:ha_interesse'].length - 2
+                                    "
+                                  >
+                                    e
+                                  </template>
                                 </template>
-                        
+
                                 <collapse>
                                   <collapse-item
                                     title="Mostra attività"
                                     name="1"
                                     class="mt-3"
                                   >
-
                                     <div v-if="item['mis'].length > 0">
-                                      <div v-if="item.poiHasSomeActivitiesVisible">
+                                      <div
+                                        v-if="item.poiHasSomeActivitiesVisible"
+                                      >
                                         <div
                                           v-for="(it, ind) in item.mis"
                                           :key="
@@ -1204,6 +1214,36 @@
         </Button>
       </div>
     </div>
+
+    <modal
+      :show.sync="modals.featureDevelopment"
+      headerClasses="justify-content-center"
+      @close="modals.featureDevelopment = false"
+    >
+      <h4 slot="header" class="title title-up text-center">Funzionalità in arrivo!</h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h6 class="itineraryCode">
+                Questa funzionalità è in fase di sviluppo!
+              </h6>
+              <p>Presto sarà resa disponibile.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button
+          size="small"
+          type="danger"
+          v-on:click="modals.featureDevelopment = false"
+          class="mx-1"
+          >Chiudi
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -1264,6 +1304,7 @@ export default {
     LControl,
     //TabPane,
     //Tabs,
+    Modal,
 
     Button,
     [Radio.name]: Radio,
@@ -1371,6 +1412,7 @@ export default {
       modals: {
         //oggetto usato per mostrare i modals
         insertCodeModal: false,
+        featureDevelopment: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -1917,6 +1959,9 @@ export default {
       //console.log("DOPO MAKE QUERY VROOM");
       //console.log(vroomItineraryResponse);
 
+      //TODO: remove me
+      this.modals.featureDevelopment = true;
+
       //var itineraryCorrectObject = this.createItineraryObject(vroomItineraryResponse);
       /*
       if (this.currentStep === 1) {
@@ -2123,7 +2168,11 @@ export default {
 
           console.log(exp["o:title"]);
 
-          if (this.selectedDifficulties.includes(exp["geo:ha_difficolta"][0]["display_title"])) {
+          if (
+            this.selectedDifficulties.includes(
+              exp["geo:ha_difficolta"][0]["display_title"]
+            )
+          ) {
             console.log("l'attività ha la difficoltà giusta!");
             expHasCorrectExpertiseLevels = true;
             poiHasSomeActivitiesVisible = true;
@@ -2198,8 +2247,7 @@ export default {
           (interest) => interest.display_title
         );
         var poiHasCorrectInterests = false;
-              var poiHasActivitiesVisible = false;
-
+        var poiHasActivitiesVisible = false;
 
         console.log(
           "INTERESSI DEL POI: " +
@@ -2212,7 +2260,6 @@ export default {
             poiHasCorrectInterests = true;
           }
         });
-
 
         if (!poiHasCorrectInterests) {
           console.log("GUARDO LE SUE ATTIVITA'");
@@ -2488,7 +2535,13 @@ export default {
       //TODO: remove me
       //console.log("somePOIVisile");
       return (
-        this.filteredPOI.filter((poi) => poi['geo:appartiene_a_area'][0]['display_title'] === this.selectedArea).filter((poi) => poi.poiVisibleWithFilters).length > 0
+        this.filteredPOI
+          .filter(
+            (poi) =>
+              poi["geo:appartiene_a_area"][0]["display_title"] ===
+              this.selectedArea
+          )
+          .filter((poi) => poi.poiVisibleWithFilters).length > 0
       );
     },
 

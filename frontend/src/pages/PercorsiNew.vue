@@ -25,7 +25,7 @@
       </div>
 
       <div class="row px-3">
-        <div class="col-lg-2 border-right">
+        <div class="col-lg-3 border-right">
           <h5><b>Menu</b></h5>
           <div class="row">
             <div class="col-lg-12">
@@ -132,7 +132,8 @@
                             >
                               <div class="row">
                                 <div class="col-12">
-                                  {{ item.expertiseLevelName }} <!--(-->
+                                  {{ item.expertiseLevelName }}
+                                  <!--(-->
                                   <svg
                                     v-if="
                                       item.expertiseLevelName ===
@@ -741,7 +742,7 @@
                       <div class="col-10 text-left py-2">
                         <div class="row">
                           <div class="col-12">
-                            {{ it["o:title"] }}
+                            <b>{{ it["o:title"].toUpperCase() }}</b>
                           </div>
                         </div>
                         <div class="row">
@@ -841,18 +842,40 @@
           </div>
         </div>
 
-        <div class="col-lg-10">
+        <div class="col-lg-9">
           <div class="row">
             <div class="col-lg-12">
+              <ul class="aree__tagbox mb-2">
+                <li
+                  :class="
+                    selectedTab === 'ElencoPercorsi'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="selectedTab = 'ElencoPercorsi'"
+                >
+                  Elenco delle aree e delle attività
+                </li>
+                <li
+                  :class="
+                    selectedTab === 'Mappa'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="selectedTab = 'Mappa'"
+                >
+                  Mappa
+                </li>
+              </ul>
               <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-12" v-if="selectedTab === 'ElencoPercorsi'">
                   <div class="row mb-5">
                     <div class="col-12">
                       <h5 class="mt-0">
-                        <b>Elenco dei luoghi e delle attività</b>
+                        <b>Elenco delle aree e delle attività</b>
                       </h5>
                       <!--TODO: mettere qua le aree-->
-                      <h5>Aree</h5>
+                      <!--<h5>Aree</h5>-->
                       <ul class="aree__tagbox mb-4">
                         <li
                           :class="
@@ -1111,10 +1134,12 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="col-lg-4">
+                <div class="col-lg-12" v-else>
                   <div class="row">
                     <div class="col-lg-12">
+                      <h5 class="mt-0">
+                        <b>Mappa</b>
+                      </h5>
                       <div>
                         <!--c'era un px-4-->
                         <l-map
@@ -1220,7 +1245,9 @@
       headerClasses="justify-content-center"
       @close="modals.featureDevelopment = false"
     >
-      <h4 slot="header" class="title title-up text-center">Funzionalità in arrivo!</h4>
+      <h4 slot="header" class="title title-up text-center">
+        Funzionalità in arrivo!
+      </h4>
       <div class="row">
         <div class="col-12">
           <div class="row">
@@ -1565,6 +1592,8 @@ export default {
           ],
         },
       ],
+
+      selectedTab: "ElencoPercorsi",
     };
   },
 

@@ -1508,6 +1508,21 @@ export default {
         { poiName: "Palazzine Olivetti", poiID: 24 },
         { poiName: "Lo sfioratore di Mazzè", poiID: 25 },
         { poiName: "Il Lago di Candia", poiID: 26 },
+        { poiName: "L'itinerario dei massi erratici di Vialfrè", poiID: 27 },
+        {
+          poiName: "I depositi marini della Borra Grande a Peronetto",
+          poiID: 28,
+        },
+        { poiName: "Panorama geomorfologico dal Lago Sirio", poiID: 29 },
+        { poiName: "Le terre ballerine dei colli di Ivrea", poiID: 30 },
+        { poiName: "La piana di Salamia ad Andrate", poiID: 31 },
+        { poiName: "Sulla serra di Ivrea alla torre della Bastia", poiID: 32 },
+        { poiName: "Le aurifodine della Bessa", poiID: 33 },
+        { poiName: "Lo scaricatore di Zimone", poiID: 34 },
+        {
+          poiName: "La mostra permanente di Masino sulla geologia dell'AMI",
+          poiID: 35,
+        },
       ],
 
       totalItinerary: [],

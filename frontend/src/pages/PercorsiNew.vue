@@ -2623,6 +2623,12 @@ export default {
       //console.log("FILTERED POI WATCHER");
       //console.log(newValue);
     },
+    totalItinerary(newValue, oldValue) {
+      console.log("TOTAL ITINERARY E' CAMBIATOO!");
+      console.log(oldValue);
+    
+      console.log(newValue);
+    },
   },
 };
 </script>

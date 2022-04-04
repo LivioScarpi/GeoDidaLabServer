@@ -186,9 +186,37 @@
               </div>
               <div class="row mx-1">
                 <h6 class="mr-2">Strumenti usati:</h6>
-                <h6 class="font-weight-normal">
-                  {{ item["geo:ha_difficolta"][0]["display_title"] }}
-                </h6>
+                <div v-if="item['geo:usa_strumento'] !== undefined">
+                  <template
+                    v-for="(strumento, index) in item['geo:usa_strumento']"
+                    style="display: inline-block"
+                  >
+                    <h6 class="font-weight-normal" :key="index">
+                      {{ strumento["display_title"] }}
+                    </h6>
+                    <template
+                      v-if="index < item['geo:usa_strumento'].length - 2"
+                      ><h6 class="font-weight-normal" :key="index">
+                        ,
+                      </h6></template
+                    >
+
+                    <template
+                      v-if="index === item['geo:usa_strumento'].length - 2"
+                    >
+                      <h6 class="font-weight-normal" :key="index">e</h6>
+                    </template>
+                  </template>
+                </div>
+                <div v-else>
+                  <h6 class="font-weight-normal">Nessuno</h6>
+                </div>
+                <!-- <h6
+                  class="font-weight-normal"
+                  v-if="item['geo:usa_strumento'] !== undefined"
+                >
+                  {{ item["geo:usa_strumento"][0]["display_title"] }}
+                </h6> -->
               </div>
             </div>
           </tab-pane>

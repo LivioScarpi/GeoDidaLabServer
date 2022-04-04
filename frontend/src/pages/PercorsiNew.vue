@@ -872,7 +872,7 @@
                   <div class="row mb-5">
                     <div class="col-12">
                       <h5 class="mt-0">
-                        <b>Elenco delle aree e delle attività</b>
+                        <b>Elenco delle aree e delle attività</b> <!--{{areasWithSomethingSelected}}-->
                       </h5>
                       <!--TODO: mettere qua le aree-->
                       <!--<h5>Aree</h5>-->
@@ -1609,6 +1609,7 @@ export default {
       ],
 
       selectedTab: "ElencoPercorsi",
+      areasWithSomethingSelected: [],
     };
   },
 
@@ -1837,7 +1838,7 @@ export default {
           this.$store.state.timeAvailable.milliseconds
       );
 
-      //var totalItinerary = [];
+      this.totalItinerary = [];
 
       Array.prototype.forEach.call(this.$store.state.aree, (area) => {
         var POIofArea = this.filteredPOI.filter(
@@ -2039,6 +2040,7 @@ export default {
     },
 
     visitPlaceClicked(poiName) {
+      var self = this;
       console.log("visitPlaceClicked");
       var tmpFilteredPOI = this.filteredPOI;
 
@@ -2050,6 +2052,21 @@ export default {
           console.log("POI TROVATO");
           this.$set(poi, "visitPOI", !poi.visitPOI);
           console.log(poi.visitPOI);
+                    console.log(poi);
+
+
+          //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
+          if (poi.visitPOI) {
+                      console.log("PUSHO");
+
+            self.areasWithSomethingSelected.push(
+              poi["geo:appartiene_a_area"][0]["display_title"]
+            );
+          } else {
+                                  console.log("ELIMINO");
+
+            self.areasWithSomethingSelected.splice(self.areasWithSomethingSelected.findIndex(a => a === poi["geo:appartiene_a_area"][0]["display_title"]), 1);
+          }
         }
       });
 
@@ -2626,7 +2643,7 @@ export default {
     totalItinerary(newValue, oldValue) {
       console.log("TOTAL ITINERARY E' CAMBIATOO!");
       console.log(oldValue);
-    
+
       console.log(newValue);
     },
   },

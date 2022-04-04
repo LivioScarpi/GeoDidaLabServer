@@ -700,7 +700,7 @@ s
           /*Il POI non ha nessuna coordinata*/
         }
 
-        poi.visitPOI = true;
+        poi.visitPOI = false;
 
         /*chiedo l'immagine dei POI*/
         Common.getElementImages(this, poi, (mediaList) => {

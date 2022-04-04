@@ -14,13 +14,14 @@
         </a>
 
         <div class="postcardpercorsi__text pt-3">
+          <h4 class="orange my-1" style="text-align: left">Esplora itinerari</h4>
           <ul class="userchoice__tagbox mb-3">
             <li
               v-on:click="enabledRadioCreatePathOrInsertCode = '1'"
               :class="
-                (enabledRadioCreatePathOrInsertCode === '1'
+                enabledRadioCreatePathOrInsertCode === '1'
                   ? 'mr-1 tag__item__selected'
-                  : 'mr-1 tag__item__unselected')
+                  : 'mr-1 tag__item__unselected'
               "
             >
               <!-- <i
@@ -31,9 +32,9 @@
             </li>
             <li
               :class="
-                (enabledRadioCreatePathOrInsertCode === '2'
+                enabledRadioCreatePathOrInsertCode === '2'
                   ? 'ml-2 tag__item__selected'
-                  : 'ml-2 tag__item__unselected')
+                  : 'ml-2 tag__item__unselected'
               "
               v-on:click="enabledRadioCreatePathOrInsertCode = '2'"
             >
@@ -41,7 +42,7 @@
                 v-if="enabledRadioCreatePathOrInsertCode === '2'"
                 class="fas fa-check mr-2"
               ></i> -->
-              Inserisci un codice
+              Inserisci il codice di un itinerario
             </li>
           </ul>
           <div

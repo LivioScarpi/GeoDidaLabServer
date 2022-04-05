@@ -272,8 +272,16 @@
     }
 }
 
+.timeline-page, .percorsi-page{
+
+    overflow-y: scroll;
+}
+
 // style for the profile page
 .strumenti-esperimenti-page{
+
+    overflow-y: scroll;
+
 
     .page-header{
         min-height: 550px;

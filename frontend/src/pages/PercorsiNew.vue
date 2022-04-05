@@ -23,6 +23,7 @@
             {{ $store.state.timeAvailable.minutes }} minuti
           </h6> -->
           {{ this.$store.state.totalTimeSelected }}
+          <h6>Tempo a disposizione occupato</h6>
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
         <div class="col-2 text-center"></div>
@@ -877,7 +878,7 @@
                     <div class="col-12">
                       <h5 class="mt-0">
                         <b>Elenco delle aree e delle attività</b>
-                        <!--{{areasWithSomethingSelected}}-->
+                        {{ this.$store.state.areasWithSomethingSelected }}
                       </h5>
                       <!--TODO: mettere qua le aree-->
                       <!--<h5>Aree</h5>-->
@@ -1325,6 +1326,8 @@ import KProgress from "k-progress";
 
 export default {
   name: "PercorsiNew",
+    bodyClass: "percorsi-page",
+
   components: {
     //Component Leaflet map
     LMap,
@@ -1620,7 +1623,7 @@ export default {
       ],
 
       selectedTab: "ElencoPercorsi",
-      areasWithSomethingSelected: [],
+      // this.$store.state.areasWithSomethingSelected: [],
     };
   },
 
@@ -2067,20 +2070,26 @@ export default {
 
           //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
           if (poi.visitPOI) {
+            this.$store.state.totalTimeSelected +=
+              parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //aggiungo la durata della visita del POI
+
             console.log("PUSHO");
 
-            self.areasWithSomethingSelected.push(
+            this.$store.state.areasWithSomethingSelected.push(
               poi["geo:appartiene_a_area"][0]["display_title"]
             );
           } else {
+            this.$store.state.totalTimeSelected -=
+              parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //rimuovo la durata della visita del POI
+
             console.log("ELIMINO");
 
-            self.areasWithSomethingSelected.splice(
-              self.areasWithSomethingSelected.findIndex(
-                (a) => a === poi["geo:appartiene_a_area"][0]["display_title"]
-              ),
-              1
+            var index = this.$store.state.areasWithSomethingSelected.indexOf(
+              poi["geo:appartiene_a_area"][0]["display_title"]
             );
+            if (index > -1) {
+              this.$store.state.areasWithSomethingSelected.splice(index, 1);
+            }
           }
         }
       });
@@ -2112,15 +2121,27 @@ export default {
                 this.$store.state.totalTimeSelected +
                 parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
 
-
-
-              if (activity.selected || (this.percent < 100 && timeCheck <= this.$store.state.timeAvailable.milliseconds)) {
+              if (
+                activity.selected ||
+                (this.percent < 100 &&
+                  timeCheck <= this.$store.state.timeAvailable.milliseconds)
+              ) {
                 // se l'attività è selezionata e la voglio deselezionare
                 activity.selected = !activity.selected;
 
                 this.$set(poi, "visitPOI", true);
 
+                this.$store.state.areasWithSomethingSelected.push(
+                  poi["geo:appartiene_a_area"][0]["display_title"]
+                ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
+
                 if (activity.selected) {
+                  if (poi.numberOfActivitiesSelectedInPOI === 0) {
+                    //se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
+                    this.$store.state.totalTimeSelected +=
+                      parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
+                  }
+
                   poi.numberOfActivitiesSelectedInPOI += 1;
 
                   this.$store.state.totalTimeSelected +=
@@ -2136,11 +2157,30 @@ export default {
                       poi.numberOfActivitiesSelectedInPOI
                   );
                   if (poi.numberOfActivitiesSelectedInPOI === 0) {
-                    this.$set(poi, "visitPOI", false);
+                    this.$set(poi, "visitPOI", false); //togliamo la visita del POI
+
+                    this.$store.state.totalTimeSelected -=
+                      parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //togliamo il tempo necessario a visitare il POI
+
+                    console.log("ELIMINO");
+
+                    //rimuovo una volta l'area  dalle aree con qualcosa di selezionato
+                    var index =
+                      this.$store.state.areasWithSomethingSelected.indexOf(
+                        poi["geo:appartiene_a_area"][0]["display_title"]
+                      );
+                    if (index > -1) {
+                      his.$store.state.areasWithSomethingSelected.splice(
+                        index,
+                        1
+                      );
+                    }
                   }
                 }
               } else {
-                alert("Questa attività ha una durata maggiore del tempo a disposizione. Rimuovere qualche attività per poter selezionare quest'ultima.");
+                alert(
+                  "Questa attività ha una durata maggiore del tempo a disposizione. Rimuovere qualche attività per poter selezionare quest'ultima."
+                );
               }
             }
           });
@@ -2706,6 +2746,24 @@ export default {
       console.log(oldValue);
 
       console.log(newValue);
+
+      this.$store.state.sottoitinerari = newValue;
+
+      var numbersOfAreasWithSomethingSelected = [
+        ...new Set(this.$store.state.areasWithSomethingSelected),
+      ];
+      console.log(numbersOfAreasWithSomethingSelected);
+
+      if (numbersOfAreasWithSomethingSelected.length === newValue.length) {
+        console.log("VADO ALLA PROSSIMA PAGINA!");
+
+        router.push({
+          name: "sintesiitinerario",
+        });
+      } else {
+        //alert("Si è verificato un errore");
+        console.log("ERRORE NELLA LUNGHEZZA");
+      }
     },
   },
 };
@@ -2856,4 +2914,8 @@ export default {
   box-shadow: 0 3px 10px #9bc5e7;
 }
 */
+
+html, body {
+  overflow: scroll;
+}
 </style>

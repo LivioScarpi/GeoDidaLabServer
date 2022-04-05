@@ -35,7 +35,11 @@ const store = new Vuex.Store({
         itinerarioInCreazione: null,
         totalTimeSelected: 0,
 
+        areasWithSomethingSelected: [],
+
         availableActivitiesInRemainingTime: [],
+
+        sottoitinerari: [],
 
 
         media: {

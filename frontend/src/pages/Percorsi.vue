@@ -498,6 +498,8 @@ const Common = require("@/Common.vue").default;
 
 export default {
   name: "Percorsi",
+      bodyClass: "percorsi-page",
+
   components: {
     [Radio.name]: Radio,
     [Checkbox.name]: Checkbox,

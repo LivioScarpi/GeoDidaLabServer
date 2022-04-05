@@ -22,6 +22,7 @@
             {{ $store.state.timeAvailable.hour }} ore e
             {{ $store.state.timeAvailable.minutes }} minuti
           </h6> -->
+          {{ this.$store.state.totalTimeSelected }}
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
         <div class="col-2 text-center"></div>
@@ -1374,7 +1375,8 @@ export default {
         color: "red",
       },
 
-      percent: 0,
+      //totalTimeSelected: 0,
+      //percent: 0,
 
       currentPage: "createPath", //variabile usata per mostrare il component corretto in base alla scelta fatta dall'utente (riguardo a cosa fare: creare un percorso, selezionarne uno già creato, selezionarne uno di default)
       currentStep: 1, //variabile contenente il numero dello step corrente
@@ -2104,19 +2106,41 @@ export default {
             //console.log("ACTIVITY TROVATA");
 
             if (activity["o:title"] === activityName) {
-              activity.selected = !activity.selected;
+              console.log("ATTIVITA SELEZIONATA: " + activity.selected);
 
-                        this.$set(poi, "visitPOI", true);
+              var timeCheck =
+                this.$store.state.totalTimeSelected +
+                parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
 
-              if (activity.selected) {
-                poi.numberOfActivitiesSelectedInPOI += 1;
-              } else {
-                poi.numberOfActivitiesSelectedInPOI -= 1;
 
-                console.log("DECREMENTO IL NUMERO DI ATTIVITA'" + poi.numberOfActivitiesSelectedInPOI );
-                if(poi.numberOfActivitiesSelectedInPOI === 0) {
-                        this.$set(poi, "visitPOI", false);
+
+              if (activity.selected || (this.percent < 100 && timeCheck <= this.$store.state.timeAvailable.milliseconds)) {
+                // se l'attività è selezionata e la voglio deselezionare
+                activity.selected = !activity.selected;
+
+                this.$set(poi, "visitPOI", true);
+
+                if (activity.selected) {
+                  poi.numberOfActivitiesSelectedInPOI += 1;
+
+                  this.$store.state.totalTimeSelected +=
+                    parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+                } else {
+                  poi.numberOfActivitiesSelectedInPOI -= 1;
+
+                  this.$store.state.totalTimeSelected -=
+                    parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+
+                  console.log(
+                    "DECREMENTO IL NUMERO DI ATTIVITA'" +
+                      poi.numberOfActivitiesSelectedInPOI
+                  );
+                  if (poi.numberOfActivitiesSelectedInPOI === 0) {
+                    this.$set(poi, "visitPOI", false);
+                  }
                 }
+              } else {
+                alert("Questa attività ha una durata maggiore del tempo a disposizione. Rimuovere qualche attività per poter selezionare quest'ultima.");
               }
             }
           });
@@ -2587,6 +2611,17 @@ export default {
   },
 
   computed: {
+    percent() {
+      //totalTimeSelected : x = millisecondiTotali : 100
+      var perc =
+        (this.$store.state.totalTimeSelected * 100) /
+        this.$store.state.timeAvailable.milliseconds;
+      if (perc <= 100) {
+        return Math.ceil(perc);
+      } else {
+        return 100;
+      }
+    },
     selectedInterests() {
       var mappedInterests = this.$store.state.interests
         .filter((interest) => interest.interestSelected)

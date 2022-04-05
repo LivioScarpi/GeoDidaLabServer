@@ -33,6 +33,7 @@ const store = new Vuex.Store({
         loadedActivitiesInPOIPivot: false,
         timeAvailable: null,
         itinerarioInCreazione: null,
+        totalTimeSelected: 0,
 
         availableActivitiesInRemainingTime: [],
 

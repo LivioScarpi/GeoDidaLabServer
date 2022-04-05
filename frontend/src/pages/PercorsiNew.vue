@@ -15,8 +15,7 @@
     </div>
     <div v-if="currentStep === 1">
       <div class="row px-3 mb-3">
-        <div class="col-2 text-center">
-        </div>
+        <div class="col-2 text-center"></div>
         <div class="col-8 text-center">
           <!-- <h6>
             <b>Tempo a disposizione: </b>
@@ -25,8 +24,7 @@
           </h6> -->
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
-                <div class="col-2 text-center">
-        </div>
+        <div class="col-2 text-center"></div>
       </div>
 
       <div class="row px-3">
@@ -877,7 +875,8 @@
                   <div class="row mb-5">
                     <div class="col-12">
                       <h5 class="mt-0">
-                        <b>Elenco delle aree e delle attività</b> <!--{{areasWithSomethingSelected}}-->
+                        <b>Elenco delle aree e delle attività</b>
+                        <!--{{areasWithSomethingSelected}}-->
                       </h5>
                       <!--TODO: mettere qua le aree-->
                       <!--<h5>Aree</h5>-->
@@ -1321,7 +1320,7 @@ import TabPane from "../components/Tabs/Tab.vue";
 import Tabs from "../components/Tabs/Tabs.vue";
 import "../utils/costMatrices";
 import { costMatrix } from "../utils/costMatrices";
-import KProgress from 'k-progress';
+import KProgress from "k-progress";
 
 export default {
   name: "PercorsiNew",
@@ -1348,7 +1347,7 @@ export default {
     activitiesOfPOI,
     //Collapsible
 
-    KProgress
+    KProgress,
   },
 
   data() {
@@ -2062,20 +2061,24 @@ export default {
           console.log("POI TROVATO");
           this.$set(poi, "visitPOI", !poi.visitPOI);
           console.log(poi.visitPOI);
-                    console.log(poi);
-
+          console.log(poi);
 
           //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
           if (poi.visitPOI) {
-                      console.log("PUSHO");
+            console.log("PUSHO");
 
             self.areasWithSomethingSelected.push(
               poi["geo:appartiene_a_area"][0]["display_title"]
             );
           } else {
-                                  console.log("ELIMINO");
+            console.log("ELIMINO");
 
-            self.areasWithSomethingSelected.splice(self.areasWithSomethingSelected.findIndex(a => a === poi["geo:appartiene_a_area"][0]["display_title"]), 1);
+            self.areasWithSomethingSelected.splice(
+              self.areasWithSomethingSelected.findIndex(
+                (a) => a === poi["geo:appartiene_a_area"][0]["display_title"]
+              ),
+              1
+            );
           }
         }
       });
@@ -2102,6 +2105,19 @@ export default {
 
             if (activity["o:title"] === activityName) {
               activity.selected = !activity.selected;
+
+                        this.$set(poi, "visitPOI", true);
+
+              if (activity.selected) {
+                poi.numberOfActivitiesSelectedInPOI += 1;
+              } else {
+                poi.numberOfActivitiesSelectedInPOI -= 1;
+
+                console.log("DECREMENTO IL NUMERO DI ATTIVITA'" + poi.numberOfActivitiesSelectedInPOI );
+                if(poi.numberOfActivitiesSelectedInPOI === 0) {
+                        this.$set(poi, "visitPOI", false);
+                }
+              }
             }
           });
         }

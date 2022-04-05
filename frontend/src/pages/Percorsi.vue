@@ -701,6 +701,7 @@ s
         }
 
         poi.visitPOI = false;
+        poi.numberOfActivitiesSelectedInPOI = 0;
 
         /*chiedo l'immagine dei POI*/
         Common.getElementImages(this, poi, (mediaList) => {

@@ -15,12 +15,17 @@
     </div>
     <div v-if="currentStep === 1">
       <div class="row px-3 mb-3">
-        <div class="col-12 text-center">
-          <h6>
+        <div class="col-2 text-center">
+        </div>
+        <div class="col-8 text-center">
+          <!-- <h6>
             <b>Tempo a disposizione: </b>
             {{ $store.state.timeAvailable.hour }} ore e
             {{ $store.state.timeAvailable.minutes }} minuti
-          </h6>
+          </h6> -->
+          <k-progress :percent="percent" color="#389e0d"></k-progress>
+        </div>
+                <div class="col-2 text-center">
         </div>
       </div>
 
@@ -1316,6 +1321,7 @@ import TabPane from "../components/Tabs/Tab.vue";
 import Tabs from "../components/Tabs/Tabs.vue";
 import "../utils/costMatrices";
 import { costMatrix } from "../utils/costMatrices";
+import KProgress from 'k-progress';
 
 export default {
   name: "PercorsiNew",
@@ -1341,6 +1347,8 @@ export default {
 
     activitiesOfPOI,
     //Collapsible
+
+    KProgress
   },
 
   data() {
@@ -1366,6 +1374,8 @@ export default {
         radius: 6,
         color: "red",
       },
+
+      percent: 0,
 
       currentPage: "createPath", //variabile usata per mostrare il component corretto in base alla scelta fatta dall'utente (riguardo a cosa fare: creare un percorso, selezionarne uno già creato, selezionarne uno di default)
       currentStep: 1, //variabile contenente il numero dello step corrente

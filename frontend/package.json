@@ -28,6 +28,8 @@
     "eslint": "^6.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "jquery": "^1.12.4",
+    "k-progress": "^1.5.0",
+    "k-progress-v3": "^1.0.0",
     "leaflet": "^1.6.0",
     "leaflet-extra-markers": "^1.2.1",
     "leaflet.awesome-markers": "^2.0.5",

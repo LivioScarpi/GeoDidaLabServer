@@ -371,7 +371,7 @@ export default {
 
   height: 400px;
   border-radius: 10px;
-  background: #eee;
+  background: linear-gradient(70deg, rgba(189, 82, 11, 0.1), transparent 100%);/*#eee;*/
   transform-origin: center center;
   transition: transform 0.5s;
   position: relative;

@@ -17,7 +17,7 @@
             'border-radius': '10px',
           },
     ]"
-    class="mx-2 postcardattivita attivita orange"
+    class="mx-2 postcardattivita attivita orange pb-3"
   >
     <div class="mt-3">
       <h5 class="card-title text-center">
@@ -27,7 +27,6 @@
         class="postcardattivita__bar margin-auto"
         style="display: inline-block"
       ></div>
-
 
       <h6 class="card-title text-center">
         Tempo totale: {{ item.totalTimeMilliseconds }}
@@ -53,40 +52,53 @@
                   :key="poiIndex"
                 >
                   <div>
-                    <h6 class="mt-4 mb-0 mx-5">
-                      <i class="bi bi-pin-map-fill mr-2"></i
-                      >{{ poi["poiName"] }}
-                    </h6>
-
-                    <h4
-                      v-if="
-                        poi['poiName'] !== 'Punto di partenza' &&
-                        poi['poiName'] !== 'Punto di arrivo'
-                      "
-                      class="mb-3 mt-0"
-                    >
-                      Attività
-                    </h4>
-
+                    <img
+                      style="height: 140px; border-radius: 10px"
+                      src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
+                      alt="Image Title"
+                    />
                     <div
-                      v-for="(activity, activityIndex) in poi.activitiesInPOI"
-                      :key="'activityInPOI' + activityIndex"
-                      class="mx-3"
+                      style="
+                        margin-top: 140px;
+                        max-height: 200px;
+                        overflow-y: auto;
+                      "
                     >
-                      <div
+                      <h6 class="mb-0 mx-5">
+                        <i class="bi bi-pin-map-fill mr-2"></i
+                        >{{ poi["poiName"] }}
+                      </h6>
+
+                      <h4
                         v-if="
                           poi['poiName'] !== 'Punto di partenza' &&
                           poi['poiName'] !== 'Punto di arrivo'
                         "
-                        class="mb-3"
+                        class="mb-3 mt-0"
                       >
-                        <!--<i
+                        Attività
+                      </h4>
+
+                      <div
+                        v-for="(activity, activityIndex) in poi.activitiesInPOI"
+                        :key="'activityInPOI' + activityIndex"
+                        class="mx-3"
+                      >
+                        <div
+                          v-if="
+                            poi['poiName'] !== 'Punto di partenza' &&
+                            poi['poiName'] !== 'Punto di arrivo'
+                          "
+                          class="mb-3"
+                        >
+                          <!--<i
                                         class="bi bi-clipboard-check-fill mr-2"
                                       ></i>-->
-                        <!--{{ poiIndex }}.{{activityIndex}} - -->
-                        <h6>{{ activity["activityName"] }}</h6>
-                        <i class="bi bi-clock mr-2"></i>
-                        {{ activity["serviceDurationMinutes"] }} minuti
+                          <!--{{ poiIndex }}.{{activityIndex}} - -->
+                          <h6>{{ activity["activityName"] }}</h6>
+                          <i class="bi bi-clock mr-2"></i>
+                          {{ activity["serviceDurationMinutes"] }} minuti
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -97,13 +109,13 @@
                 <div id="slide-5">5</div> -->
               </div>
 
-                <a
-                 class="mt-2"
-                  v-for="(poi, poiIndex) in item.poi"
-                  :href="'#' + poi['poiName'] + 'slide-' + poiIndex"
-                  :key="poiIndex"
-                  >{{ poiIndex + 1 }}</a
-                >
+              <a
+                class="mt-2"
+                v-for="(poi, poiIndex) in item.poi"
+                :href="'#' + poi['poiName'] + 'slide-' + poiIndex"
+                :key="poiIndex"
+                >{{ poiIndex + 1 }}</a
+              >
             </div>
           </tab-pane>
 
@@ -127,7 +139,7 @@
                   :lat-lng="marker.marker.getLatLng()"
                   :key="'marker' + index"
                 >
-                  <l-popup :options="anchorOptions">
+                  <l-popup>
                     <div class="px-3">
                       <div class="row">
                         <h5>{{ marker.POItitle }}</h5>
@@ -135,16 +147,6 @@
                     </div>
                   </l-popup>
                 </l-marker>
-
-                <l-circle-marker
-                  :lat-lng="circle.center"
-                  :radius="circle.radius"
-                  :color="circle.color"
-                >
-                  <l-popup>Tu sei qui!</l-popup>
-                </l-circle-marker>
-
-              
               </l-map>
             </div>
           </tab-pane>
@@ -192,7 +194,7 @@ export default {
     //LGeoJson,
     LMarker,
     LPopup,
-    LCircleMarker,
+    //LCircleMarker,
     //LIcon,
     //LControl,
 
@@ -222,12 +224,14 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 16,
+      zoom: 12,
       center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
       geojson: null,
       markers: [],
+      markersPolylines: [],
+      anchorOptions: { offset: L.point(0, -30) },
 
       coord: null,
 
@@ -251,15 +255,71 @@ export default {
   },
 
   methods: {
-    invalidateMapSizeMethod(){
+    invalidateMapSizeMethod() {
       console.log("ECOOMI");
 
-            if (this.$refs.mappaSottoItinerario !== undefined) {
-              console.log("SONO QUA");
+      if (this.$refs.mappaSottoItinerario !== undefined) {
+        console.log("SONO QUA");
         this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
-        
       }
-    }
+    },
+    createMarkerArray() {
+      //Punto di partenza
+      //this.markersPolylines.push(this.startPoint);
+
+      Array.prototype.forEach.call(this.item.poi, (poi) => {
+        console.log(poi);
+        var POIlat = poi["location"][0];
+        var POIlng = poi["location"][1];
+
+        var POIcoordinates = [POIlat, POIlng];
+
+        this.markersPolylines.push(POIcoordinates);
+      });
+
+      //Punto di arrivo
+      //this.markersPolylines.push(this.endPoint);
+
+      //console.log(this.markersPolylines);
+    },
+
+    initializeMarkersOfFilteredPOI() {
+      console.log("initializeMarkersOfFilteredPOI");
+      this.markers = [];
+
+      Array.prototype.forEach.call(this.item.poi, (poi) => {
+        //viene usato anche per il punto di arrivo
+        var isStartingPoint =
+          poi["poiName"] === "Punto di partenza" ||
+          poi["poiName"] === "Punto di arrivo";
+
+        if (isStartingPoint) {
+          this.markers.push({
+            marker: L.marker([poi["location"][0], poi["location"][1]]),
+            color: "#1585bd",
+            strokeColor: "#1b4f88",
+            circleColor: "#ffffff",
+            POItitle: poi["poiName"],
+            //TODo: aggiungere attributi
+            isStartPoint: isStartingPoint,
+          });
+        } else {
+          this.markers.push({
+            marker: L.marker([poi["location"][1], poi["location"][0]]),
+            color: "#1585bd",
+            strokeColor: "#1b4f88",
+            circleColor: "#ffffff",
+            POItitle: poi["poiName"],
+            //TODo: aggiungere attributi
+            isStartPoint: isStartingPoint,
+          });
+        }
+      });
+
+      console.log(this.markers);
+
+      this.markersCreated = true;
+    },
   },
   computed: {
     isLarge() {
@@ -270,6 +330,9 @@ export default {
   mounted() {
     console.log("monto sottoitinerario: ");
     console.log(this.item);
+
+    this.createMarkerArray();
+    this.initializeMarkersOfFilteredPOI();
   },
 };
 </script>
@@ -304,7 +367,7 @@ export default {
   flex-shrink: 0;
   width: 385px;
   margin-left: 10px;
-    margin-right: 10px;
+  margin-right: 10px;
 
   height: 400px;
   border-radius: 10px;

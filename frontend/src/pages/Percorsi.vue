@@ -14,7 +14,9 @@
         </a>
 
         <div class="postcardpercorsi__text pt-3">
-          <h4 class="orange my-1" style="text-align: left">Esplora itinerari</h4>
+          <h4 class="orange my-1" style="text-align: left">
+            Esplora itinerari
+          </h4>
           <ul class="userchoice__tagbox mb-3">
             <li
               v-on:click="enabledRadioCreatePathOrInsertCode = '1'"
@@ -45,10 +47,7 @@
               Inserisci il codice di un itinerario
             </li>
           </ul>
-          <div
-            v-if="enabledRadioCreatePathOrInsertCode === '1'"
-            class="postcardpercorsi__preview-txt"
-          >
+          <div v-if="enabledRadioCreatePathOrInsertCode === '1'">
             <h1 class="postcardpercorsi__title orange">
               Crea un nuovo percorso
             </h1>
@@ -58,7 +57,12 @@
                 </time>
               </div>-->
             <div class="postcardpercorsi__bar" style="height: 4px"></div>
-            <div class="pb-lg-4 pb-3">
+            <!-- <div class="pb-lg-4 pb-3">
+              Creando un nuovo percorso hai la possibilità di inserire le
+              attività che più ti interessano e i posti che più vuoi visitare in
+              modo tale da rendere la tua esperienza ancora più unica!
+            </div> -->
+            <div class="postcardpercorsi__preview-txt mb-3">
               Creando un nuovo percorso hai la possibilità di inserire le
               attività che più ti interessano e i posti che più vuoi visitare in
               modo tale da rendere la tua esperienza ancora più unica!
@@ -134,7 +138,6 @@
               type="primary"
               v-on:click="createPath()"
               class="textButtonColor mt-3"
-              style="width: 100%"
               >Crea percorso
             </Button>
           </div>
@@ -165,7 +168,6 @@
                 type="primary"
                 v-on:click="checkCodeAndGetPath()"
                 class="textButtonColor mt-3"
-                style="width: 100%"
                 >Inserisci codice
               </Button>
             </div>
@@ -215,28 +217,30 @@
             alt="Image Title"
           />
         </a>
-        <div class="postcardpercorsi__text">
-          <h1 class="postcardpercorsi__title orange">
-            Seleziona un itinerario predefinito
-          </h1>
-          <!--<div class="postcardpercorsi__subtitle small">
+        <div class="postcardpercorsi__text pt-3 mt-4">
+          <div style="height: 100%">
+            <h1 class="postcardpercorsi__title orange">
+              Seleziona un itinerario predefinito
+            </h1>
+            <!--<div class="postcardpercorsi__subtitle small">
                 <time datetime="2020-05-25 12:00:00">
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-          <div class="postcardpercorsi__bar" style="height: 8px"></div>
-          <div class="postcardpercorsi__preview-txt">
-            Selezionando questa opzione hai la possibilità di scegliere un
-            itinerario tra i vari itinerari predefiniti già creati
-            appositamente, senza il bisogno di doverlo creare da zero.
+            <div class="postcardpercorsi__bar" style="height: 8px"></div>
+            <div class="postcardpercorsi__preview-txt">
+              Selezionando questa opzione hai la possibilità di scegliere un
+              itinerario tra i vari itinerari predefiniti già creati
+              appositamente, senza il bisogno di doverlo creare da zero.
+            </div>
+            <Button
+              size="small"
+              type="primary"
+              v-on:click="selectDefaultPath()"
+              class="textButtonColor mt-5"
+              >Seleziona itinerario
+            </Button>
           </div>
-          <Button
-            size="small"
-            type="primary"
-            v-on:click="selectDefaultPath()"
-            class="mx-1 textButtonColor"
-            >Seleziona itinerario
-          </Button>
         </div>
       </article>
       <!--
@@ -498,7 +502,7 @@ const Common = require("@/Common.vue").default;
 
 export default {
   name: "Percorsi",
-      bodyClass: "percorsi-page",
+  bodyClass: "percorsi-page",
 
   components: {
     [Radio.name]: Radio,

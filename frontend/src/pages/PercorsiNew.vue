@@ -947,7 +947,7 @@
                     <div class="col-12">
                       <h5 class="mt-0">
                         <b>Elenco delle aree e delle attività</b>
-                        {{ this.$store.state.areasWithSomethingSelected }}
+                        <!-- {{ this.$store.state.areasWithSomethingSelected }} -->
                       </h5>
                       <!--TODO: mettere qua le aree-->
                       <!--<h5>Aree</h5>-->
@@ -2114,7 +2114,7 @@ export default {
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
             POItitle: poi["geo:Titolo_it"][0]["@value"],
-            poiSelected: poi.poiHasActivitiesSelected,
+            poiSelected: poi.poiHasActivitiesSelected || poi.visitPOI,
           });
         }
       });
@@ -2298,7 +2298,7 @@ export default {
                         poi["geo:appartiene_a_area"][0]["display_title"]
                       );
                     if (index > -1) {
-                      his.$store.state.areasWithSomethingSelected.splice(
+                      this.$store.state.areasWithSomethingSelected.splice(
                         index,
                         1
                       );
@@ -2839,7 +2839,7 @@ export default {
       //TODO: remove me
       //console.log("someActivitiesSelected");
       return (
-        this.filteredPOI.filter((poi) => poi.poiHasActivitiesSelected).length >
+        this.filteredPOI.filter((poi) => (poi.poiHasActivitiesSelected || poi.visitPOI)).length >
         0
       );
     },

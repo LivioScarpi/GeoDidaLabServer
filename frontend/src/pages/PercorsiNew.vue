@@ -709,6 +709,76 @@
                 <!-- <div
                       v-if="item['geo:appartiene_a_area'][0]['display_title'] == area['o:title']"
                     > -->
+                <div v-if="item.visitPOI">
+                  <div
+                    class="row border mr-1 mb-3 postcard orange"
+                    style="border-radius: 10px"
+                  >
+                    <div
+                      class="col-2 text-center px-0"
+                      style="
+                        background-color: indianred;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        cursor: pointer;
+
+                        display: flex;
+
+                        justify-content: center;
+                        align-items: center;
+                      "
+                      @click="
+                        changeSelection(
+                          item['geo:Titolo_it'][0]['@value'],
+                          item['o:title']
+                        )
+                      "
+                    >
+                      <i
+                        class="bi bi-trash"
+                        style="color: white; font-size: 1.2rem"
+                      ></i>
+                    </div>
+                    <div class="col-10 text-left py-2">
+                      <div class="row">
+                        <div class="col-12">
+                          <b
+                            >VISITA
+                            {{
+                              item["geo:Titolo_it"][0]["@value"].toUpperCase()
+                            }}</b
+                          >
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <i class="bi bi-pin-map-fill mr-2"></i
+                          >{{ item["geo:Titolo_it"][0]["@value"] }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <i class="bi bi-map mr-2"></i>
+                          {{
+                            item["geo:appartiene_a_area"][0]["display_title"]
+                          }}
+                        </div>
+                      </div>
+
+                      <div class="row" v-if="item['geo:Durata'] !== undefined">
+                        <div class="col-12">
+                          <i class="bi bi-clock mr-2"></i
+                          >{{ item["geo:Durata"][0]["@value"] }} minuti
+                        </div>
+                      </div>
+                      <div class="row" v-else>
+                        <div class="col-12">
+                          <i class="bi bi-clock mr-2"></i>10 minuti
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div
                   v-for="(it, ind) in item.mis"
                   :key="'availableActivities' + (ind + 200)"
@@ -1326,7 +1396,7 @@ import KProgress from "k-progress";
 
 export default {
   name: "PercorsiNew",
-    bodyClass: "percorsi-page",
+  bodyClass: "percorsi-page",
 
   components: {
     //Component Leaflet map
@@ -2915,7 +2985,8 @@ export default {
 }
 */
 
-html, body {
+html,
+body {
   overflow: scroll;
 }
 </style>

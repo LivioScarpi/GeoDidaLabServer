@@ -1320,17 +1320,22 @@
       headerClasses="justify-content-center"
       @close="modals.featureDevelopment = false"
     >
-      <h4 slot="header" class="title title-up text-center">
-        Funzionalità in arrivo!
-      </h4>
+      <h4 slot="header" class="title title-up text-center">Attenzione!</h4>
       <div class="row">
         <div class="col-12">
           <div class="row">
             <div class="col-12 text-center">
               <h6 class="itineraryCode">
-                Questa funzionalità è in fase di sviluppo!
+                Seleziona almeno una delle attività proposte oppure esplora uno
+                degli itinerari predefiniti!
               </h6>
-              <p>Presto sarà resa disponibile.</p>
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="goToItinerariPredefinitiPage()"
+                class="mx-1 mt-4"
+                >Esplora itinerari predefiniti
+              </Button>
             </div>
           </div>
         </div>
@@ -1923,84 +1928,93 @@ export default {
 
       this.totalItinerary = [];
 
-      Array.prototype.forEach.call(this.$store.state.aree, (area) => {
-        var POIofArea = this.filteredPOI.filter(
-          (poi) =>
-            poi["geo:appartiene_a_area"][0]["display_title"] === area["o:title"]
-        );
-
-        console.log("POI OF AREA " + area["o:title"]);
-        console.log(POIofArea);
-
-        if (POIofArea.length > 0) {
-          var vroomObject = {
-            jobs: [],
-            vehicles: [
-              {
-                id: 1,
-                profile: "car",
-                start_index: 0,
-                end_index: 0,
-                start: this.startPoint,
-                end: this.endPoint,
-                time_window: [0, this.$store.state.timeAvailable.milliseconds], //TODO: inserire qua il tempo a disposizione in millisecondi
-              },
-            ],
-            matrices: {
-              car: {
-                durations: costMatrix,
-                costs: costMatrix,
-              },
-            },
-          };
-
-          console.log("FILTRO I POI");
-
-          //oggetto contenente i POI con delle attività selezionate
-          var poiWithSelectedActivities = POIofArea.filter(
-            (poi) => poi.poiHasActivitiesSelected
+      if (this.$store.state.totalTimeSelected === 0) {
+        //TODO: mostrare modal di avviso
+        //alert("Selezionare almeno un'attività oppure scegliere uno degli itinerari predefiniti");
+        this.modals.featureDevelopment = true;
+      } else {
+        Array.prototype.forEach.call(this.$store.state.aree, (area) => {
+          var POIofArea = this.filteredPOI.filter(
+            (poi) =>
+              poi["geo:appartiene_a_area"][0]["display_title"] ===
+              area["o:title"]
           );
 
-          //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
-          if (poiWithSelectedActivities.length === 0) {
-            Array.prototype.forEach.call(POIofArea, (poi) => {
-              Array.prototype.forEach.call(poi.mis, (activity) => {
-                activity.selected = true;
+          console.log("POI OF AREA " + area["o:title"]);
+          console.log(POIofArea);
+
+          if (POIofArea.length > 0) {
+            var vroomObject = {
+              jobs: [],
+              vehicles: [
+                {
+                  id: 1,
+                  profile: "car",
+                  start_index: 0,
+                  end_index: 0,
+                  start: this.startPoint,
+                  end: this.endPoint,
+                  time_window: [
+                    0,
+                    this.$store.state.timeAvailable.milliseconds,
+                  ], //TODO: inserire qua il tempo a disposizione in millisecondi
+                },
+              ],
+              matrices: {
+                car: {
+                  durations: costMatrix,
+                  costs: costMatrix,
+                },
+              },
+            };
+
+            console.log("FILTRO I POI");
+
+            //oggetto contenente i POI con delle attività selezionate
+            var poiWithSelectedActivities = POIofArea.filter(
+              (poi) => poi.poiHasActivitiesSelected
+            );
+
+            //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
+            if (poiWithSelectedActivities.length === 0) {
+              Array.prototype.forEach.call(POIofArea, (poi) => {
+                Array.prototype.forEach.call(poi.mis, (activity) => {
+                  activity.selected = true;
+                });
               });
-            });
 
-            poiWithSelectedActivities = POIofArea;
-          }
+              poiWithSelectedActivities = POIofArea;
+            }
 
-          //TODO: remove me
-          //onsole.log("poi con attività selezionate");
-          console.log(poiWithSelectedActivities);
+            //TODO: remove me
+            //onsole.log("poi con attività selezionate");
+            console.log(poiWithSelectedActivities);
 
-          var jobID = 1;
+            var jobID = 1;
 
-          var placeID = 0;
-          var currentPlaceID = 0;
+            var placeID = 0;
+            var currentPlaceID = 0;
 
-          var customObjTmp = [];
+            var customObjTmp = [];
 
-          //creo i jobs per l'oggetto VROOM
-          Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
-            var activitiesSelected = poi.mis.filter(
-              (activity) => activity.selected
-            );
+            //creo i jobs per l'oggetto VROOM
+            Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
+              var activitiesSelected = poi.mis.filter(
+                (activity) => activity.selected
+              );
 
-            console.log("activitiesSelected");
-            console.log(activitiesSelected);
+              console.log("activitiesSelected");
+              console.log(activitiesSelected);
 
-            console.log(poi["geo:Titolo_it"][0]["@value"]);
-            var poiIDObject = this.correctIdsOfPOI.filter(
-              (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
-            );
+              console.log(poi["geo:Titolo_it"][0]["@value"]);
+              var poiIDObject = this.correctIdsOfPOI.filter(
+                (p) => p.poiName === poi["geo:Titolo_it"][0]["@value"]
+              );
 
-            console.log(poiIDObject[0]);
-            currentPlaceID = poiIDObject[0].poiID;
+              console.log(poiIDObject[0]);
+              currentPlaceID = poiIDObject[0].poiID;
 
-            /*
+              /*
         if (poiIDObject.length === 0) {
           console.log("il POI NON c'è");
           this.idsOfPOI.push({
@@ -2023,64 +2037,67 @@ export default {
         }
         */
 
-            //TODO: sistemare poiIDObject
+              //TODO: sistemare poiIDObject
 
-            if (poi.visitPOI) {
-              //se l'utente vuole visitare il POI viene aggiunto il Job
-              var visitPOIjob = {
-                id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-                description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
-                service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
-                location: [
-                  poi.marker["o-module-mapping:lng"],
-                  poi.marker["o-module-mapping:lat"],
-                ],
-                location_index: currentPlaceID,
-              };
+              if (poi.visitPOI) {
+                //se l'utente vuole visitare il POI viene aggiunto il Job
+                var visitPOIjob = {
+                  id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+                  description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+                  service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
+                  location: [
+                    poi.marker["o-module-mapping:lng"],
+                    poi.marker["o-module-mapping:lat"],
+                  ],
+                  location_index: currentPlaceID,
+                };
 
-              vroomObject.jobs.push(visitPOIjob);
+                vroomObject.jobs.push(visitPOIjob);
 
-              jobID += 1;
-            }
+                jobID += 1;
+              }
 
-            Array.prototype.forEach.call(activitiesSelected, (activity) => {
-              var job = {
-                id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-                description:
-                  poi["geo:Titolo_it"][0]["@value"] + "_" + activity["o:title"],
-                service: this.getMilliseconds(
-                  activity["geo:Durata"][0]["@value"]
-                ),
-                location: [
-                  poi.marker["o-module-mapping:lng"],
-                  poi.marker["o-module-mapping:lat"],
-                ],
-                location_index: currentPlaceID,
-              };
+              Array.prototype.forEach.call(activitiesSelected, (activity) => {
+                var job = {
+                  id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+                  description:
+                    poi["geo:Titolo_it"][0]["@value"] +
+                    "_" +
+                    activity["o:title"],
+                  service: this.getMilliseconds(
+                    activity["geo:Durata"][0]["@value"]
+                  ),
+                  location: [
+                    poi.marker["o-module-mapping:lng"],
+                    poi.marker["o-module-mapping:lat"],
+                  ],
+                  location_index: currentPlaceID,
+                };
 
-              console.log("JOB creato");
+                console.log("JOB creato");
 
-              vroomObject.jobs.push(job);
+                vroomObject.jobs.push(job);
 
-              jobID += 1;
+                jobID += 1;
+              });
             });
-          });
 
-          console.log("VROOM OBJECT");
-          console.log(vroomObject);
-          console.log(JSON.stringify(vroomObject));
+            console.log("VROOM OBJECT");
+            console.log(vroomObject);
+            console.log(JSON.stringify(vroomObject));
 
-          console.log("OGGETTO CON GLI ID");
-          console.log(JSON.stringify(customObjTmp));
+            console.log("OGGETTO CON GLI ID");
+            console.log(JSON.stringify(customObjTmp));
 
-          var vroomItineraryResponse = this.makeQueryVROOM(
-            vroomObject,
-            area["o:title"]
-          );
+            var vroomItineraryResponse = this.makeQueryVROOM(
+              vroomObject,
+              area["o:title"]
+            );
 
-          //totalItinerary.push(vroomItineraryResponse);
-        }
-      });
+            //totalItinerary.push(vroomItineraryResponse);
+          }
+        });
+      }
 
       console.log("TOTAL ITINERARY");
       console.log(this.totalItinerary);
@@ -2183,13 +2200,11 @@ export default {
           var visit = poi.visitPOI;
           this.$set(poi, "visitPOI", !visit);
 
-                    //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
+          //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
           if (poi.visitPOI) {
             // this.$store.state.totalTimeSelected +=
             //   parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //aggiungo la durata della visita del POI
-
             // console.log("PUSHO");
-
             // this.$store.state.areasWithSomethingSelected.push(
             //   poi["geo:appartiene_a_area"][0]["display_title"]
             // );
@@ -2281,14 +2296,15 @@ export default {
                 // se l'attività è selezionata e la voglio deselezionare
                 activity.selected = !activity.selected;
 
-                
-
                 this.$store.state.areasWithSomethingSelected.push(
                   poi["geo:appartiene_a_area"][0]["display_title"]
                 ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
 
                 if (activity.selected) {
-                  if (poi.numberOfActivitiesSelectedInPOI === 0 && !poi.visitPOI) {
+                  if (
+                    poi.numberOfActivitiesSelectedInPOI === 0 &&
+                    !poi.visitPOI
+                  ) {
                     this.$set(poi, "visitPOI", true);
                     //se visitPOI è false e se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
                     this.$store.state.totalTimeSelected +=
@@ -2309,7 +2325,10 @@ export default {
                     "DECREMENTO IL NUMERO DI ATTIVITA'" +
                       poi.numberOfActivitiesSelectedInPOI
                   );
-                  if (poi.numberOfActivitiesSelectedInPOI === 0 && poi.visitPOI) {
+                  if (
+                    poi.numberOfActivitiesSelectedInPOI === 0 &&
+                    poi.visitPOI
+                  ) {
                     this.$set(poi, "visitPOI", false); //togliamo la visita del POI
 
                     this.$store.state.totalTimeSelected -=
@@ -2608,6 +2627,12 @@ export default {
       return minutesInt * 60000;
     },
 
+    goToItinerariPredefinitiPage() {
+      router.push({
+        name: "elencopercorsi",
+      });
+    },
+
     makeQueryVROOM(vroomObject, areaName) {
       var self = this;
       var itinerary = null;
@@ -2864,8 +2889,9 @@ export default {
       //TODO: remove me
       //console.log("someActivitiesSelected");
       return (
-        this.filteredPOI.filter((poi) => (poi.poiHasActivitiesSelected || poi.visitPOI)).length >
-        0
+        this.filteredPOI.filter(
+          (poi) => poi.poiHasActivitiesSelected || poi.visitPOI
+        ).length > 0
       );
     },
 

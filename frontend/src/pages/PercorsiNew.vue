@@ -728,9 +728,8 @@
                         align-items: center;
                       "
                       @click="
-                        changeSelection(
-                          item['geo:Titolo_it'][0]['@value'],
-                          item['o:title']
+                        changeSelectionVisitPOI(
+                          item['geo:Titolo_it'][0]['@value']
                         )
                       "
                     >
@@ -2168,6 +2167,65 @@ export default {
       for (var i = 0; i < this.filteredPOI.length; i++) {
         this.$set(this.filteredPOI, i, tmpFilteredPOI[i]);
       }
+    },
+
+    changeSelectionVisitPOI(poiName) {
+      //TODO: remove me
+      //console.log("CHANGE SELECTION: " + poiName + ", " + activityName);
+
+      var tmpFilteredPOI = this.filteredPOI;
+
+      Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+        if (poi["geo:Titolo_it"][0]["@value"] === poiName) {
+          //TODO: remove me
+          //console.log("POI TROVATO");
+
+          var visit = poi.visitPOI;
+          this.$set(poi, "visitPOI", !visit);
+        }
+      });
+
+      //imposto se il POI ha delle attività selezionate
+      Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+        var poiHasActivitiesSelected = false;
+
+        Array.prototype.forEach.call(poi.mis, (activity) => {
+          if (activity.selected) {
+            poiHasActivitiesSelected = true;
+            console.log("IL POI ha delle attività selezionate");
+          }
+        });
+
+        // il poi ha delle attività selezionate se è selezionata la sua visita oppure delle attività da fare al suo interno
+        poi.poiHasActivitiesSelected = poiHasActivitiesSelected || poi.visitPOI;
+      });
+
+      //TODO: impostare se l'area ha delle attività selezionate
+      // Array.prototype.forEach.call(this.$store.state.aree, (area) => {
+      //   console.log(area);
+      //   var areaHasActivitiesSelected = false;
+
+      //   Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+      //     if (
+      //       poi.poiHasActivitiesSelected &&
+      //       poi["geo:appartiene_a_area"][0]["display_title"] == area["o:title"]
+      //     ) {
+      //       areaHasActivitiesSelected = true;
+      //     }
+      //   });
+
+      //   area.areaHasActivitiesSelected = areaHasActivitiesSelected;
+      // });
+
+      //TODO: funziona -> se si riesce migliorarlo
+      for (var i = 0; i < this.filteredPOI.length; i++) {
+        this.$set(this.filteredPOI, i, tmpFilteredPOI[i]);
+      }
+
+      console.log("stampo dopo la selezione");
+      console.log(this.filteredPOI);
+
+      this.initializeMarkersOfFilteredPOI();
     },
 
     changeSelection(poiName, activityName) {

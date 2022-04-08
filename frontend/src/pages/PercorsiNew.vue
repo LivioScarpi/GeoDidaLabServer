@@ -2182,6 +2182,30 @@ export default {
 
           var visit = poi.visitPOI;
           this.$set(poi, "visitPOI", !visit);
+
+                    //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
+          if (poi.visitPOI) {
+            // this.$store.state.totalTimeSelected +=
+            //   parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //aggiungo la durata della visita del POI
+
+            // console.log("PUSHO");
+
+            // this.$store.state.areasWithSomethingSelected.push(
+            //   poi["geo:appartiene_a_area"][0]["display_title"]
+            // );
+          } else {
+            this.$store.state.totalTimeSelected -=
+              parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //rimuovo la durata della visita del POI
+
+            console.log("ELIMINO");
+
+            var index = this.$store.state.areasWithSomethingSelected.indexOf(
+              poi["geo:appartiene_a_area"][0]["display_title"]
+            );
+            if (index > -1) {
+              this.$store.state.areasWithSomethingSelected.splice(index, 1);
+            }
+          }
         }
       });
 
@@ -2257,15 +2281,16 @@ export default {
                 // se l'attività è selezionata e la voglio deselezionare
                 activity.selected = !activity.selected;
 
-                this.$set(poi, "visitPOI", true);
+                
 
                 this.$store.state.areasWithSomethingSelected.push(
                   poi["geo:appartiene_a_area"][0]["display_title"]
                 ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
 
                 if (activity.selected) {
-                  if (poi.numberOfActivitiesSelectedInPOI === 0) {
-                    //se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
+                  if (poi.numberOfActivitiesSelectedInPOI === 0 && !poi.visitPOI) {
+                    this.$set(poi, "visitPOI", true);
+                    //se visitPOI è false e se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
                     this.$store.state.totalTimeSelected +=
                       parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
                   }
@@ -2284,13 +2309,13 @@ export default {
                     "DECREMENTO IL NUMERO DI ATTIVITA'" +
                       poi.numberOfActivitiesSelectedInPOI
                   );
-                  if (poi.numberOfActivitiesSelectedInPOI === 0) {
+                  if (poi.numberOfActivitiesSelectedInPOI === 0 && poi.visitPOI) {
                     this.$set(poi, "visitPOI", false); //togliamo la visita del POI
 
                     this.$store.state.totalTimeSelected -=
                       parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //togliamo il tempo necessario a visitare il POI
 
-                    console.log("ELIMINO");
+                    console.log("ELIMINO LA VISITA DEL POI QUA");
 
                     //rimuovo una volta l'area  dalle aree con qualcosa di selezionato
                     var index =

@@ -111,7 +111,7 @@
               </Button>
             </div>
           </article>
-          <collapse>
+          <!-- <collapse>
             <collapse-item
               id="collapseItinerario"
               :title="itinerario['geo:Titolo_it'][0]['@value']"
@@ -123,7 +123,7 @@
                 <Itinerario :itinerario="itinerario" />
               </div>
             </collapse-item>
-          </collapse>
+          </collapse> -->
         </div>
       </div>
     </div>
@@ -154,12 +154,14 @@ const Common = require("@/Common.vue").default;
 
 export default {
   name: "PercorsoSelezionato",
+  bodyClass: "percorsi-page",
+
   //props: ["test"],
 
   components: {
-    Itinerario,
-    Collapse,
-    CollapseItem,
+    // Itinerario,
+    // Collapse,
+    // CollapseItem,
     Button,
   },
 

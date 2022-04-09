@@ -306,6 +306,8 @@ const store = new Vuex.Store({
                     }
 
                     poi.media = pivot.media;
+
+                    poi.areaDiAppartenenza = pivot["geo:appartiene_a_area"];
                 })
             })
 
@@ -366,7 +368,21 @@ const store = new Vuex.Store({
 
                 //aggiungo i poi all'itinerario
                 itinerario.poi = poiInItinerario;
+
+                var poiGroupedByArea = itinerario.poi.reduce(function (r, a) {
+                    console.log("SONO QUA");
+                    console.log(a);
+                    r[a['areaDiAppartenenza'][0]['display_title']] = r[a['areaDiAppartenenza'][0]['display_title']] || [];
+                    r[a['areaDiAppartenenza'][0]['display_title']].push(a);
+                    return r;
+                }, Object.create(null));
+            
+                console.log(poiGroupedByArea);
+
+                itinerario.poiGroupedByArea = poiGroupedByArea;
             });
+
+
 
             console.log("FINE setPOIinItinerario");
             console.log(state.itinerari);

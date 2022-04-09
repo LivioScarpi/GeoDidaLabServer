@@ -9,7 +9,7 @@
           v-on:click="goBack()"
         ></i>
 
-        <div class="row">
+        <div class="row mb-4">
           <div class="col-12">
             <div class="row">
               <div class="col-12">
@@ -45,6 +45,72 @@
           </svg>
         </div>
         <div v-else class="px-2 px-lg-5">
+          <article
+            class="postcardpercorsi light orange mx-4"
+            v-for="(itinerario, index) in itinerari"
+            :key="'itinerario' + index"
+          >
+            <a class="postcardpercorsi__img_link">
+              <img
+                class="postcardpercorsi__img"
+                src="https://picsum.photos/501/500"
+                alt="Image Title"
+              />
+            </a>
+            <div class="postcardpercorsi__text pt-3 mt-4">
+              <div style="height: 100%">
+                <h1 class="postcardpercorsi__title orange">
+                  {{ itinerario["geo:Titolo_it"][0]["@value"] }}
+                </h1>
+                <!--<div class="postcardpercorsi__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+                <div class="postcardpercorsi__bar" style="height: 5px"></div>
+                <div
+                  class="postcardpercorsi__preview-txt mb-3"
+                  v-if="itinerario['dcterms:description'] !== undefined"
+                >
+                  {{ itinerario["dcterms:description"][0]["@value"] }}
+                </div>
+                <div class="postcardpercorsi__preview-txt mb-3" v-else>
+                  Nessuna descrizione disponibile
+                </div>
+
+                <h6>Interessi:</h6>
+                <template
+                  v-for="(ambito, index) in itinerario[
+                    'geo:appartiene_a_ambito'
+                  ]"
+                  style="display: inline-block"
+                >
+                  {{ ambito["display_title"] }}
+                  <template
+                    v-if="
+                      index < itinerario['geo:appartiene_a_ambito'].length - 2
+                    "
+                    >,</template
+                  >
+
+                  <template
+                    v-if="
+                      index === itinerario['geo:appartiene_a_ambito'].length - 2
+                    "
+                  >
+                    e
+                  </template>
+                </template>
+              </div>
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="goToItinerarioPredefinitoPage(index)"
+                class="textButtonColor mt-5"
+                >Esplora itinerario
+              </Button>
+            </div>
+          </article>
           <collapse>
             <collapse-item
               id="collapseItinerario"
@@ -72,6 +138,7 @@ import router from "../router";
 import $ from "jquery";
 
 import Itinerario from "../components/customComponents/Itinerario.vue";
+import { Button } from "element-ui";
 
 import {
   Checkbox,
@@ -93,6 +160,7 @@ export default {
     Itinerario,
     Collapse,
     CollapseItem,
+    Button,
   },
 
   data() {
@@ -144,7 +212,7 @@ export default {
       console.log(store.state.itinerari);
 
       //chiedo i POI
-          console.log("chiedo i POI");
+      console.log("chiedo i POI");
 
       Common.getElemsByClass(this, 120, (res) => {
         store.state.POI = res.body;
@@ -155,7 +223,7 @@ export default {
 
         //da qua
         if (store.state.loadedActivitiesInPOIPivot) {
-                    console.log("TRUE store.state.loadedActivitiesInPOIPivot");
+          console.log("TRUE store.state.loadedActivitiesInPOIPivot");
 
           store.commit("setActivitiesInPOI");
           store.commit("setPOIinItinerario");
@@ -204,6 +272,16 @@ export default {
       router.go(-1);
 
       //router.replace({ path: "/percorsi" });
+    },
+    goToItinerarioPredefinitoPage(index) {
+      //TODO: navigo alla pagina dell'itinerario predefinito
+      var itinerario = this.itinerari[index];
+      router.push({
+        name: "sintesiitinerariopredefinito",
+        params: {
+          itinerario,
+        },
+      });
     },
   },
 

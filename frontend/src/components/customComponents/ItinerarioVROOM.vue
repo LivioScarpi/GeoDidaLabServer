@@ -2,6 +2,7 @@
   <div>
     <div class="row px-lg-5">
       <div class="col-lg-7 col-sm-12">
+        <!--
         <div class="row align-items-center">
           <div class="col-2 col-lg-1 text-center pr-1">
             <i
@@ -12,8 +13,168 @@
           <div class="col-10 col-lg-11">
             <h5 class="mb-0">{{ itinerario["name"] }}</h5>
           </div>
+        </div>-->
+
+        <div class="row mb-0 text-center">
+          <div class="col-12">
+            <h2 class="title">
+              {{ itinerario["name"] }}
+            </h2>
+          </div>
         </div>
 
+        <div v-if="itineraryCode === null" class="row mb-0 text-center">
+          <div class="col-12 px-5">
+            Puoi salvare il tuo itinerario premendo il bottone "Salva
+            itinerario". Ti verrà fornito un codice identificativo del tuo
+            itinerario, salvalo e conservalo per poter poi consultare nuovamente
+            l'itinerario.
+          </div>
+        </div>
+
+        <div v-if="itineraryCode === null" class="row mt-3 text-center">
+          <div class="col-12">
+            <Button
+              size="large"
+              v-on:click="saveItinerary()"
+              class="m-2 textButtonColor"
+              >Salva itinerario
+            </Button>
+          </div>
+        </div>
+
+        <div v-if="itineraryCode !== null" class="row mb-0 text-center">
+          <div class="col-12 px-5">
+            Puoi effettuare la tua prenotazione inviando una mail premendo il
+            bottone "Invia mail".
+          </div>
+        </div>
+
+        <div v-if="itineraryCode !== null" class="row mt-3 text-center">
+          <div class="col-12">
+            <Button
+              size="large"
+              v-on:click="sendEmail()"
+              class="m-2 textButtonColor"
+              >Invia mail
+            </Button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div id="first-section1">
+              <div class="container">
+                <!--
+                <div class="row">
+                  <div class="triangle"></div>
+                </div>-->
+                <div class="row">
+                  <div class="col-md-12">
+                    <section id="cd-timeline" class="cd-container">
+                      <div
+                        v-for="(poi, poiIndex) in itinerario.poi"
+                        :key="poiIndex"
+                        class="cd-timeline-block"
+                      >
+                        <div class="cd-timeline-img cd-picture">
+                          <img
+                            v-if="
+                              poi['poiName'] === 'Punto di partenza' ||
+                              poi['poiName'] === 'Punto di arrivo'
+                            "
+                            src="../../icons/startPoint.png"
+                          />
+                          <img
+                            v-else
+                            src="../../icons/unselectedPOI.png"
+                            alt="Picture"
+                          />
+                        </div>
+
+                        <div
+                          class="
+                            cd-timeline-content
+                            service-box-content
+                            pt-0
+                            px-0
+                          "
+                        >
+                          <div class="row postcardpercorsi                             timeline
+                            orange">
+                            <div class="col-12 pb-3">
+                              <div
+                                v-if="
+                                  poi['poiName'] !== 'Punto di partenza' &&
+                                  poi['poiName'] !== 'Punto di arrivo'
+                                "
+                                class="row"
+                              >
+                                <!--v-if="poi.image !== undefined"-->
+                                <div class="col-12 px-0">
+                                  <img
+                                    src="@/assets/images/bg3.jpg"
+                                    alt="Picture"
+                                    class="px-0 rounded-top postcardtimeline__img"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="row text-center">
+                                <div class="col-12">
+                                  <h2 class="mt-4 mb-0">
+                                    <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["poiName"] }}
+                                  </h2>
+                                  <div class="postcardtimeline__bar margin-auto" style=" display: inline-block;"></div>
+
+                                  <h4
+                                    v-if="
+                                      poi['poiName'] !== 'Punto di partenza' &&
+                                      poi['poiName'] !== 'Punto di arrivo'
+                                    "
+                                    class="mb-3 mt-0"
+                                  >
+                                    Attività
+                                  </h4>
+
+                                  <div
+                                    v-for="(
+                                      activity, activityIndex
+                                    ) in poi.activitiesInPOI"
+                                    :key="'activityInPOI' + activityIndex"
+                                    class="mx-3"
+                                  >
+                                    <div
+                                      v-if="
+                                        poi['poiName'] !==
+                                          'Punto di partenza' &&
+                                        poi['poiName'] !== 'Punto di arrivo'
+                                      "
+                                      class="mb-3"
+                                    >
+                                      <!--<i
+                                        class="bi bi-clipboard-check-fill mr-2"
+                                      ></i>-->
+                                      <!--{{ poiIndex }}.{{activityIndex}} - -->
+                                      <h6>{{ activity["activityName"] }}</h6>
+                                      <i class="bi bi-clock mr-2"></i>
+                                        {{ activity["serviceDurationMinutes"] }} minuti
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
           <div class="col-10 col-lg-11 pl-0 mb-4">
@@ -46,11 +207,6 @@
                   :key="'activityInPOI' + activityIndex"
                   class="ml-5"
                 >
-                  <!--
-                  <div v-if="poi['poiName'] === 'Punto di partenza' || poi['poiName'] === 'Punto di arrivo' ">
-                    - {{ activity["activityName"] }}
-                  </div>-->
-                  <!--{{poi['poiName']}}-->
                   <div
                     v-if="
                       poi['poiName'] !== 'Punto di partenza' &&
@@ -58,7 +214,7 @@
                     "
                   >
                     <i class="bi bi-clipboard-check-fill mr-2"></i>
-                    <!--{{ poiIndex }}.{{activityIndex}} - -->{{
+                    {
                       activity["activityName"]
                     }}
                     (
@@ -111,9 +267,11 @@
             AVANTI
           </div>
         </div>
+
+        -->
       </div>
       <div class="col-lg-5 col-sm-12">
-        <div class="row">
+        <div class="row pt-4">
           <div class="col-lg-12">
             <div class="px-4">
               <l-map style="height: 500px" :zoom="zoom" :center="center">
@@ -203,19 +361,20 @@
     </modal>
 
     <modal
-        :show.sync="modals.itineraryCodeGeneratedWithError"
-        headerClasses="justify-content-center"
-        @close="modals.itineraryCodeGeneratedWithError = false"
+      :show.sync="modals.itineraryCodeGeneratedWithError"
+      headerClasses="justify-content-center"
+      @close="modals.itineraryCodeGeneratedWithError = false"
     >
       <h4 slot="header" class="title title-up text-center">Errore!</h4>
       <div class="row">
         <div class="col-12">
           <div class="row">
             <div class="col-12 text-center">
-              <h6 class="itineraryCode">Si è verificato un errore durante il salvataggio del tuo itinerario.</h6>
-              <p>
-                Riprovare più tardi.
-              </p>
+              <h6 class="itineraryCode">
+                Si è verificato un errore durante il salvataggio del tuo
+                itinerario.
+              </h6>
+              <p>Riprovare più tardi.</p>
             </div>
           </div>
         </div>
@@ -223,11 +382,11 @@
 
       <template slot="footer">
         <Button
-            size="small"
-            type="danger"
-            v-on:click="modals.itineraryCodeGeneratedWithError = false"
-            class="mx-1"
-        >Chiudi
+          size="small"
+          type="danger"
+          v-on:click="modals.itineraryCodeGeneratedWithError = false"
+          class="mx-1"
+          >Chiudi
         </Button>
       </template>
     </modal>
@@ -403,7 +562,6 @@ export default {
 
           self.modals.itineraryCodeGeneratedWithError = false;
           self.modals.itineraryCodeGenerated = true;
-
         },
         error: function (error) {
           console.log("error: ");
@@ -411,7 +569,6 @@ export default {
 
           self.modals.itineraryCodeGenerated = false;
           self.modals.itineraryCodeGeneratedWithError = true;
-
         },
       });
     },
@@ -436,6 +593,8 @@ export default {
 <style scoped>
 .textButtonColor {
   color: #2c2c2c;
+  background: #ffaa78;
+  border-color: #ffaa78;
 }
 
 .itineraryCode {

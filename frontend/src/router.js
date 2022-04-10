@@ -15,6 +15,9 @@ import PercorsiNew from './pages/PercorsiNew.vue';
 import PersonalizzazionePercorso from './pages/PersonalizzazionePercorso.vue';
 import PercorsoSelezioato from './pages/PercorsoSelezionato.vue';
 import PercorsoVROOM from './pages/PercorsoVROOM.vue'
+import SintesiItinerario from './pages/SintesiItinerario.vue'
+import SintesiItinerarioPredefinito from './pages/SintesiItinerarioPredefinito.vue'
+
 import ElencoPercorsi from './pages/ElencoPercorsi.vue';
 import DoveSiamo from './pages/DoveSiamo.vue';
 import Contatti from './pages/Contatti.vue';
@@ -130,6 +133,24 @@ export default new Router({
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: 'black' }
       },*/
+    },
+    {
+      path: '/sintesiitinerario',
+      name: 'sintesiitinerario',
+      components: { default: SintesiItinerario, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: 'black' }
+      }
+    },
+    {
+      path: '/sintesiitinerariopredefinito',
+      name: 'sintesiitinerariopredefinito',
+      components: { default: SintesiItinerarioPredefinito, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: 'black' }
+      }
     },
     {
       path: '/itinerariogenerato',

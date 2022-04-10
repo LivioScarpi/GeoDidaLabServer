@@ -3,12 +3,12 @@
     <div class="page-header clear-filter" filter-color="orange">
       <parallax
         class="page-header-image"
-        style="background-image:url('img/canoe-scaled.jpg.webp')"
+        :style="{ 'background-image': 'url(' + imageUrl + ')' }"
       >
       </parallax>
       <div class="container">
         <div class="photo-container">
-          <img src="img/squared_logo.png" alt="" />
+          <img :src="require('../assets/images/squared_logo.png')" alt="" />
         </div>
         <h3 class="title">CONTATTI</h3>
         <!--
@@ -35,39 +35,41 @@
         <div class="button-container">
           <!--
           <a href="#button" class="btn btn-primary btn-round btn-lg">Follow</a>-->
-          <a
+          <!-- <a
             href="#button"
             class="btn twitter-color btn-round btn-lg btn-icon"
             rel="tooltip"
             title="Follow me on Twitter"
           >
             <i class="fab fa-twitter"></i>
-          </a>
+          </a> -->
           <a
-            href="#button"
-            class="btn instagram-color btn-round btn-lg btn-icon"
+            href="https://www.youtube.com/watch?v=ZO0cf8fyk40"
+            class="btn youtube-color btn-round btn-lg btn-icon"
             rel="tooltip"
             title="Follow me on Instagram"
           >
-            <i class="fab fa-instagram"></i>
+            <i class="fab fa-youtube"></i>
           </a>
           <a
-              href="#button"
-              class="btn facebook-color btn-round btn-lg btn-icon"
-              rel="tooltip"
-              title="Follow me on Instagram"
+            href="https://it-it.facebook.com/Geodidalab/"
+            class="btn facebook-color btn-round btn-lg btn-icon"
+            rel="tooltip"
+            title="Vieni a trovarci su facebook!"
           >
             <i class="fab fa-facebook"></i>
           </a>
         </div>
-        <h3 class="title">About me</h3>
+        <h3 class="title">Il Geodidalab</h3>
         <h5 class="description">
-          An artist of considerable range, Ryan — the name taken by
-          Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and
-          records all of his own music, giving it a warm, intimate feel with a
-          solid groove structure. An artist of considerable range.
+          Il GeoDidaLab è un laboratorio di educazione ambientale e ricerca
+          didattica gestito dal Dipartimento di Scienze della Terra
+          dell’Università di Torino che dal 2013 propone attività didattiche per
+          le scuole di ogni ordine e grado, attività di formazione per gli
+          insegnanti e promuove progetti di ricerca scientifica in ambito
+          geologico-ambientale e didattico.
         </h5>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-6 ml-auto mr-auto">
             <h4 class="title text-center">My Portfolio</h4>
           </div>
@@ -129,49 +131,59 @@
               </div>
             </tab-pane>
           </tabs>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 <script>
-import { Tabs, TabPane } from '@/components';
+import { Tabs, TabPane } from "@/components";
 
 export default {
-  name: 'profile',
-  bodyClass: 'profile-page',
+  name: "profile",
+  bodyClass: "profile-page",
   components: {
-    Tabs,
-    TabPane
-  }
+    //Tabs,
+    //TabPane,
+  },
+
+  data() {
+    return {
+      imageUrl: require("../assets/images/canoe-scaled.jpg.webp"),
+    };
+  },
 };
 </script>
 <style>
-
-
 .facebook-color {
-  background-color: #3b5998;
+  background-color: #3b5998 !important;
 }
 
 .facebook-color:hover {
-  background-color: #6388d5;
+  background-color: #6388d5 !important;
+}
 
+.youtube-color {
+  background-color: #e65b43 !important;
+}
+
+.youtube-color:hover {
+  background-color: #e87662 !important;
 }
 
 .twitter-color {
-  background-color: #1DA1F2;
+  background-color: #1da1f2 !important;
 }
 
 .twitter-color:hover {
-  background-color: #6cb3e1;
+  background-color: #6cb3e1 !important;
 }
 
 .instagram-color {
-  background-color: #E1306C;
+  background-color: #e1306c !important;
 }
 
 .instagram-color:hover {
-  background-color: #ee7099;
+  background-color: #ee7099 !important;
 }
-
 </style>

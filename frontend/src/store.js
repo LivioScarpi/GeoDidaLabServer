@@ -1,10 +1,15 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
+
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+    plugins: [createPersistedState({
+        storage: window.sessionStorage,
+    })],
     state: {
         count: 1,
         urlCache: {}, // Url => Obj
@@ -23,12 +28,18 @@ const store = new Vuex.Store({
         difficultyLevels: [],
         itinerari: [],
         POI: [],
+        aree: [],
 
         loadedActivitiesInPOIPivot: false,
         timeAvailable: null,
         itinerarioInCreazione: null,
+        totalTimeSelected: 0,
+
+        areasWithSomethingSelected: [],
 
         availableActivitiesInRemainingTime: [],
+
+        sottoitinerari: [],
 
 
         media: {
@@ -181,6 +192,17 @@ const store = new Vuex.Store({
             console.log("FINE setAvailableActivitiesInRemainingTime");  
         },
 
+        setAreaInPOIPivot(state) {
+            console.log("STORE setAreaInPoiPivot");
+
+            Array.prototype.forEach.call(state.POIpivot, i => {
+                console.log(i["geo:appartiene_a_area"]);
+            })
+
+            console.log("FINE setAreaInPOIPivot");
+            console.log(state.POIpivot);
+        },
+
         setActivitiesInPOIPivot(state) {
             /*
             * cosa vorrei:
@@ -214,13 +236,18 @@ const store = new Vuex.Store({
 
                 console.log(misurazioni);
 
-                i.mis = misurazioni;
+                if(i.mis === undefined) {
+                    i.mis = misurazioni;
+                }
 
                 //attributo usato per mostrare o meno il poi sulla vista
                 i.poiVisibleWithFilters = true;
 
                 //attributo usato per sapere se ci sono attività selezionate in questo POI
                 i.poiHasActivitiesSelected = false;
+
+                //attributo usato per sapere se ci sono delle attività visibili
+                i.poiHasSomeActivitiesVisible = true;
             })
 
             console.log("FINE setActivitiesInPOIPivot");
@@ -271,8 +298,16 @@ const store = new Vuex.Store({
 
                 Array.prototype.forEach.call(poiInPivot, poi => {
                     //recupero i poi che appartengono all'itinerario corrente
+                    if(poi.activitiesOfPOIPivot === undefined){
                     poi.activitiesOfPOIPivot = misurazioniInPivot;
+                    }
+                    if(poi.marker === undefined) { 
                     poi.marker = pivot.marker;
+                    }
+
+                    poi.media = pivot.media;
+
+                    poi.areaDiAppartenenza = pivot["geo:appartiene_a_area"];
                 })
             })
 
@@ -318,9 +353,13 @@ const store = new Vuex.Store({
                 console.log(state.POI);
 
                 var filteredPOI = state.POI.filter(x => x["geo:appartiene_a_itinerario"] !== undefined && x["geo:Posizione_itinerario"] !== undefined);
+                var POIWithNotItinerary = state.POI.filter(x => x["geo:appartiene_a_itinerario"] === undefined || x["geo:Posizione_itinerario"] === undefined);
 
                 console.log("filteredPOI");
                 console.log(filteredPOI);
+
+                console.log("POIWithNotItinerary");
+                console.log(POIWithNotItinerary);
 
                 var poiInItinerario = filteredPOI.filter(x => x["geo:appartiene_a_itinerario"][0]["display_title"] === itinerario["o:title"]);
 
@@ -329,7 +368,21 @@ const store = new Vuex.Store({
 
                 //aggiungo i poi all'itinerario
                 itinerario.poi = poiInItinerario;
+
+                var poiGroupedByArea = itinerario.poi.reduce(function (r, a) {
+                    console.log("SONO QUA");
+                    console.log(a);
+                    r[a['areaDiAppartenenza'][0]['display_title']] = r[a['areaDiAppartenenza'][0]['display_title']] || [];
+                    r[a['areaDiAppartenenza'][0]['display_title']].push(a);
+                    return r;
+                }, Object.create(null));
+            
+                console.log(poiGroupedByArea);
+
+                itinerario.poiGroupedByArea = poiGroupedByArea;
             });
+
+
 
             console.log("FINE setPOIinItinerario");
             console.log(state.itinerari);

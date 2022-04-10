@@ -134,7 +134,7 @@ export default {
           pageDestination: "/percorsi",
         },
         {
-          title: "Esperimenti",
+          title: "Attività",
           message: "Questa è la card 3",
           imgSrc: require("@/assets/images/esperimenti.jpg"),
           pageDestination: "/esperimenti",

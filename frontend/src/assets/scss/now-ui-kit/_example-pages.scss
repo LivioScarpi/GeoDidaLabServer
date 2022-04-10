@@ -1,5 +1,7 @@
 // style for the landing page
 .index-page{
+overflow-y: scroll;
+
     .page-header{
         height: 125vh;
 
@@ -80,6 +82,9 @@
 
 // style for the profile page
 .profile-page{
+
+    overflow-y: scroll;
+
 
     .page-header{
         min-height: 550px;
@@ -272,8 +277,16 @@
     }
 }
 
+.timeline-page, .percorsi-page{
+
+    overflow-y: scroll;
+}
+
 // style for the profile page
 .strumenti-esperimenti-page{
+
+    overflow-y: scroll;
+
 
     .page-header{
         min-height: 550px;

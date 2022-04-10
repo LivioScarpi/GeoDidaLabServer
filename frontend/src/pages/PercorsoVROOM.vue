@@ -8,11 +8,12 @@
           style="font-size: 2rem; color: black; cursor: pointer"
           v-on:click="goBack()"
         ></i>
+        <!--
         <div>
           <h4 class="text-center mt-0">
             <b>Itinerario generato con VROOM</b>
           </h4>
-        </div>
+        </div>-->
         <!--ELENCO PERCORSI:-->
 
         <div v-if="itinerario === null" class="loader">

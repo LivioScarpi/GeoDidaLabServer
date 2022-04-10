@@ -1,11 +1,254 @@
 <template>
   <div>
-    <div v-if="currentStep === 0" class="centerTimePicker text-center">
+    <div
+      v-if="currentStep === 0"
+      class="centerTimePicker text-center pt-4 px-lg-5"
+    >
+      <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
+          <img
+            class="postcardpercorsi__img"
+            src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
+            alt="Image Title"
+          />
+        </a>
+
+        <div class="postcardpercorsi__text pt-3">
+          <h4 class="orange my-1" style="text-align: left">
+            Esplora itinerari
+          </h4>
+          <ul class="userchoice__tagbox mb-3">
+            <li
+              v-on:click="enabledRadioCreatePathOrInsertCode = '1'"
+              :class="
+                enabledRadioCreatePathOrInsertCode === '1'
+                  ? 'mr-1 tag__item__selected'
+                  : 'mr-1 tag__item__unselected'
+              "
+            >
+              <!-- <i
+                v-if="enabledRadioCreatePathOrInsertCode === '1'"
+                class="fas fa-check mr-2"
+              ></i> -->
+              Crea un nuovo percorso
+            </li>
+            <li
+              :class="
+                enabledRadioCreatePathOrInsertCode === '2'
+                  ? 'ml-2 tag__item__selected'
+                  : 'ml-2 tag__item__unselected'
+              "
+              v-on:click="enabledRadioCreatePathOrInsertCode = '2'"
+            >
+              <!-- <i
+                v-if="enabledRadioCreatePathOrInsertCode === '2'"
+                class="fas fa-check mr-2"
+              ></i> -->
+              Inserisci il codice di un itinerario
+            </li>
+          </ul>
+          <div v-if="enabledRadioCreatePathOrInsertCode === '1'">
+            <h1 class="postcardpercorsi__title orange">
+              Crea un nuovo percorso
+            </h1>
+            <!--<div class="postcardpercorsi__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+            <div class="postcardpercorsi__bar" style="height: 4px"></div>
+            <!-- <div class="pb-lg-4 pb-3">
+              Creando un nuovo percorso hai la possibilità di inserire le
+              attività che più ti interessano e i posti che più vuoi visitare in
+              modo tale da rendere la tua esperienza ancora più unica!
+            </div> -->
+            <div class="postcardpercorsi__preview-txt mb-3">
+              Creando un nuovo percorso hai la possibilità di inserire le
+              attività che più ti interessano e i posti che più vuoi visitare in
+              modo tale da rendere la tua esperienza ancora più unica!
+            </div>
+            <div style="text-align: left">
+              Scegli il tempo che hai a disposizione
+            </div>
+            <ul class="postcardpercorsi__tagbox">
+              <li class="tag__item" v-on:click="enabledRadio = '1'">
+                <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
+                >Mattina
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '2'">
+                <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
+                >Pomeriggio
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '3'">
+                <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
+                >Tutta la giornata
+              </li>
+              <li class="tag__item" v-on:click="enabledRadio = '4'">
+                <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
+                >Altro (fascia oraria personalizzata)
+              </li>
+            </ul>
+
+            <div v-if="enabledRadio === '4'">
+              <div class="row mt-4">
+                <h6 class="col-12">
+                  <b>Seleziona il tempo che hai a disposizione</b>
+                </h6>
+                <div
+                  v-if="!okTimeAvailable"
+                  class="col-12 errorMessage fade-in-text text-center"
+                >
+                  <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  Hai selezionato di essere disponibile dalle ore
+                  {{ startAvailableTimeValue.HH }} e
+                  {{ startAvailableTimeValue.mm }} alle ore
+                  {{ endAvailableTimeValue.HH }} e
+                  {{ endAvailableTimeValue.mm }}.
+                </div>
+              </div>
+
+              <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
+              <div class="row pt-3">
+                <div class="col-12 text-center">
+                  <b>dalle ore</b><br />
+                  <vue-timepicker
+                    v-model="startAvailableTimeValue"
+                    format="HH:mm"
+                  ></vue-timepicker>
+                </div>
+              </div>
+
+              <div class="row align-items-center pt-3 pb-3">
+                <div class="col-12 text-center">
+                  <b>alle ore</b><br />
+                  <vue-timepicker
+                    v-model="endAvailableTimeValue"
+                    format="HH:mm"
+                  ></vue-timepicker>
+                </div>
+              </div>
+            </div>
+            <Button
+              size="small"
+              type="primary"
+              v-on:click="createPath()"
+              class="textButtonColor mt-3"
+              >Crea percorso
+            </Button>
+          </div>
+          <div v-else>
+            <div class="">
+              <h1 class="postcardpercorsi__title orange">
+                Inserisci il codice del tuo itinerario
+              </h1>
+              <!--<div class="postcardpercorsi__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+              <div class="postcardpercorsi__bar" style="height: 4px"></div>
+              <div class="postcardpercorsi__preview-txt mb-3">
+                Inserisci qua il codice dell'itinerario che hai creato per
+                poterlo visualizzare!
+              </div>
+              <form-group-input
+                class="no-border form-control-lg px-0"
+                placeholder="Codice..."
+                v-model="pathCodeInserted"
+                addon-left-icon="now-ui-icons objects_key-25"
+              >
+              </form-group-input>
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="checkCodeAndGetPath()"
+                class="textButtonColor mt-3"
+                >Inserisci codice
+              </Button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
+          <img
+            class="postcardpercorsi__img"
+            src="https://kyusuf.com/images/password-visibility/thumbnail.png"
+            alt="Image Title"
+          />
+        </a>
+        <div class="postcardpercorsi__text">
+          <h1 class="postcardpercorsi__title orange">
+            Inserisci il codice del tuo itinerario
+          </h1>
+          <div class="postcardpercorsi__bar" style="height: 20px"></div>
+          <div class="postcardpercorsi__preview-txt">
+            Inserisci qua il codice dell'itinerario che hai creato per poterlo
+            visualizzare!
+          </div>
+          <form-group-input
+            class="no-border form-control-lg"
+            placeholder="Codice..."
+            v-model="pathCodeInserted"
+            addon-left-icon="now-ui-icons objects_key-25"
+          >
+          </form-group-input>
+          <Button
+            size="small"
+            type="primary"
+            v-on:click="checkCodeAndGetPath()"
+            class="mx-1 textButtonColor mt-2"
+            >Inserisci codice
+          </Button>
+        </div>
+      </article> -->
+
+      <article class="postcardpercorsi light orange mx-4">
+        <a class="postcardpercorsi__img_link">
+          <img
+            class="postcardpercorsi__img"
+            src="https://picsum.photos/501/500"
+            alt="Image Title"
+          />
+        </a>
+        <div class="postcardpercorsi__text pt-3 mt-4">
+          <div style="height: 100%">
+            <h1 class="postcardpercorsi__title orange">
+              Seleziona un itinerario predefinito
+            </h1>
+            <!--<div class="postcardpercorsi__subtitle small">
+                <time datetime="2020-05-25 12:00:00">
+                  <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                </time>
+              </div>-->
+            <div class="postcardpercorsi__bar" style="height: 8px"></div>
+            <div class="postcardpercorsi__preview-txt">
+              Selezionando questa opzione hai la possibilità di scegliere un
+              itinerario tra i vari itinerari predefiniti già creati
+              appositamente, senza il bisogno di doverlo creare da zero.
+            </div>
+            <Button
+              size="small"
+              type="primary"
+              v-on:click="selectDefaultPath()"
+              class="textButtonColor mt-5"
+              >Seleziona itinerario
+            </Button>
+          </div>
+        </div>
+      </article>
+      <!--
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">Crea un nuovo percorso</h4>
+              <h4 class="title text-center pt-0 mt-0">Crea nuovo percorso</h4>
 
               <n-radio v-model="enabledRadio" label="1">Mattina</n-radio>
               <n-radio v-model="enabledRadio" label="2">Pomeriggio</n-radio>
@@ -39,7 +282,6 @@
                   </div>
                 </div>
 
-                <!--TODO: inserire controllo -> il tempo non deve essere minore di tot-->
                 <div class="row align-items-center pt-3">
                   <div class="col-12 text-center">
                     <b>dalle ore</b><br />
@@ -71,109 +313,62 @@
           </card>
         </div>
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">
+              <div class="row">
+                <div class="col-12 px-0">
+                  <img
+                    class="postcardpercorsi__img px-0"
+                    src="
+                                    https://kyusuf.com/images/password-visibility/thumbnail.png
+                                  "
+                    alt="Image Title"
+                  />
+                </div>
+              </div>
+              <h4 slot="header" class="title text-center pt-0 mt-3">
                 Inserisci il codice del tuo itinerario
               </h4>
-              <p class="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <p>
+                        Inserisci il codice del percorso nel camp sottostante e
+                        premi il tasto "Inserisci"
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-12">
+                      <form-group-input
+                        class="no-border form-control-lg"
+                        placeholder="Codice..."
+                        v-model="pathCodeInserted"
+                        addon-left-icon="now-ui-icons objects_key-25"
+                      >
+                      </form-group-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <Button
                 size="small"
                 type="primary"
-                v-on:click="insertPathCode()"
+                v-on:click="checkCodeAndGetPath()"
                 class="mx-1 textButtonColor"
                 >Inserisci codice
               </Button>
             </div>
           </card>
 
-          <modal
-            :show.sync="modals.insertCodeModal"
-            headerClasses="justify-content-center"
-          >
-            <h4 slot="header" class="title title-up text-center">
-              Inserisci codice
-            </h4>
-            <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <p>
-                      Inserisci il codice del percorso nel camp sottostante e
-                      premi il tasto "Inserisci"
-                    </p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <form-group-input
-                      class="no-border form-control-lg"
-                      placeholder="Codice..."
-                      v-model="pathCodeInserted"
-                      addon-left-icon="now-ui-icons objects_key-25"
-                    >
-                    </form-group-input>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <template slot="footer">
-              <Button
-                size="small"
-                type="danger"
-                v-on:click="modals.insertCodeModal = false"
-                class="mx-1 textButtonColor"
-                >Chiudi
-              </Button>
-
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="checkCodeAndGetPath()"
-                class="mx-1 textButtonColor"
-                >Inserisci
-              </Button>
-            </template>
-          </modal>
-
-          <modal
-              :show.sync="modals.itineraryNotReceivedWithError"
-              headerClasses="justify-content-center"
-              @close="modals.itineraryNotReceivedWithError = false"
-          >
-            <h4 slot="header" class="title title-up text-center">Errore!</h4>
-            <div class="row">
-              <div class="col-12">
-                <div class="row">
-                  <div class="col-12 text-center">
-                    <h6 class="itineraryCode">Si è verificato un errore durante recupero del tuo itinerario.</h6>
-                    <p>
-                      Riprovare più tardi.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <template slot="footer">
-              <Button
-                  size="small"
-                  type="danger"
-                  v-on:click="modals.itineraryNotReceivedWithError = false"
-                  class="mx-1"
-              >Chiudi
-              </Button>
-            </template>
-          </modal>
+          
         </div>
+
         <div class="col-lg-4 col-sm-12">
-          <card style="border-radius: 13px">
+          <card style="border-radius: 13px; height: 35rem" class="pb-4">
             <div>
-              <h4 class="card-title mt-0">
+              <h4 class="title text-center pt-0 mt-0">
                 Seleziona un itinerario predefinito
               </h4>
               <p class="card-text">
@@ -190,7 +385,66 @@
             </div>
           </card>
         </div>
-      </div>
+      </div>-->
+      <modal
+        :show.sync="modals.itineraryNotReceivedWithError"
+        headerClasses="justify-content-center"
+        @close="modals.itineraryNotReceivedWithError = false"
+      >
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Si è verificato un errore durante recupero del tuo itinerario.
+                </h6>
+                <p>Riprovare più tardi.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button
+            size="small"
+            type="danger"
+            v-on:click="modals.itineraryNotReceivedWithError = false"
+            class="mx-1"
+            >Chiudi
+          </Button>
+        </template>
+      </modal>
+
+      <modal
+        :show.sync="modals.itineraryCodeNotValid"
+        headerClasses="justify-content-center"
+        @close="modals.itineraryCodeNotValid = false"
+      >
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Il codice inserito non è valido, si prega di inserire un
+                  codice corretto.
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button
+            size="small"
+            type="danger"
+            v-on:click="modals.itineraryCodeNotValid = false"
+            class="mx-1"
+            >Chiudi
+          </Button>
+        </template>
+      </modal>
     </div>
   </div>
 </template>
@@ -248,12 +502,14 @@ const Common = require("@/Common.vue").default;
 
 export default {
   name: "Percorsi",
+  bodyClass: "percorsi-page",
+
   components: {
     [Radio.name]: Radio,
     [Checkbox.name]: Checkbox,
     Button,
     VueTimepicker,
-    Card,
+    //Card,
     Modal,
     FormGroupInput,
   },
@@ -289,6 +545,8 @@ export default {
         timeout: 0.1,
         maximumAge: 1000,
       },
+
+      isLoadingAree: true,
 
       isLoadingEsperimenti: true,
       isLoadingPOIPivot: true,
@@ -355,11 +613,13 @@ export default {
         //oggetto usato per mostrare i modals
         insertCodeModal: false,
         itineraryNotReceivedWithError: false,
+        itineraryCodeNotValid: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
 
-      enabledRadio: "4",
+      enabledRadio: "1",
+      enabledRadioCreatePathOrInsertCode: "1",
     };
   },
 
@@ -420,12 +680,11 @@ s
   async created() {
     // eseguo la query per gli strumenti solo la prima volta che apro la pagina degli Strumenti
 
+    var self = this;
+
     /**
      * 121 : class id POI_Pivot
      */
-
-    var self = this;
-
     Common.getElemsByClass(this, 121, (res) => {
       store.state.POIpivot = res.body;
       self.isLoadingPOIPivot = false;
@@ -446,58 +705,83 @@ s
         } else {
           /*Il POI non ha nessuna coordinata*/
         }
+
+        poi.visitPOI = false;
+        poi.numberOfActivitiesSelectedInPOI = 0;
+
+        /*chiedo l'immagine dei POI*/
+        Common.getElementImages(this, poi, (mediaList) => {
+          poi.media = mediaList;
+          //self.isLoadingImages = false;
+        });
       });
     });
 
+    // console.log("DOPO AVER CHIESTO I MEDIA dei POI PIVOT");
+    // console.log(store.state.POIpivot);
+
+    // /**
+    //  * 118 : class id Misurazione
+    //  * 130 : class id Attivita
+    //  */
+
+    // store.state.loadedActivitiesInPOIPivot = false;
+
+    // //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
+    // Common.getElemsByClass(this, 130, (res) => {
+    //   store.state.esperimenti = res.body;
+    //   store.commit("setActivitiesInPOIPivot");
+    //   //store.commit("setAvailableActivitiesInRemainingTime");
+
+    //   store.commit("setAllExpertiseLevels");
+    //   //store.commit('setAllSchoolLevels');
+
+    //   console.log(store.state.POIpivot);
+
+    //   console.log("metto a true loadedActivitiesInPOIPivot");
+    //   store.state.loadedActivitiesInPOIPivot = true;
+
+    //   self.activitiesLoaded = true;
+    //   self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
+
+    //   //console.log(store.state.schoolLevels);
+    // });
+
+    // //chiedo i livelli di difficoltà
+    // Common.getElemsByClass(this, 129, (res) => {
+    //   store.state.difficultyLevels = res.body;
+
+    //   //self.activitiesLoaded = true;
+    //   //self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
+
+    //   console.log(store.state.difficultyLevels);
+    // });
+
+    // //chiedo gli interessi
+    // Common.getElemsByClass(this, 128, (res) => {
+    //   store.state.interestsObject = res.body;
+
+    //   //self.activitiesLoaded = true;
+    //   //self.isLoadingEsperimenti = false;
+    //   //console.log( store.state.POIpivot);
+
+    //   console.log(store.state.interestsObject);
+    //   store.commit("setAllinterestOfPOI");
+    // });
+
     /**
-     * 118 : class id Misurazione
-     * 130 : class id Attivita
+     * 132 : class id geo:Area
      */
+    Common.getElemsByClass(this, 132, (res) => {
+      console.log("HO OTTENUTO TUTTE LE AREE");
+      store.state.aree = res.body;
+      self.isLoadingAree = false;
+      //store.commit('setAllinterestOfPOI');
+      //store.commit("setAreaInPOIPivot");
 
-    store.state.loadedActivitiesInPOIPivot = false;
-
-    //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
-    Common.getElemsByClass(this, 130, (res) => {
-      store.state.esperimenti = res.body;
-      store.commit("setActivitiesInPOIPivot");
-      //store.commit("setAvailableActivitiesInRemainingTime");
-
-      store.commit("setAllExpertiseLevels");
-      //store.commit('setAllSchoolLevels');
-
-      console.log(store.state.POIpivot);
-
-      console.log("metto a true loadedActivitiesInPOIPivot");
-      store.state.loadedActivitiesInPOIPivot = true;
-
-      self.activitiesLoaded = true;
-      self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
-
-      //console.log(store.state.schoolLevels);
-    });
-
-    //chiedo i livelli di difficoltà
-    Common.getElemsByClass(this, 129, (res) => {
-      store.state.difficultyLevels = res.body;
-
-      //self.activitiesLoaded = true;
-      //self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
-
-      console.log(store.state.difficultyLevels);
-    });
-
-    //chiedo gli interessi
-    Common.getElemsByClass(this, 128, (res) => {
-      store.state.interestsObject = res.body;
-
-      //self.activitiesLoaded = true;
-      //self.isLoadingEsperimenti = false;
-      //console.log( store.state.POIpivot);
-
-      console.log(store.state.interestsObject);
-      store.commit("setAllinterestOfPOI");
+      console.log(res.body);
     });
 
     //do we support geolocation
@@ -735,7 +1019,7 @@ s
         console.log("hAvailable: " + hAvailable);
         console.log("minAvailable: " + minAvailable);
 
-        if (hAvailable > 0 || minAvailable >= 10) {
+        if (hAvailable > 0 || (hAvailable === 0 && minAvailable >= 10)) {
           this.okTimeAvailable = true;
           //this.currentStep++;
 
@@ -779,47 +1063,53 @@ s
       console.log("checkCodeAndGetPath");
       console.log(this.pathCodeInserted);
 
-      var self = this;
+      if (this.pathCodeInserted.trim().length !== 0) {
+        var self = this;
 
-      $.ajax({
-        url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
-        type: "GET",
-        success: function (result) {
-          //self.geojson = result;
-          console.log("RISPOSTA: ");
-          console.log(result);
+        $.ajax({
+          url: "/geodidalab/api/itinerari/" + this.pathCodeInserted,
+          type: "GET",
+          success: function (result) {
+            //self.geojson = result;
+            console.log("RISPOSTA: ");
+            console.log(result);
 
-          var itinerario = result;
+            var itinerario = result;
 
-          router.push({
-            name: "percorsoselezionato",
-            params: {
-              itinerario,
-              page: "percorsi",
-            },
-          });
-        },
-        error: function (error) {
-          console.log("error: ");
-          console.log(error);
+            router.push({
+              name: "percorsoselezionato",
+              params: {
+                itinerario,
+                page: "percorsi",
+              },
+            });
+          },
+          error: function (error) {
+            console.log("error: ");
+            console.log(error);
 
-          self.modals.itineraryNotReceivedWithError = true;
-        },
-      });
+            self.modals.itineraryNotReceivedWithError = true;
+          },
+        });
 
-      this.modals.insertCodeModal = false;
+        this.modals.insertCodeModal = false;
 
-      //TODO: controllare se il codice esiste ed è corretto -> in caso recuperare il percorso e mostrarlo
+        //TODO: controllare se il codice esiste ed è corretto -> in caso recuperare il percorso e mostrarlo
 
-      this.currentPage = "selectExistingPath";
+        this.currentPage = "selectExistingPath";
 
-      /*
+        /*
       var path = {
         name: "percorso",
         val: 2,
       };
 
        */
+      } else {
+        console.log("il codice inserito contiene solo spazi");
+        //il codice inserito contiene solo spazi
+        this.modals.itineraryCodeNotValid = true;
+      }
     },
 
     //OLD
@@ -1448,5 +1738,11 @@ s
 
 .vue__time-picker input.display-time {
   border-radius: 5px;
+}
+
+.customTitle {
+  font-family: "Sofia Pro";
+  font-style: normal;
+  font-weight: 600;
 }
 </style>

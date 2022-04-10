@@ -8,14 +8,10 @@
       <nav>
         <ul>
           <li>
-            <a href="/">
-              Openalplab
-            </a>
+            <a href="/geodidalab"> Openalplab </a>
           </li>
           <li>
-            <a href="/">
-              About Us
-            </a>
+            <a v-on:click="goToContattiPage()" style="cursor: pointer;"> Contatti </a>
           </li>
         </ul>
       </nav>
@@ -31,19 +27,27 @@
   </footer>
 </template>
 <script>
+import router from "../router";
+
 export default {
   props: {
     backgroundColor: String,
-    type: String
+    type: String,
   },
   data() {
     return {
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
     };
-  }
+  },
+
+  methods: {
+    goToContattiPage() {
+      if (router.history.current.name !== "contatti") {
+        router.push({ path: "/contatti" });
+      }
+    },
+  },
 };
 </script>
 <style>
-
-
 </style>

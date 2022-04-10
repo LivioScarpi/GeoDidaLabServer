@@ -2,6 +2,7 @@
   <div id="collapseDiv">
     <div class="row">
       <div class="col-lg-7 col-sm-12">
+        <!--
         <div class="row align-items-center">
           <div class="col-2 col-lg-1 text-center pr-1">
             <i
@@ -12,8 +13,155 @@
           <div class="col-10 col-lg-11">
             <h5 class="mb-0">{{ itinerario["geo:Titolo_it"][0]["@value"] }}</h5>
           </div>
+        </div>-->
+
+        <div class="row">
+          <div class="col-12">
+            <div id="first-section1">
+              <div class="container">
+                <!--
+                <div class="row">
+                  <div class="triangle"></div>
+                </div>-->
+                <div class="row">
+                  <div class="col-md-12">
+                    <section id="cd-timeline" class="cd-container">
+                      <div
+                        v-for="(poi, poiIndex) in itinerario.poi"
+                        :key="poiIndex"
+                        class="cd-timeline-block"
+                      >
+                        <div class="cd-timeline-img cd-picture">
+                          <img
+                            v-if="
+                              poi['poiName'] === 'Punto di partenza' ||
+                              poi['poiName'] === 'Punto di arrivo'
+                            "
+                            src="../../icons/startPoint.png"
+                          />
+                          <img
+                            v-else
+                            src="../../icons/unselectedPOI.png"
+                            alt="Picture"
+                          />
+                        </div>
+
+                        <div
+                          class="
+                            cd-timeline-content
+                            service-box-content
+                            pt-0
+                            px-0
+                          "
+                        >
+                          <div class="row postcardpercorsi timeline orange">
+                            <div class="col-12 pb-3">
+                              <div
+                                v-if="
+                                  poi['poiName'] !== 'Punto di partenza' &&
+                                  poi['poiName'] !== 'Punto di arrivo'
+                                "
+                                class="row"
+                              >
+                                <!--v-if="poi.image !== undefined"-->
+                                <div class="col-12 px-0">
+                                    <img
+                                    v-if="poi['media'].length > 0"
+                                      :src="
+                                        poi['media'][0]['o:thumbnail_urls'][
+                                          'large'
+                                        ]
+                                      "
+                                      alt="Picture"
+                                      class="
+                                        px-0
+                                        rounded-top
+                                        postcardtimeline__img
+                                      "
+                                      style="width: 100%"
+                                    />
+
+                                    <img
+                                    v-else
+                                      src="@/assets/images/bg3.jpg"
+                                      alt="Picture"
+                                      class="
+                                        px-0
+                                        rounded-top
+                                        postcardtimeline__img
+                                      "
+                                    />
+                                </div>
+                              </div>
+
+                              <div class="row text-center">
+                                <div class="col-12">
+                                  <h2 class="mt-4 mb-0">
+                                    <i class="bi bi-pin-map-fill mr-2"></i
+                                    >{{ poi["geo:Titolo_it"][0]["@value"] }}
+                                  </h2>
+                                  <div
+                                    class="postcardtimeline__bar margin-auto"
+                                    style="display: inline-block"
+                                  ></div>
+
+                                  <h4
+                                    v-if="
+                                      poi['poiName'] !== 'Punto di partenza' &&
+                                      poi['poiName'] !== 'Punto di arrivo' &&
+                                      poi.activitiesOfPOIPivot.length !== 0
+                                    "
+                                    class="mb-3 mt-0"
+                                  >
+                                    Attività
+                                  </h4>
+
+                                  <div
+                                    v-for="(
+                                      activity, activityIndex
+                                    ) in poi.activitiesOfPOIPivot"
+                                    :key="'activityInPOI' + activityIndex"
+                                    class="mx-3"
+                                  >
+                                    <div
+                                      v-if="
+                                        poi['poiName'] !==
+                                          'Punto di partenza' &&
+                                        poi['poiName'] !== 'Punto di arrivo'
+                                      "
+                                      class="mb-3"
+                                    >
+                                      <!--<i
+                                        class="bi bi-clipboard-check-fill mr-2"
+                                      ></i>-->
+                                      <!--{{ poiIndex }}.{{activityIndex}} - -->
+                                      <h6>{{ activity["o:title"] }}</h6>
+                                      <i class="bi bi-clock mr-2"></i>
+                                      {{
+                                        (parseInt(
+                                          activity["durataMillisecondi"]
+                                        ) *
+                                          10) /
+                                        600000
+                                      }}
+                                      minuti
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!--
         <div class="row px-2">
           <div class="col-2 col-lg-1"></div>
           <div class="col-10 col-lg-11 pl-0">
@@ -59,7 +207,7 @@
               >Seleziona itinerario
             </Button>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="col-lg-5 col-sm-12">
         <div class="row">
@@ -81,18 +229,18 @@
                   :lat-lng="marker.marker.getLatLng()"
                   :key="'marker' + index"
                 >
-                            <l-icon
-                              v-if="marker.isStartPoint"
-                              :icon-url="require('../../icons/startPoint.png')"
-                            ></l-icon>
-                            <l-icon
-                              v-else-if="marker.poiHasActivitiesInItinerary"
-                              :icon-url="require('../../icons/selectedPOI.png')"
-                            ></l-icon>
-                            <l-icon
-                              v-else-if="!marker.poiHasActivitiesInItinerary"
-                              :icon-url="require('../../icons/unselectedPOI.png')"
-                            ></l-icon>
+                  <l-icon
+                    v-if="marker.isStartPoint"
+                    :icon-url="require('../../icons/startPoint.png')"
+                  ></l-icon>
+                  <l-icon
+                    v-else-if="marker.poiHasActivitiesInItinerary"
+                    :icon-url="require('../../icons/selectedPOI.png')"
+                  ></l-icon>
+                  <l-icon
+                    v-else-if="!marker.poiHasActivitiesInItinerary"
+                    :icon-url="require('../../icons/unselectedPOI.png')"
+                  ></l-icon>
                   <l-popup :options="anchorOptions">
                     <div class="px-3">
                       <div class="row">
@@ -150,7 +298,7 @@ export default {
     LMarker,
     LPopup,
     LIcon,
-    Button,
+    //Button,
   },
 
   data() {
@@ -203,6 +351,9 @@ export default {
       //Punto di partenza
       this.markersPolylines.push(this.startPoint);
 
+      console.log("ITINERARIO IN INPUT");
+      console.log(this.itinerario);
+
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         var POIlat = poi["marker"]["o-module-mapping:lat"];
         var POIlng = poi["marker"]["o-module-mapping:lng"];
@@ -232,6 +383,9 @@ export default {
         isStartPoint: true,
       });
 
+      console.log("ITINERARIO IN INPUT QUA");
+      console.log(this.itinerario);
+
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
         this.markers.push({
           marker: L.marker([
@@ -246,13 +400,13 @@ export default {
         });
       });
 
-      //marker punto di partenza
+      //marker punto di arrivo
       this.markers.push({
         marker: L.marker(this.endPoint),
         color: "#1585bd",
         strokeColor: "#1b4f88",
         circleColor: "#ffffff",
-        POItitle: "Punto di partenza",
+        POItitle: "Punto di arrivo",
         poiHasActivitiesInItinerary: false,
         isStartPoint: true,
       });

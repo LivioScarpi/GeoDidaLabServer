@@ -263,11 +263,27 @@ export default {
     invalidateMapSizeMethod() {
       console.log("ECOOMI");
 
-      if (this.$refs.mappaSottoItinerario !== undefined) {
-        console.log("SONO QUA");
-        setTimeout(() => {
-          this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
-        }, 700);
+      // if (this.$refs.mappaSottoItinerario !== undefined) {
+      //   console.log("SONO QUA");
+      //   setTimeout(() => {
+      //     this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+      //   }, 700);
+      // }
+
+            //QUESTE ISTRUZIONI SERVONO ANCHE QUA
+      var self = this;
+
+      console.log(window.location.href);
+
+      //escamotage per visualizzare correttamente la mappa
+      for (var i = 0; i < 10; i++) {
+        console.log("ENTRO QUA: " + i);
+        $(".nav-item").on("click", function () {
+          if (window.location.href.includes("sintesiitinerario")) {
+            console.log("simulo un click su mappa!");
+            self.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+          }
+        });
       }
     },
     createMarkerArray() {
@@ -354,6 +370,19 @@ export default {
   },
 
   mounted() {
+    var self = this;
+
+    //escamotage per visualizzare correttamente la mappa
+    for (var i = 0; i < 10; i++) {
+      console.log("ENTRO QUA: " + i);
+      $(".nav-item").on("click", function () {
+        if (window.location.href.includes("sintesiitinerario")) {
+          console.log("simulo un click su mappa!");
+          self.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        }
+      });
+    }
+
     console.log("monto sottoitinerario: ");
     console.log(this.item);
 

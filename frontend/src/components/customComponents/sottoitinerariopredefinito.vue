@@ -139,7 +139,7 @@
           </tab-pane>
 
           <tab-pane>
-            <span slot="label" @click="invalidateMapSizeMethod()">
+            <span slot="label" @click="invalidateMapSizeMethod()" id="Mappa">
               <i class="now-ui-icons travel_info"></i>MAPPA
             </span>
             <div class="text-justify description col-12 text-black">
@@ -277,11 +277,27 @@ export default {
     invalidateMapSizeMethod() {
       console.log("ECOOMI");
 
-      if (this.$refs.mappaSottoItinerario !== undefined) {
-        console.log("SONO QUA");
-        setTimeout(() => {
-          this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
-        }, 700);
+      // if (this.$refs.mappaSottoItinerario !== undefined) {
+      //   console.log("SONO QUA");
+      //   setTimeout(() => {
+      //     this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+      //   }, 700);
+      // }
+
+      //QUESTE ISTRUZIONI SERVONO ANCHE QUA
+      var self = this;
+
+      console.log(window.location.href);
+
+      //escamotage per visualizzare correttamente la mappa
+      for (var i = 0; i < 10; i++) {
+        console.log("ENTRO QUA: " + i);
+        $(".nav-item").on("click", function () {
+          if (window.location.href.includes("sintesiitinerariopredefinito")) {
+            console.log("simulo un click su mappa!");
+            self.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+          }
+        });
       }
     },
     createMarkerArray() {
@@ -355,6 +371,19 @@ export default {
   },
 
   mounted() {
+    var self = this;
+
+    //escamotage per visualizzare correttamente la mappa
+    for (var i = 0; i < 10; i++) {
+      console.log("ENTRO QUA: " + i);
+      $(".nav-item").on("click", function () {
+        if (window.location.href.includes("sintesiitinerariopredefinito")) {
+          console.log("simulo un click su mappa!");
+          self.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        }
+      });
+    }
+
     console.log("monto sottoitinerario: ");
     console.log(this.item);
 

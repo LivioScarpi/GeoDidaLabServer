@@ -28,8 +28,11 @@
         style="display: inline-block"
       ></div>
 
-      <h6 class="card-title text-center">
-        Tempo totale: {{ item.totalTimeMilliseconds }}
+      <h6 class="card-title text-center" v-if="totalTime.hours > 0">
+        Tempo totale: {{ totalTime.hours }} ore e {{ totalTime.minutes }} minuti
+      </h6>
+      <h6 class="card-title text-center" v-else>
+        Tempo totale: {{ totalTime.minutes }} minuti
       </h6>
 
       <div class="row">
@@ -244,6 +247,8 @@ export default {
         radius: 6,
         color: "red",
       },
+
+      totalTime: 0,
     };
   },
   created() {
@@ -322,6 +327,25 @@ export default {
 
       this.markersCreated = true;
     },
+    msToTime(duration) {
+      var milliseconds = Math.floor((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      var timeObject = {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: milliseconds,
+      };
+
+      return timeObject;
+    },
   },
   computed: {
     isLarge() {
@@ -332,6 +356,8 @@ export default {
   mounted() {
     console.log("monto sottoitinerario: ");
     console.log(this.item);
+
+    this.totalTime = this.msToTime(this.item.totalTimeMilliseconds);
 
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();
@@ -373,7 +399,11 @@ export default {
 
   height: 400px;
   border-radius: 10px;
-  background: linear-gradient(70deg, rgba(189, 82, 11, 0.1), transparent 100%);/*#eee;*/
+  background: linear-gradient(
+    70deg,
+    rgba(189, 82, 11, 0.1),
+    transparent 100%
+  ); /*#eee;*/
   transform-origin: center center;
   transition: transform 0.5s;
   position: relative;

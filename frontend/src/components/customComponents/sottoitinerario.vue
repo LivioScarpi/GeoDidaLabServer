@@ -260,7 +260,9 @@ export default {
 
       if (this.$refs.mappaSottoItinerario !== undefined) {
         console.log("SONO QUA");
-        this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        setTimeout(() => {
+          this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        }, 700);
       }
     },
     createMarkerArray() {

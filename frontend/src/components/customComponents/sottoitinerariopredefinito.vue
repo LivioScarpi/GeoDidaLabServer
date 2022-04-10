@@ -80,7 +80,9 @@
                       </h4>
 
                       <div
-                        v-for="(activity, activityIndex) in poi.activitiesOfPOIPivot"
+                        v-for="(
+                          activity, activityIndex
+                        ) in poi.activitiesOfPOIPivot"
                         :key="'activityInPOI' + activityIndex"
                         class="mx-3"
                       >
@@ -264,7 +266,9 @@ export default {
 
       if (this.$refs.mappaSottoItinerario !== undefined) {
         console.log("SONO QUA");
-        this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        setTimeout(() => {
+          this.$refs.mappaSottoItinerario.mapObject.invalidateSize(true);
+        }, 700);
       }
     },
     createMarkerArray() {
@@ -299,7 +303,10 @@ export default {
 
         if (isStartingPoint) {
           this.markers.push({
-            marker: L.marker([poi["marker"]["o-module-mapping:lat"], poi["marker"]["o-module-mapping:lng"]]),
+            marker: L.marker([
+              poi["marker"]["o-module-mapping:lat"],
+              poi["marker"]["o-module-mapping:lng"],
+            ]),
             color: "#1585bd",
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
@@ -309,7 +316,10 @@ export default {
           });
         } else {
           this.markers.push({
-            marker: L.marker([poi["marker"]["o-module-mapping:lat"], poi["marker"]["o-module-mapping:lng"]]),
+            marker: L.marker([
+              poi["marker"]["o-module-mapping:lat"],
+              poi["marker"]["o-module-mapping:lng"],
+            ]),
             color: "#1585bd",
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
@@ -375,7 +385,11 @@ export default {
 
   height: 400px;
   border-radius: 10px;
-  background: linear-gradient(70deg, rgba(189, 82, 11, 0.1), transparent 100%);/*#eee;*/
+  background: linear-gradient(
+    70deg,
+    rgba(189, 82, 11, 0.1),
+    transparent 100%
+  ); /*#eee;*/
   transform-origin: center center;
   transition: transform 0.5s;
   position: relative;

@@ -53,10 +53,23 @@
                 >
                   <div>
                     <img
+                      v-if="poi['media'].length > 0"
+                      :src="poi['media'][0]['o:thumbnail_urls']['large']"
+                      alt="Picture"
+                      style="height: 140px; border-radius: 10px"
+                    />
+
+                    <img
+                      v-else
+                      src="@/assets/images/bg3.jpg"
+                      alt="Picture"
+                      style="height: 140px; border-radius: 10px"
+                    />
+                    <!-- <img
                       style="height: 140px; border-radius: 10px"
                       src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
                       alt="Image Title"
-                    />
+                    /> -->
                     <div
                       style="
                         margin-top: 140px;

@@ -1,7 +1,7 @@
 <template>
   <router-link :to="item.pageDestination">
-    <div class="card zoom text-black" style="width: 18rem; margin: 10px"> <!--TODO: riuovere l'attributo style inline-->
-      <img slot="image" class="card-img-top card-img bg-light" :src="item.imgSrc" alt="Card image cap" >
+    <div class="card zoom text-black" style="width: 18rem; margin: 10px; border-radius: 10px"> <!--TODO: riuovere l'attributo style inline-->
+      <img slot="image" class="card-img-top card-img bg-light" style="border-radius: 10px" :src="item.imgSrc" alt="Card image cap" >
       <div class="card-body">
         <h4 class="card-title"><b>{{ item.title }}</b></h4>
       </div>

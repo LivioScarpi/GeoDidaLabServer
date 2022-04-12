@@ -297,6 +297,9 @@ const store = new Vuex.Store({
                 var poiInPivot = state.POI.filter(poi => poi["geo:appartiene_a_pivot"][0]["display_title"] === pivot["o:title"]);
 
                 Array.prototype.forEach.call(poiInPivot, poi => {
+                    console.log("POI IN PiVOT");
+                    console.log(pivot);
+
                     //recupero i poi che appartengono all'itinerario corrente
                     if(poi.activitiesOfPOIPivot === undefined){
                     poi.activitiesOfPOIPivot = misurazioniInPivot;
@@ -308,6 +311,8 @@ const store = new Vuex.Store({
                     poi.media = pivot.media;
 
                     poi.areaDiAppartenenza = pivot["geo:appartiene_a_area"];
+
+                    poi['geo:Durata'] = pivot['geo:Durata'];
                 })
             })
 

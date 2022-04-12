@@ -95,6 +95,11 @@
                       >
                         Attività
                       </h4>
+                      <div class="mb-3">
+                        <h6>Visita</h6>
+                        <i class="bi bi-clock mr-2"></i>
+                        {{ poi["geo:Durata"][0]["@value"] }} minuti
+                      </div>
 
                       <div
                         v-for="(
@@ -120,9 +125,9 @@
                         </div>
                       </div>
 
-                      <div v-if="poi.activitiesOfPOIPivot.length === 0">
+                      <!-- <div v-if="poi.activitiesOfPOIPivot.length === 0">
                         Nessuna attività da svolgere
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -398,7 +403,8 @@ export default {
       var totalTimeMilliseconds = 0;
       Array.prototype.forEach.call(this.item, (poi) => {
         console.log(poi);
-        totalTimeMilliseconds += (parseInt(poi['geo:Durata'][0]['@value']) * 60000); //converto i minuti da testo e intero e poi li converto in millisecondi
+        totalTimeMilliseconds +=
+          parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //converto i minuti da testo e intero e poi li converto in millisecondi
         Array.prototype.forEach.call(poi.activitiesOfPOIPivot, (activity) => {
           totalTimeMilliseconds += activity.durataMillisecondi;
         });

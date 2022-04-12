@@ -22,7 +22,7 @@
             {{ $store.state.timeAvailable.hour }} ore e
             {{ $store.state.timeAvailable.minutes }} minuti
           </h6> -->
-          {{ this.$store.state.totalTimeSelected }}
+          <!-- {{ this.$store.state.totalTimeSelected }} -->
           <h6>Tempo a disposizione occupato</h6>
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>

@@ -28,8 +28,12 @@
         style="display: inline-block"
       ></div>
 
-      <h6 class="card-title text-center">
-        Tempo totale: {{ item.totalTimeMilliseconds }} DA SISTEMARE
+      <h6 class="card-title text-center" v-if="totalTimeObject.hours > 0">
+        Tempo totale: {{ totalTimeObject.hours }} ore e
+        {{ totalTimeObject.minutes }} minuti
+      </h6>
+      <h6 class="card-title text-center" v-else>
+        Tempo totale: {{ totalTimeObject.minutes }} minuti
       </h6>
 
       <div class="row">
@@ -263,6 +267,8 @@ export default {
         radius: 6,
         color: "red",
       },
+
+      totalTimeObject: {},
     };
   },
   created() {
@@ -363,14 +369,45 @@ export default {
 
       this.markersCreated = true;
     },
+
+    msToTime(duration) {
+      var milliseconds = Math.floor((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      var timeObject = {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: milliseconds,
+      };
+
+      return timeObject;
+    },
   },
   computed: {
     isLarge() {
       return this.windowWidth >= 768;
     },
+    totalTime() {
+      var totalTimeMilliseconds = 0;
+      Array.prototype.forEach.call(this.item, (poi) => {
+        Array.prototype.forEach.call(poi.activitiesOfPOIPivot, (activity) => {
+          totalTimeMilliseconds += activity.durataMillisecondi;
+        });
+      });
+      return totalTimeMilliseconds;
+    },
   },
 
   mounted() {
+    console.log(this.item);
+
     var self = this;
 
     //escamotage per visualizzare correttamente la mappa
@@ -386,6 +423,8 @@ export default {
 
     console.log("monto sottoitinerario: ");
     console.log(this.item);
+
+    this.totalTimeObject = this.msToTime(this.totalTime);
 
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();

@@ -1853,6 +1853,27 @@ export default {
     // });
   },
 
+  mounted() {
+    this.$store.state.totalTimeSelected = 0;
+
+    Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+      console.log("POI");
+      console.log(poi);
+
+      if (poi.visitPOI) {
+        this.$store.state.totalTimeSelected +=
+          parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
+      }
+
+      Array.prototype.forEach.call(poi.mis, (activity) => {
+        if (activity.selected) {
+          this.$store.state.totalTimeSelected +=
+            parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+        }
+      });
+    });
+  },
+
   methods: {
     someMethod(event) {
       // do something to let the user decide

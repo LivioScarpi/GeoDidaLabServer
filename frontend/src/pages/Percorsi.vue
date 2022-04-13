@@ -227,7 +227,7 @@
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-            <div class="postcardpercorsi__bar" style="height: 8px"></div>
+            <div class="postcardpercorsi__bar" style="height: 4px"></div>
             <div class="postcardpercorsi__preview-txt">
               Selezionando questa opzione hai la possibilità di scegliere un
               itinerario tra i vari itinerari predefiniti già creati

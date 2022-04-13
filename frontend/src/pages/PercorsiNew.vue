@@ -1949,6 +1949,9 @@ export default {
 
       this.totalItinerary = [];
 
+      console.log(this.$store.state.totalTimeSelected);
+      console.log(this.$store.state.totalTimeSelected === 0);
+
       if (this.$store.state.totalTimeSelected === 0) {
         //TODO: mostrare modal di avviso
         //alert("Selezionare almeno un'attività oppure scegliere uno degli itinerari predefiniti");
@@ -1997,15 +2000,15 @@ export default {
             );
 
             //se nessun POI ha delle attività selezionate allora è come averle selezionate tutte
-            if (poiWithSelectedActivities.length === 0) {
-              Array.prototype.forEach.call(POIofArea, (poi) => {
-                Array.prototype.forEach.call(poi.mis, (activity) => {
-                  activity.selected = true;
-                });
-              });
+            // if (poiWithSelectedActivities.length === 0) {
+            //   Array.prototype.forEach.call(POIofArea, (poi) => {
+            //     Array.prototype.forEach.call(poi.mis, (activity) => {
+            //       activity.selected = true;
+            //     });
+            //   });
 
-              poiWithSelectedActivities = POIofArea;
-            }
+            //   poiWithSelectedActivities = POIofArea;
+            // }
 
             //TODO: remove me
             //onsole.log("poi con attività selezionate");
@@ -2017,6 +2020,26 @@ export default {
             var currentPlaceID = 0;
 
             var customObjTmp = [];
+
+            Array.prototype.forEach.call(POIofArea, (poi) => {
+              if (poi.visitPOI) {
+                //se l'utente vuole visitare il POI viene aggiunto il Job
+                var visitPOIjob = {
+                  id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+                  description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+                  service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
+                  location: [
+                    poi.marker["o-module-mapping:lng"],
+                    poi.marker["o-module-mapping:lat"],
+                  ],
+                  location_index: currentPlaceID,
+                };
+
+                vroomObject.jobs.push(visitPOIjob);
+
+                jobID += 1;
+              }
+            });
 
             //creo i jobs per l'oggetto VROOM
             Array.prototype.forEach.call(poiWithSelectedActivities, (poi) => {
@@ -2060,23 +2083,23 @@ export default {
 
               //TODO: sistemare poiIDObject
 
-              if (poi.visitPOI) {
-                //se l'utente vuole visitare il POI viene aggiunto il Job
-                var visitPOIjob = {
-                  id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-                  description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
-                  service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
-                  location: [
-                    poi.marker["o-module-mapping:lng"],
-                    poi.marker["o-module-mapping:lat"],
-                  ],
-                  location_index: currentPlaceID,
-                };
+              // if (poi.visitPOI) {
+              //   //se l'utente vuole visitare il POI viene aggiunto il Job
+              //   var visitPOIjob = {
+              //     id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
+              //     description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+              //     service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
+              //     location: [
+              //       poi.marker["o-module-mapping:lng"],
+              //       poi.marker["o-module-mapping:lat"],
+              //     ],
+              //     location_index: currentPlaceID,
+              //   };
 
-                vroomObject.jobs.push(visitPOIjob);
+              //   vroomObject.jobs.push(visitPOIjob);
 
-                jobID += 1;
-              }
+              //   jobID += 1;
+              // }
 
               Array.prototype.forEach.call(activitiesSelected, (activity) => {
                 var job = {
@@ -2110,10 +2133,12 @@ export default {
             console.log("OGGETTO CON GLI ID");
             console.log(JSON.stringify(customObjTmp));
 
-            var vroomItineraryResponse = this.makeQueryVROOM(
-              vroomObject,
-              area["o:title"]
-            );
+            if (vroomObject.jobs.length !== 0) {
+              var vroomItineraryResponse = this.makeQueryVROOM(
+                vroomObject,
+                area["o:title"]
+              );
+            }
 
             //totalItinerary.push(vroomItineraryResponse);
           }
@@ -2954,15 +2979,17 @@ export default {
       ];
       console.log(numbersOfAreasWithSomethingSelected);
 
-      if (numbersOfAreasWithSomethingSelected.length === newValue.length) {
-        console.log("VADO ALLA PROSSIMA PAGINA!");
+      if (numbersOfAreasWithSomethingSelected.length !== 0) {
+        if (numbersOfAreasWithSomethingSelected.length === newValue.length) {
+          console.log("VADO ALLA PROSSIMA PAGINA!");
 
-        router.push({
-          name: "sintesiitinerario",
-        });
-      } else {
-        //alert("Si è verificato un errore");
-        console.log("ERRORE NELLA LUNGHEZZA");
+          router.push({
+            name: "sintesiitinerario",
+          });
+        } else {
+          //alert("Si è verificato un errore");
+          console.log("ERRORE NELLA LUNGHEZZA");
+        }
       }
     },
   },

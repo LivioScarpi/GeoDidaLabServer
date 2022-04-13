@@ -7,13 +7,13 @@
       isLarge
         ? {
             'max-width': '28rem',
-            height: '42rem',
-            'max-height': '43rem',
+            height: '46rem',
+            'max-height': '47rem',
             'border-radius': '10px',
           }
         : {
             'max-width': '28rem',
-            'max-sheight': '45rem',
+            'max-height': '45rem',
             'border-radius': '10px',
           },
     ]"
@@ -47,6 +47,7 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
+            <h6 class="text-center mb-4">Scorri verso destra per esplorare il tuo sottoitinerario</h6>
             <div class="slider">
               <div class="slides">
                 <div
@@ -112,13 +113,13 @@
                 <div id="slide-5">5</div> -->
               </div>
 
-              <a
+              <!-- <a
                 class="mt-2"
                 v-for="(poi, poiIndex) in item.poi"
                 :href="'#' + poi['poiName'] + 'slide-' + poiIndex"
                 :key="poiIndex"
                 >{{ poiIndex + 1 }}</a
-              >
+              > -->
             </div>
           </tab-pane>
 

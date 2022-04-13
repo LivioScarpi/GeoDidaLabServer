@@ -4,6 +4,13 @@
       <div class="container">
         <h2 class="title pt-0">SINTESI ITINERARIO</h2>
         <h5 class="description mb-3">Sintesi dell'itinerario creato.</h5>
+        <h5 class="card-title text-center" v-if="totalTimeObject.hours > 0">
+          Tempo totale: {{ totalTimeObject.hours }} ore e
+          {{ totalTimeObject.minutes }} minuti
+        </h5>
+        <h5 class="card-title text-center" v-else>
+          Tempo totale: {{ totalTimeObject.minutes }} minuti
+        </h5>
       </div>
       <div v-if="itineraryCode === null" class="row mb-0 text-center">
         <h6 class="px-5 mx-lg-5">
@@ -62,8 +69,10 @@
 import { Tabs, TabPane } from "@/components";
 import store from "../store";
 import $ from "jquery";
-import sottoitinerario from '../components/customComponents/sottoitinerario.vue';
+import sottoitinerario from "../components/customComponents/sottoitinerario.vue";
 import { Button } from "element-ui";
+import { costMatrixAreas } from "../utils/costMatricesAreas";
+
 const Common = require("@/Common.vue").default;
 
 export default {
@@ -79,18 +88,19 @@ export default {
       isLoadingVideos: true,
       allLoaded: true,
       itineraryCode: null,
+      totalTimeObject: {},
     };
   },
 
   mounted() {
     console.log("Sotto Itinerari: ");
     console.log(store.state.sottoitinerari);
+    var self = this;
+    this.totalTimeObject = this.msToTime(this.totalTime);
   },
 
-  created() {
+  created() {},
 
-  },
-  
   methods: {
     saveItinerary() {
       console.log("Save itinerary");
@@ -100,7 +110,7 @@ export default {
 
       var self = this;
 
-self.sendEmail();
+      self.sendEmail();
 
       //TODO: salvare l'itinerario sul DB
 
@@ -145,11 +155,112 @@ self.sendEmail();
       mail.click();
     },
 
+    msToTime(duration) {
+      var milliseconds = Math.floor((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      var timeObject = {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: milliseconds,
+      };
+
+      return timeObject;
+    },
     //ui-1_simple-remove
-  
   },
 
-  computed: {},
+  computed: {
+    totalTime() {
+      var areas = [];
+      var time = 0;
+
+      //Recupero le aree a cui appartengono i sottoitinerari
+      Array.prototype.forEach.call(
+        this.$store.state.sottoitinerari,
+        (sottoitinerario) => {
+          var areaName = sottoitinerario.name.substring(11);
+          areas.push(areaName);
+        }
+      );
+
+      console.log(areas);
+
+      //Sommo i tempi relativi ai sottoitinerari
+      Array.prototype.forEach.call(
+        this.$store.state.sottoitinerari,
+        (sottoitinerario) => {
+          console.log(sottoitinerario);
+          time += sottoitinerario.totalTimeMilliseconds;
+        }
+      );
+
+      //Sommo i tempi di tragitto da un'area all'altra
+      for (var i = 0; i < areas.length - 1; i++) {
+        var fromArea = areas[i];
+        var toArea = areas[i + 1];
+
+        var fromAreaIndex = -1;
+        var toAreaIndex = -1;
+
+        switch (fromArea) {
+          case "Torino":
+            fromAreaIndex = 0;
+            break;
+          case "Ivrea":
+            fromAreaIndex = 1;
+            break;
+          case "GeoDidaLab - Ivrea":
+            fromAreaIndex = 2;
+            break;
+          case "Anfiteatro Morenico d'Ivrea":
+            fromAreaIndex = 3;
+            break;
+          default:
+            fromAreaIndex = -1;
+        }
+
+        switch (toArea) {
+          case "Torino":
+            toAreaIndex = 0;
+            break;
+          case "Ivrea":
+            toAreaIndex = 1;
+            break;
+          case "GeoDidaLab - Ivrea":
+            toAreaIndex = 2;
+            break;
+          case "Anfiteatro Morenico d'Ivrea":
+            toAreaIndex = 3;
+            break;
+          default:
+            toAreaIndex = -1;
+        }
+
+        console.log("FROM AREA: " + fromArea + "; TO AREA: " + toArea);
+        console.log("FROM AREA INDEX: " + fromAreaIndex + "; TO AREA INDEX: " + toAreaIndex);
+        console.log(costMatrixAreas[fromAreaIndex][toAreaIndex]);
+        console.log(costMatrixAreas);
+
+
+        time += (costMatrixAreas[fromAreaIndex][toAreaIndex] * 60000); //nella matrice i valori sono espressi in minuti!
+      }
+
+      //TODO: aggiungere il tempo corretto per andare da una zona all'altra!!!
+      //time += 10000;
+
+      console.log(time);
+
+      return time;
+    },
+  },
 
   watch: {},
 };

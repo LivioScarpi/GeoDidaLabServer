@@ -4,14 +4,30 @@
       v-if="currentStep === 0"
       class="centerTimePicker text-center pt-4 px-lg-5"
     >
-      <article class="postcardpercorsi light orange mx-4">
-        <a class="postcardpercorsi__img_link">
-          <img
-            class="postcardpercorsi__img"
-            src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
-            alt="Image Title"
-          />
-        </a>
+      <div class="postcardpercorsi light orange mx-4">
+        <div
+          :style="[
+            isLarge
+              ? {
+                  overflow: 'hidden',
+                  'border-radius': '10px 0px 0px 10px',
+                }
+              : {
+                  overflow: 'hidden',
+                  'border-radius': '10px 10px 0px 0px',
+                  width: '100%',
+                },
+          ]"
+        >
+          <a class="postcardpercorsi__img_link">
+            <img
+              class="postcardpercorsi__img"
+              style="height: 100%"
+              src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
+              alt="Image Title"
+            />
+          </a>
+        </div>
 
         <div class="postcardpercorsi__text pt-3">
           <h4 class="orange my-1" style="text-align: left">
@@ -173,7 +189,7 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
       <!-- <article class="postcardpercorsi light orange mx-4">
         <a class="postcardpercorsi__img_link">
@@ -209,14 +225,30 @@
         </div>
       </article> -->
 
-      <article class="postcardpercorsi light orange mx-4">
-        <a class="postcardpercorsi__img_link">
-          <img
-            class="postcardpercorsi__img"
-            src="https://picsum.photos/501/500"
-            alt="Image Title"
-          />
-        </a>
+      <div class="postcardpercorsi light orange mx-4">
+        <div
+          :style="[
+            isLarge
+              ? {
+                  overflow: 'hidden',
+                  'border-radius': '0px 10px 10px 0px',
+                }
+              : {
+                  overflow: 'hidden',
+                  'border-radius': '10px 10px 0px 0px',
+                  width: '100%',
+                  'max-height': '250px',
+                },
+          ]"
+        >
+          <a class="postcardpercorsi__img_link">
+            <img
+              class="postcardpercorsi__img"
+              src="https://picsum.photos/501/500"
+              alt="Image Title"
+            />
+          </a>
+        </div>
         <div class="postcardpercorsi__text pt-3 mt-4">
           <div style="height: 100%">
             <h1 class="postcardpercorsi__title orange">
@@ -242,7 +274,7 @@
             </Button>
           </div>
         </div>
-      </article>
+      </div>
       <!--
       <div class="row px-4">
         <div class="col-lg-4 col-sm-12">
@@ -620,11 +652,17 @@ export default {
 
       enabledRadio: "1",
       enabledRadioCreatePathOrInsertCode: "1",
+
+      windowWidth: 0,
     };
   },
 
   computed: {
     ...Vuex.mapGetters([]),
+
+    isLarge() {
+      return this.windowWidth >= 768;
+    },
 
     allActivitiesAvailable: function () {
       console.log("COMPUTED allActivitiesAvailable");
@@ -681,6 +719,12 @@ s
     // eseguo la query per gli strumenti solo la prima volta che apro la pagina degli Strumenti
 
     var self = this;
+
+    this.windowWidth = $(window).width();
+
+    $(window).resize(() => {
+      this.windowWidth = $(window).width();
+    });
 
     /**
      * 121 : class id POI_Pivot

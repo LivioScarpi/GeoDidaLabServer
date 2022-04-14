@@ -46,6 +46,7 @@
         </div>
         <div v-else class="px-2 px-lg-5">
           <article
+            style="overflow: hidden"
             class="postcardpercorsi light orange mx-4"
             v-for="(itinerario, index) in itinerari"
             :key="'itinerario' + index"

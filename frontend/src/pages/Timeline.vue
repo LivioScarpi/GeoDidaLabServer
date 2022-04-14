@@ -83,7 +83,7 @@
                           "
                         >
                           <div class="row postcardpercorsi                             timeline
-                            orange">
+                            orange" style="overflow: hidden">
                             <div class="col-12">
                               <div v-if="event.image !== null" class="row mb-4">
                                 <div class="col-12 px-0">

@@ -26,33 +26,7 @@
             </h4>
           </div>
         </div>
-        <!--
-        <div class="row">
-          <div class="col-12">
-            <div v-if="timelinesReady" class="timeline">
-              <Timeline
-                :timeline-items="this.correctTimelines[0]"
-                :message-when-no-items="messageWhenNoItems"
-                :unique-year="true"
-                :show-day-and-month="false"
-                order="desc"
-              />
-            </div>
-            <div v-else class="loader">
-              <svg class="circular">
-                <circle
-                  class="path"
-                  cx="50"
-                  cy="50"
-                  r="20"
-                  fill="none"
-                  stroke-width="5"
-                  stroke-miterlimit="10"
-                ></circle>
-              </svg>
-            </div>
-          </div>
-        </div>-->
+
         <div class="row"  style="z-index: 299;">
           <div class="col-12">
             <div id="first-section1">
@@ -236,56 +210,6 @@ export default {
 
   computed: {
     ...Vuex.mapGetters([]),
-
-    /*correctTimelines() {
-      var timelines = [...Array(store.getters.timelinesWithEvents.length)].map(x => 0);
-
-      Array.prototype.forEach.call(store.getters.timelinesWithEvents, (i, index) => {
-
-        var timeline = [];
-
-        Array.prototype.forEach.call(i.events, event => {
-
-          console.log("EVENTO CORRENTE:");
-          console.log(event);
-
-          const [day, month, year] = event["geo:Data"][0]["@value"].split('/');
-          var description;
-
-          console.log("MEDIA IMAGES");
-          console.log(event.media);
-
-          if (event["media"].length > 0) {
-            var imageUrl = event["media"][0]['o:thumbnail_urls']['large'];
-            console.log(imageUrl);
-            description = `<img src="` + imageUrl + `"/>` + event["geo:Descrizione_estesa_it"][0]["@value"]
-          } else {
-            console.log("NON CE NE SONO");
-
-            description = event["geo:Descrizione_estesa_it"][0]["@value"]
-          }
-
-          var e = {
-            from: new Date(year, month, day),
-            title: event["geo:Titolo_it"][0]["@value"],
-            showDayAndMonth: true,
-            description: description,
-          };
-
-          timeline.push(e);
-        });
-
-        timelines[index] = timeline;
-      })
-
-      this.setTimelinesReady();
-
-      console.log(timelines);
-
-      return timelines;
-    }
-
-     */
   },
 
   methods: {
@@ -296,10 +220,6 @@ export default {
         var timeline = [];
 
         Array.prototype.forEach.call(i.events, (event) => {
-          //TODO: remove me
-          //console.log("EVENTO CORRENTE:");
-          //console.log(event);
-
           var date;
 
           if (event["geo:Data"][0]["@value"].length === 4) {
@@ -310,25 +230,7 @@ export default {
             date = new Date(year, month, day);
           }
 
-          var description;
-
-          //TODO: remove me
-          //console.log("MEDIA IMAGES");
-          //console.log(event.media);
-
-          /*
-          if (event["media"] !== undefined && event["media"].length > 0) {
-            var imageUrl = event["media"][0]["o:thumbnail_urls"]["large"];
-            description =
-              `<img src="` +
-              imageUrl +
-              `"/>` +
-              event["dcterms:description"][0]["@value"];
-          } else {
-            description = event["dcterms:description"][0]["@value"];
-          }*/
-
-          description = event["dcterms:description"][0]["@value"];
+          var description = event["dcterms:description"][0]["@value"];
 
           var e = {
             from: date,
@@ -391,5 +293,4 @@ export default {
   visibility: hidden;
 }
 
-/*TODO: da qua*/
 </style>

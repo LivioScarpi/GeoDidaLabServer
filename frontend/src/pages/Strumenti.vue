@@ -94,56 +94,7 @@ export default {
     Common.getElemsByClass(this, 123, (res) => {
       store.state.strumenti = res.body;
       self.allLoaded = true;
-
-      /*
-      Array.prototype.forEach.call(store.state.strumenti, i => {
-        i.media = [];
-
-        Common.getElementImages(this, i, mediaList => {
-          i.media = mediaList;
-
-
-        });
-      })
-
-       */
     });
-
-    /*
-    if (store.state.strumenti.length === 0) {
-      console.log("faccio la query");
-      $.get('https://dev.geodidalab.unito.it/api/items?fulltext_search=&property[0][type]=eq&resource_class_id[]=123',
-          {}, (data) => {
-            store.state.strumenti = data;
-            console.log(store.state.strumenti);
-
-            Array.prototype.forEach.call(store.state.strumenti, i => {
-              console.log(i["o:media"][0]["@id"]);
-
-              i.media = [];
-
-              Array.prototype.forEach.call(i["o:media"], media => {
-
-                $.get(media["@id"],
-                    {}, (data) => {
-                      i.media.push(data);
-                      console.log(i.media);
-
-                    }).always(() => {
-                });
-
-
-              })
-
-            })
-
-          }).always(() => {
-      });
-
-
-    }
-
-     */
   },
 
   mounted() {},

@@ -1,6 +1,7 @@
 <template>
   <div>
     <div
+      v-if="currentStep === 0"
       class="centerTimePicker text-center pt-4 px-lg-5"
     >
       <div class="postcardpercorsi light orange mx-4">
@@ -291,6 +292,7 @@ import $ from "jquery";
 
 import "leaflet/dist/leaflet.css";
 import { Button } from "element-ui";
+import L from "leaflet";
 
 import { Checkbox, Radio, Modal, FormGroupInput } from "../components";
 
@@ -304,6 +306,13 @@ import store from "../store";
 import Vuex from "vuex";
 import router from "../router";
 
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
 
 const { Geolocation } = Plugins;
 
@@ -324,6 +333,16 @@ export default {
 
   data() {
     return {
+
+      errorGettingPosition: false,
+
+      idNavigator: 0,
+      options: {
+        enableHighAccuracy: false,
+        timeout: 0.1,
+        maximumAge: 1000,
+      },
+
       isLoadingAree: true,
 
       isLoadingEsperimenti: true,

@@ -37,9 +37,7 @@
 <script>
 //width: small < 768 px
 
-import { Tabs, TabPane } from "@/components";
 import strumento from "../components/customComponents/strumento";
-import strumentoMobile from "../components/customComponents/strumentoMobile";
 import $ from "jquery";
 import store from "../store";
 
@@ -50,7 +48,6 @@ export default {
   bodyClass: "strumenti-esperimenti-page",
   components: {
     strumento,
-    //strumentoMobile
   },
   data() {
     return {

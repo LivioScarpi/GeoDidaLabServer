@@ -1,37 +1,9 @@
 <template>
-  <!--
-  <div v-if="!isLoadingImages">
-    <div class="col-10 ml-auto mr-auto">
-      <div class="row justify-content-center align-items-center">
-        <div class="col-6">
-          <div>
-            <h3 class="title text-left">{{ item["o:title"] }}</h3>
-            <h5 class="description text-left">
-              <b>{{ item["dcterms:description"][0]["@value"] }}</b>
-            </h5>
-          </div>
-        </div>
-        <div class="col-6">
-          <img :src="item['media'][0]['o:thumbnail_urls']['large']" alt="" class="img-raised img_strumento"/>
-        </div>
-      </div>
-    </div>
-  </div>-->
-
   <card
     v-if="!isLoadingImages"
     style="width: 28rem; height: 33rem; border-radius: 10px"
     class="mx-2 postcardattivita attivita orange"
   >
-    <!--
-    <img
-      slot="image"
-      class="img"
-      :src="item['media'][0]['o:thumbnail_urls']['large']"
-      alt="Card image cap"
-      style="border-radius: 10px"
-    />-->
-
     <swiper
       ref="mySwiperStrumenti"
       class="swiper"

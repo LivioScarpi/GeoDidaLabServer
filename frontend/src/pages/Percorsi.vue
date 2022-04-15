@@ -1,7 +1,6 @@
 <template>
   <div>
     <div
-      v-if="currentStep === 0"
       class="centerTimePicker text-center pt-4 px-lg-5"
     >
       <div class="postcardpercorsi light orange mx-4">

@@ -1351,6 +1351,36 @@
         </Button>
       </template>
     </modal>
+
+    <modal
+      :show.sync="modals.errorGettingSottoitinerario"
+      headerClasses="justify-content-center"
+      @close="modals.errorGettingSottoitinerario = false"
+    >
+      <h4 slot="header" class="title title-up text-center">Errore!</h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h6 class="itineraryCode">
+                Si è verificato un errore nella creazione del tuo itinerario,
+                riprova più tardi.
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button
+          size="small"
+          type="danger"
+          v-on:click="modals.errorGettingSottoitinerario = false"
+          class="mx-1"
+          >Chiudi
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -1528,6 +1558,7 @@ export default {
         //oggetto usato per mostrare i modals
         insertCodeModal: false,
         featureDevelopment: false,
+        errorGettingSottoitinerario: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -1729,6 +1760,44 @@ export default {
         : false;
 
     this.startInterests = false;
+
+    //codice nell'altro mounted
+
+    this.$store.state.totalTimeSelected = 0;
+
+    this.$store.state.areasWithSomethingSelected = [];
+
+    Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+      console.log("POI");
+      console.log(poi);
+
+      if (poi.visitPOI) {
+        this.$store.state.totalTimeSelected +=
+          parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
+
+        console.log(
+          "PUSHO: " + poi["geo:appartiene_a_area"][0]["display_title"]
+        );
+        this.$store.state.areasWithSomethingSelected.push(
+          poi["geo:appartiene_a_area"][0]["display_title"]
+        );
+      }
+
+      Array.prototype.forEach.call(poi.mis, (activity) => {
+        if (activity.selected) {
+          this.$store.state.totalTimeSelected +=
+            parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+          console.log(
+            "PUSHO PER ATTIVITA: " +
+              poi["geo:appartiene_a_area"][0]["display_title"]
+          );
+
+          this.$store.state.areasWithSomethingSelected.push(
+            poi["geo:appartiene_a_area"][0]["display_title"]
+          );
+        }
+      });
+    });
   },
 
   async created() {
@@ -1851,27 +1920,6 @@ export default {
 
     //   console.log(res.body);
     // });
-  },
-
-  mounted() {
-    this.$store.state.totalTimeSelected = 0;
-
-    Array.prototype.forEach.call(this.filteredPOI, (poi) => {
-      console.log("POI");
-      console.log(poi);
-
-      if (poi.visitPOI) {
-        this.$store.state.totalTimeSelected +=
-          parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
-      }
-
-      Array.prototype.forEach.call(poi.mis, (activity) => {
-        if (activity.selected) {
-          this.$store.state.totalTimeSelected +=
-            parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
-        }
-      });
-    });
   },
 
   methods: {
@@ -2151,7 +2199,7 @@ export default {
       //console.log(vroomItineraryResponse);
 
       //TODO: remove me
-      this.modals.featureDevelopment = true;
+      //this.modals.featureDevelopment = true;
 
       //var itineraryCorrectObject = this.createItineraryObject(vroomItineraryResponse);
       /*
@@ -2230,6 +2278,8 @@ export default {
       for (var i = 0; i < this.filteredPOI.length; i++) {
         this.$set(this.filteredPOI, i, tmpFilteredPOI[i]);
       }
+
+      console.log(this.filteredPOI);
     },
 
     changeSelectionVisitPOI(poiName) {
@@ -2690,16 +2740,23 @@ export default {
         data: JSON.stringify(vroomObject),
         url: "https://vroom.geodidalab.unito.it/",
         contentType: "application/json",
-      }).done(function (res) {
-        console.log("res", res);
-        console.log("JSON res", JSON.stringify(res));
+      })
+        .done(function (res) {
+          console.log("res", res);
+          console.log("JSON res", JSON.stringify(res));
 
-        itinerary = self.createItineraryObject(res, areaName);
-        //return itinerary;
+          itinerary = self.createItineraryObject(res, areaName);
+          //return itinerary;
 
-        //return res;
-        // Do something with the result :)
-      });
+          //return res;
+          // Do something with the result :)
+        })
+        .fail(function () {
+          self.modals.errorGettingSottoitinerario = true;
+        })
+        .always(function () {
+          //alert("complete");
+        });
     },
 
     createItineraryObject(vroomResponseObject, areaName) {

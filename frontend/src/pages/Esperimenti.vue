@@ -16,12 +16,6 @@
               :item="item"
               :key="item.name"
             ></esperimento>
-            <esperimento
-              class="align-top"
-              v-for="item in this.$store.state.esperimenti"
-              :item="item"
-              :key="item.name"
-            ></esperimento>
           </div>
         </div>
       </div>

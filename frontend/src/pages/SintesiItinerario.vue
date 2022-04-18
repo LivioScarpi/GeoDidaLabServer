@@ -14,8 +14,7 @@
          <h6 class="card-title text-center">
           Il tempo totale include anche gli spostamenti in auto da un'area all'altra.
         </h6>
-      </div>
-      <div v-if="itineraryCode === null" class="row mb-0 text-center">
+        <div v-if="itineraryCode === null" class="row mb-0 text-center">
         <h6 class="px-5 mx-lg-5">
           Puoi prenotare il tuo itinerario premendo il bottone "Prenota
           itinerario". Ti verrà fornito il codice identificativo del tuo
@@ -23,6 +22,8 @@
           l'itinerario.
         </h6>
       </div>
+      </div>
+      
 
       <div v-if="itineraryCode === null" class="row mt-3 text-center">
         <div class="col-12">

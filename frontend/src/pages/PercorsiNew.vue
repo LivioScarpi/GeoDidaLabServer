@@ -1220,7 +1220,7 @@
                         <l-map
                           style="height: 500px; border-radius: 10px"
                           :zoom="zoom"
-                          :center="center"
+                          :center="centerMap"
                         >
                           <l-tile-layer
                             :url="url"
@@ -1463,7 +1463,7 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 16,
+      zoom: 11,
       center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
@@ -2932,6 +2932,26 @@ export default {
   },
 
   computed: {
+    centerMap() {
+      var sumLat = 0;
+      var sumLng = 0;
+
+      Array.prototype.forEach.call(this.markers, (marker) => {
+        console.log(marker.marker["_latlng"]);
+
+        sumLat += marker.marker["_latlng"].lat;
+        sumLng += marker.marker["_latlng"].lng;
+      });
+
+      var middleLat = sumLat / this.markers.length;
+      var middleLng = sumLng / this.markers.length;
+
+      if (isNaN(middleLat) || isNaN(middleLng)) {
+        return [45.47724690648075, 7.888264286334166];
+      } else {
+        return [middleLat, middleLng];
+      }
+    },
     percent() {
       //totalTimeSelected : x = millisecondiTotali : 100
       var perc =

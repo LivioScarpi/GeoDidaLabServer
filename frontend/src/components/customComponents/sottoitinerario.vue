@@ -47,7 +47,9 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
-            <h6 class="text-center mb-4">Scorri verso destra per esplorare il tuo sottoitinerario</h6>
+            <h6 class="text-center mb-4">
+              Scorri verso destra per esplorare il percorso
+            </h6>
             <div class="slider">
               <div class="slides">
                 <div
@@ -127,6 +129,10 @@
             <span slot="label" @click="invalidateMapSizeMethod()">
               <i class="now-ui-icons travel_info"></i>MAPPA
             </span>
+            <h6 class="text-center mb-4">
+              Esplora la mappa per vedere i punti del percorso
+            </h6>
+
             <div class="text-justify description col-12 text-black">
               <l-map
                 style="width: 370px; height: 400px; border-radius: 10px"
@@ -271,7 +277,7 @@ export default {
       //   }, 700);
       // }
 
-            //QUESTE ISTRUZIONI SERVONO ANCHE QUA
+      //QUESTE ISTRUZIONI SERVONO ANCHE QUA
       var self = this;
 
       console.log(window.location.href);

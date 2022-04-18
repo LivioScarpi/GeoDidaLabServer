@@ -59,7 +59,7 @@
 
             <div class="col-md-10 ml-auto mr-auto">
               <div class="row collections">
-                <div class="col-md-6">
+                <div class="col-md-6 text-right">
                   <img
                     :src="require('../assets/images/geodidalab/lago/lago1.jpg')"
                     class="img-raised"

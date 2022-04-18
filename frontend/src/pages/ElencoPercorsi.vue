@@ -103,14 +103,17 @@
                   </template>
                 </template>
               </div>
+              <div class="text-center">
               <Button
                 size="small"
                 type="primary"
                 v-on:click="goToItinerarioPredefinitoPage(index)"
                 class=" mt-5"
-                style="width: 10%"
+                style="width: fit-content;"
                 >Esplora itinerario
               </Button>
+              </div>
+              
             </div>
           </article>
           <!-- <collapse>

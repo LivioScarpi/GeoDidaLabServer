@@ -4,26 +4,51 @@
       <div class="container">
         <h2 class="title pt-0">SINTESI ITINERARIO</h2>
         <h5 class="description mb-3">Sintesi dell'itinerario creato.</h5>
-        <h5 class="card-title text-center" v-if="totalTimeObject.hours > 0">
-          Tempo totale: {{ totalTimeObject.hours }} ore e
-          {{ totalTimeObject.minutes }} minuti
+        <h5
+          class="card-title text-center"
+          v-if="
+            parseInt(totalTimeObject.hours) === 1 &&
+            parseInt(totalTimeObject.minutes) === 0
+          "
+        >
+          Tempo totale: {{ totalTimeObject.hours }} ora
+        </h5>
+        <h5
+          class="card-title text-center"
+          v-else-if="parseInt(totalTimeObject.hours) === 1"
+        >
+          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ora e
+          {{ parseInt(totalTimeObject.minutes) }} minuti
+        </h5>
+        <h5
+          class="card-title text-center"
+          v-else-if="parseInt(totalTimeObject.hours) > 0 && parseInt(totalTimeObject.minutes) === 0"
+        >
+          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ore
+        </h5>
+        <h5
+          class="card-title text-center"
+          v-else-if="parseInt(totalTimeObject.hours) > 0"
+        >
+          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ore e
+          {{ parseInt(totalTimeObject.minutes) }} minuti
         </h5>
         <h5 class="card-title text-center" v-else>
-          Tempo totale: {{ totalTimeObject.minutes }} minuti
+          Tempo totale: {{ parseInt(totalTimeObject.minutes) }} minuti
         </h5>
-         <h6 class="card-title text-center">
-          Il tempo totale include anche gli spostamenti in auto da un'area all'altra.
+        <h6 class="card-title text-center">
+          Il tempo totale include anche gli spostamenti in auto da un'area
+          all'altra.
         </h6>
         <div v-if="itineraryCode === null" class="row mb-0 text-center">
-        <h6 class="px-5 mx-lg-5">
-          Puoi prenotare il tuo itinerario premendo il bottone "Prenota
-          itinerario". Ti verrà fornito il codice identificativo del tuo
-          itinerario, salvalo e conservalo per poter poi consultare nuovamente
-          l'itinerario.
-        </h6>
+          <h6 class="px-5 mx-lg-5">
+            Puoi prenotare il tuo itinerario premendo il bottone "Prenota
+            itinerario". Ti verrà fornito il codice identificativo del tuo
+            itinerario, salvalo e conservalo per poter poi consultare nuovamente
+            l'itinerario.
+          </h6>
+        </div>
       </div>
-      </div>
-      
 
       <div v-if="itineraryCode === null" class="row mt-3 text-center">
         <div class="col-12">
@@ -249,12 +274,16 @@ export default {
         }
 
         console.log("FROM AREA: " + fromArea + "; TO AREA: " + toArea);
-        console.log("FROM AREA INDEX: " + fromAreaIndex + "; TO AREA INDEX: " + toAreaIndex);
+        console.log(
+          "FROM AREA INDEX: " +
+            fromAreaIndex +
+            "; TO AREA INDEX: " +
+            toAreaIndex
+        );
         console.log(costMatrixAreas[fromAreaIndex][toAreaIndex]);
         console.log(costMatrixAreas);
 
-
-        time += (costMatrixAreas[fromAreaIndex][toAreaIndex] * 60000); //nella matrice i valori sono espressi in minuti!
+        time += costMatrixAreas[fromAreaIndex][toAreaIndex] * 60000; //nella matrice i valori sono espressi in minuti!
       }
 
       //TODO: aggiungere il tempo corretto per andare da una zona all'altra!!!

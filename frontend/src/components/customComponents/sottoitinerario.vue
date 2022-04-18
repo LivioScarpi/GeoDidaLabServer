@@ -28,8 +28,35 @@
         style="display: inline-block"
       ></div>
 
-      <h6 class="card-title text-center" v-if="totalTime.hours > 0">
-        Tempo totale: {{ totalTime.hours }} ore e {{ totalTime.minutes }} minuti
+      <h6
+        class="card-title text-center"
+        v-if="
+          parseInt(totalTime.hours) === 1 && parseInt(totalTime.minutes) === 0
+        "
+      >
+        Tempo totale: {{ parseInt(totalTime.hours) }} ora
+      </h6>
+      <h6
+        class="card-title text-center"
+        v-else-if="parseInt(totalTime.hours) === 1"
+      >
+        Tempo totale: {{ parseInt(totalTime.hours) }} ora e
+        {{ totalTime.minutes }} minuti
+      </h6>
+      <h6
+        class="card-title text-center"
+        v-else-if="
+          parseInt(totalTime.hours) > 0 && parseInt(totalTime.minutes) === 0
+        "
+      >
+        Tempo totale: {{ parseInt(totalTime.hours) }} ore
+      </h6>
+      <h6
+        class="card-title text-center"
+        v-else-if="parseInt(totalTime.hours) > 0"
+      >
+        Tempo totale: {{ parseInt(totalTime.hours) }} ore e
+        {{ totalTime.minutes }} minuti
       </h6>
       <h6 class="card-title text-center" v-else>
         Tempo totale: {{ totalTime.minutes }} minuti

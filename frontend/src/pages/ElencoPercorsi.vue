@@ -107,7 +107,8 @@
                 size="small"
                 type="primary"
                 v-on:click="goToItinerarioPredefinitoPage(index)"
-                class="textButtonColor mt-5"
+                class=" mt-5"
+                style="width: 10%"
                 >Esplora itinerario
               </Button>
             </div>

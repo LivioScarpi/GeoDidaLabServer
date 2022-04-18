@@ -137,7 +137,7 @@
               <l-map
                 style="width: 370px; height: 400px; border-radius: 10px"
                 :zoom="zoom"
-                :center="center"
+                :center="centerMap"
                 ref="mappaSottoItinerario"
               >
                 <l-tile-layer
@@ -235,7 +235,7 @@ export default {
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 12,
-      center: [45.47724690648075, 7.888264286334166],
+      //center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,
       geojson: null,
@@ -323,6 +323,9 @@ export default {
           poi["poiName"] === "Punto di partenza" ||
           poi["poiName"] === "Punto di arrivo";
 
+        console.log(poi["location"][0]);
+        console.log(poi["location"][1]);
+
         if (isStartingPoint) {
           this.markers.push({
             marker: L.marker([poi["location"][0], poi["location"][1]]),
@@ -373,6 +376,26 @@ export default {
   computed: {
     isLarge() {
       return this.windowWidth >= 768;
+    },
+    centerMap() {
+      var sumLat = 0;
+      var sumLng = 0;
+
+      Array.prototype.forEach.call(this.markers, (marker) => {
+        console.log(marker.marker["_latlng"]);
+
+        sumLat += marker.marker["_latlng"].lat;
+        sumLng += marker.marker["_latlng"].lng;
+      });
+
+      var middleLat = sumLat / this.markers.length;
+      var middleLng = sumLng / this.markers.length;
+
+      if (isNaN(middleLat) || isNaN(middleLng)) {
+        return [45.47724690648075, 7.888264286334166];
+      } else {
+        return [middleLat, middleLng];
+      }
     },
   },
 

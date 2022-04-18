@@ -2,7 +2,8 @@
   <div>
     <div class="section text-black pt-3">
       <div class="container">
-        <h2 class="title pt-0">{{this.itinerario["geo:Titolo_it"][0]["@value"]}}</h2>
+        <h2 v-if="this.itinerario !== null" class="title pt-0">{{this.itinerario["geo:Titolo_it"][0]["@value"]}}</h2>
+        <h2 v-else class="title pt-0">Itinerario senza nome</h2>
         <h5 class="description mb-0">
           Sintesi dell'itinerario selezionato.
         </h5>

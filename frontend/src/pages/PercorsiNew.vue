@@ -23,6 +23,8 @@
             {{ $store.state.timeAvailable.minutes }} minuti
           </h6> -->
           <!-- {{ this.$store.state.totalTimeSelected }} -->
+
+          <!-- {{ this.$store.state.areasWithSomethingSelected }} -->
           <h6>Tempo a disposizione occupato</h6>
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
@@ -2392,10 +2394,6 @@ export default {
                 // se l'attività è selezionata e la voglio deselezionare
                 activity.selected = !activity.selected;
 
-                this.$store.state.areasWithSomethingSelected.push(
-                  poi["geo:appartiene_a_area"][0]["display_title"]
-                ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
-
                 if (activity.selected) {
                   if (
                     poi.numberOfActivitiesSelectedInPOI === 0 &&
@@ -2405,7 +2403,17 @@ export default {
                     //se visitPOI è false e se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
                     this.$store.state.totalTimeSelected +=
                       parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
+
+                    // aggiungo una volta l'area per la visita del posto
+                    this.$store.state.areasWithSomethingSelected.push(
+                      poi["geo:appartiene_a_area"][0]["display_title"]
+                    ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
                   }
+
+                  // aggiungo una volta l'area per l'attività selezionata
+                  this.$store.state.areasWithSomethingSelected.push(
+                    poi["geo:appartiene_a_area"][0]["display_title"]
+                  ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
 
                   poi.numberOfActivitiesSelectedInPOI += 1;
 
@@ -2421,6 +2429,19 @@ export default {
                     "DECREMENTO IL NUMERO DI ATTIVITA'" +
                       poi.numberOfActivitiesSelectedInPOI
                   );
+
+                  //rimuovo una volta l'area  dalle aree con qualcosa di selezionato
+                  var index =
+                    this.$store.state.areasWithSomethingSelected.indexOf(
+                      poi["geo:appartiene_a_area"][0]["display_title"]
+                    );
+                  if (index > -1) {
+                    this.$store.state.areasWithSomethingSelected.splice(
+                      index,
+                      1
+                    );
+                  }
+
                   if (
                     poi.numberOfActivitiesSelectedInPOI === 0 &&
                     poi.visitPOI

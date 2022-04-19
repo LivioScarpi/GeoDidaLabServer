@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-      class="centerTimePicker text-center pt-4 px-lg-5"
-    >
+    <div class="centerTimePicker text-center pt-4 px-lg-5">
       <div class="postcardpercorsi light orange mx-4">
         <div
           :style="[
@@ -138,13 +136,15 @@
                 </div>
               </div>
             </div>
-            <Button
-              size="small"
-              type="primary"
-              v-on:click="createPath()"
-              class="textButtonColor mt-3"
-              >Crea percorso
-            </Button>
+            <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="createPath()"
+                class="textButtonColor mt-3"
+                >Crea percorso
+              </Button>
+            </div>
           </div>
           <div v-else>
             <div class="">
@@ -164,13 +164,15 @@
                 addon-left-icon="now-ui-icons objects_key-25"
               >
               </form-group-input>
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="checkCodeAndGetPath()"
-                class="textButtonColor mt-3"
-                >Inserisci codice
-              </Button>
+              <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
+                <Button
+                  size="small"
+                  type="primary"
+                  v-on:click="checkCodeAndGetPath()"
+                  class="textButtonColor mt-3"
+                  >Inserisci codice
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -212,13 +214,15 @@
               itinerario tra i vari itinerari predefiniti già creati
               appositamente, senza il bisogno di doverlo creare da zero.
             </div>
-            <Button
-              size="small"
-              type="primary"
-              v-on:click="selectDefaultPath()"
-              class="textButtonColor mt-5"
-              >Seleziona itinerario
-            </Button>
+            <div :class="{ 'text-left mt-5': isLarge, 'text-center': !isLarge }">
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="selectDefaultPath()"
+                class="textButtonColor mt-5"
+                >Seleziona itinerario
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -332,7 +336,6 @@ export default {
 
   data() {
     return {
-
       errorGettingPosition: false,
 
       idNavigator: 0,

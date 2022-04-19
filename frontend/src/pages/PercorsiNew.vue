@@ -2282,6 +2282,8 @@ export default {
       }
 
       console.log(this.filteredPOI);
+
+      this.initializeMarkersOfFilteredPOI();
     },
 
     changeSelectionVisitPOI(poiName) {

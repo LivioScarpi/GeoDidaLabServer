@@ -7,7 +7,7 @@
           class="bi bi-arrow-left ml-3"
           style="font-size: 2rem; color: black; cursor: pointer"
           v-on:click="goBack()"
-        ></i> 
+        ></i>
 
         <div class="row mb-4">
           <div class="col-12">
@@ -103,17 +103,16 @@
                   </template>
                 </template>
               </div>
-              <div class="text-center">
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="goToItinerarioPredefinitoPage(index)"
-                class=" mt-5"
-                style="width: fit-content;"
-                >Esplora itinerario
-              </Button>
+              <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
+                <Button
+                  size="small"
+                  type="primary"
+                  v-on:click="goToItinerarioPredefinitoPage(index)"
+                  class="mt-5"
+                  style="width: fit-content"
+                  >Esplora itinerario
+                </Button>
               </div>
-              
             </div>
           </article>
           <!-- <collapse>
@@ -175,10 +174,18 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       path: null,
       itinerari: null,
+      windowWidth: 0,
     };
   },
 
   async created() {
+
+    this.windowWidth = $(window).width();
+
+    $(window).resize(() => {
+      this.windowWidth = $(window).width();
+    });
+
     //TODO: remove me
     //console.log("ASYNC CREATED");
 
@@ -299,6 +306,9 @@ export default {
           store.state.loadedActivitiesInPOIPivot
       );
       return store.state.loadedActivitiesInPOIPivot;
+    },
+    isLarge() {
+      return this.windowWidth >= 768;
     },
   },
 

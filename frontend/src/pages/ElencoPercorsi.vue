@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="row">
+    <div class="row mt-2">
       <div class="col-12">
         <!--TODO: sistemare pagine e step-->
         <i
           class="bi bi-arrow-left ml-3"
           style="font-size: 2rem; color: black; cursor: pointer"
           v-on:click="goBack()"
-        ></i>
+        ></i> 
 
         <div class="row mb-4">
           <div class="col-12">

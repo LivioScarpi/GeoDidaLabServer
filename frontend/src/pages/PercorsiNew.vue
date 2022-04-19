@@ -1383,6 +1383,45 @@
         </Button>
       </template>
     </modal>
+
+    <modal
+      :show.sync="modals.loadingVROOMresponse"
+      headerClasses="justify-content-center"
+      @close="modals.loadingVROOMresponse = false"
+    >
+      <h4 slot="header" class="title title-up text-center">
+        Caricamento in corso
+      </h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 text-center">
+              <svg class="circular">
+                <circle
+                  class="path"
+                  cx="50"
+                  cy="50"
+                  r="20"
+                  fill="none"
+                  stroke-width="5"
+                  stroke-miterlimit="10"
+                ></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button
+          size="small"
+          type="danger"
+          v-on:click="modals.loadingVROOMresponse = false"
+          class="mx-1"
+          >Chiudi
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -1561,6 +1600,7 @@ export default {
         insertCodeModal: false,
         featureDevelopment: false,
         errorGettingSottoitinerario: false,
+        loadingVROOMresponse: false
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -2007,6 +2047,10 @@ export default {
         //alert("Selezionare almeno un'attività oppure scegliere uno degli itinerari predefiniti");
         this.modals.featureDevelopment = true;
       } else {
+
+        this.modals.loadingVROOMresponse = true;
+
+
         Array.prototype.forEach.call(this.$store.state.aree, (area) => {
           var POIofArea = this.filteredPOI.filter(
             (poi) =>
@@ -3245,5 +3289,22 @@ export default {
 html,
 body {
   overflow: scroll;
+}
+
+.circular {
+  animation: rotate 2s linear infinite;
+  height: 100px;
+  position: relative;
+  width: 100px;
+}
+
+.loader {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  padding-top: 5rem;
+  transform: translate(-50%, -50%);
 }
 </style>

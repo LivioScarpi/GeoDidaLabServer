@@ -55,6 +55,7 @@
     "vue-waypoint": "^4.2.1",
     "vue-youtube": "^1.4.0",
     "vue-youtube-embed": "^2.2.2",
+    "vue2-circle-progress": "^1.2.3",
     "vue2-leaflet": "^2.7.1",
     "vue2-timepicker": "^1.1.6",
     "vue2-transitions": "^0.3.0",

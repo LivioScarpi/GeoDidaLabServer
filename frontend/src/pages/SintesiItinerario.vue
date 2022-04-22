@@ -36,7 +36,7 @@
         <h5 class="card-title text-center" v-else>
           Tempo totale: {{ parseInt(totalTimeObject.minutes) }} minuti
         </h5>
-        <h6 class="card-title text-center">
+        <h6 class="card-title text-center" v-if="this.$store.state.sottoitinerari.length > 1">
           Il tempo totale include anche gli spostamenti in auto da un'area
           all'altra.
         </h6>

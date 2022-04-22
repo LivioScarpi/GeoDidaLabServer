@@ -1008,22 +1008,7 @@
                                     item["geo:Titolo_it"][0]["@value"]
                                   }}</a>
                                 </h1>
-                                <ul class="postcard__tagbox">
-                                  <li
-                                    class="tag__item"
-                                    v-on:click="
-                                      visitPlaceClicked(
-                                        item['geo:Titolo_it'][0]['@value']
-                                      )
-                                    "
-                                  >
-                                    <i
-                                      v-if="item.visitPOI"
-                                      class="fas fa-check mr-2"
-                                    ></i
-                                    >Visita luogo
-                                  </li>
-                                </ul>
+
                                 <!--<div class="postcard__subtitle small">
                                   <time datetime="2020-05-25 12:00:00">
                                     <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
@@ -1059,82 +1044,120 @@
                                   </template>
                                 </template>
 
-                                <collapse>
-                                  <collapse-item
-                                    title="Mostra attività"
-                                    name="1"
-                                    class="mt-3"
+                                <ul class="postcard__tagbox">
+                                  <li class="tag__item__title mr-3">
+                                    <i class="bi bi-clock mr-2"></i> Tempo di
+                                    visita:
+
+                                    <template
+                                      v-if="item['geo:Durata'] !== undefined"
+                                      >{{ item["geo:Durata"][0]["@value"] }}
+                                      minuti
+                                    </template>
+                                    <template v-else>10 minuti </template>
+                                  </li>
+                                  <li
+                                    :class="
+                                      item.visitPOI
+                                        ? 'tag__item__selected'
+                                        : 'tag__item__unselected'
+                                    "
+                                    v-on:click="
+                                      visitPlaceClicked(
+                                        item['geo:Titolo_it'][0]['@value']
+                                      )
+                                    "
                                   >
-                                    <div v-if="item['mis'].length > 0">
-                                      <div
-                                        v-if="item.poiHasSomeActivitiesVisible"
-                                      >
+                                    <i
+                                      v-if="item.visitPOI"
+                                      class="fas fa-check mr-2"
+                                    ></i
+                                    >Seleziona la visita del luogo
+                                  </li>
+                                </ul>
+                                <div v-if="item['mis'].length > 0">
+                                  <collapse>
+                                    <collapse-item
+                                      title="Aggiungi attività"
+                                      name="1"
+                                      class="mt-3"
+                                    >
+                                      <div v-if="item['mis'].length > 0">
                                         <div
-                                          v-for="(it, ind) in item.mis"
-                                          :key="
-                                            'filteredPOIactivities' +
-                                            (ind + 300)
+                                          v-if="
+                                            item.poiHasSomeActivitiesVisible
                                           "
-                                          class="pl-3"
                                         >
                                           <div
-                                            v-if="
-                                              it.activityVisibleWithDifficultiesFilters &&
-                                              it.activityVisibleWithInterestsFilters
+                                            v-for="(it, ind) in item.mis"
+                                            :key="
+                                              'filteredPOIactivities' +
+                                              (ind + 300)
                                             "
+                                            class="pl-3"
                                           >
                                             <div
-                                              class="
-                                                row
-                                                mt-0
-                                                py-2
-                                                text-center
-                                                align-items-center
+                                              v-if="
+                                                it.activityVisibleWithDifficultiesFilters &&
+                                                it.activityVisibleWithInterestsFilters
                                               "
                                             >
-                                              <!--v-bind:class="{'border-bottom ': index === 0}"-->
-                                              <div class="col-lg-9 col-9 pl-0">
-                                                <activitiesOfPOI :it="it" />
-                                              </div>
-                                              <div class="col-lg-3 col-3">
-                                                <ul
-                                                  class="
-                                                    activity__tagbox
-                                                    float-right
-                                                  "
+                                              <div
+                                                class="
+                                                  row
+                                                  mt-0
+                                                  py-2
+                                                  text-center
+                                                  align-items-center
+                                                "
+                                              >
+                                                <!--v-bind:class="{'border-bottom ': index === 0}"-->
+                                                <div
+                                                  class="col-lg-9 col-9 pl-0"
                                                 >
-                                                  <li
-                                                    v-if="it.selected"
+                                                  <activitiesOfPOI :it="it" />
+                                                </div>
+                                                <div class="col-lg-3 col-3">
+                                                  <ul
                                                     class="
-                                                      tag__item__unselected
-                                                    "
-                                                    v-on:click="
-                                                      changeSelection(
-                                                        item[
-                                                          'geo:Titolo_it'
-                                                        ][0]['@value'],
-                                                        it['o:title']
-                                                      )
+                                                      activity__tagbox
+                                                      float-right
                                                     "
                                                   >
-                                                    Deseleziona
-                                                  </li>
-                                                  <li
-                                                    v-else
-                                                    class="tag__item__selected"
-                                                    v-on:click="
-                                                      changeSelection(
-                                                        item[
-                                                          'geo:Titolo_it'
-                                                        ][0]['@value'],
-                                                        it['o:title']
-                                                      )
-                                                    "
-                                                  >
-                                                    Seleziona
-                                                  </li>
-                                                </ul>
-                                                <!-- <div v-if="it.selected">
+                                                    <li
+                                                      v-if="it.selected"
+                                                      class="
+                                                        tag__item__unselected
+                                                      "
+                                                      v-on:click="
+                                                        changeSelection(
+                                                          item[
+                                                            'geo:Titolo_it'
+                                                          ][0]['@value'],
+                                                          it['o:title']
+                                                        )
+                                                      "
+                                                    >
+                                                      Deseleziona
+                                                    </li>
+                                                    <li
+                                                      v-else
+                                                      class="
+                                                        tag__item__selected
+                                                      "
+                                                      v-on:click="
+                                                        changeSelection(
+                                                          item[
+                                                            'geo:Titolo_it'
+                                                          ][0]['@value'],
+                                                          it['o:title']
+                                                        )
+                                                      "
+                                                    >
+                                                      Seleziona
+                                                    </li>
+                                                  </ul>
+                                                  <!-- <div v-if="it.selected">
 
                                                   
                                                   <i
@@ -1174,30 +1197,38 @@
                                                     "
                                                   ></i>
                                                 </div> -->
-                                              </div>
+                                                </div>
 
-                                              <hr
-                                                v-if="ind < item.mis.length - 1"
-                                                style="
-                                                  width: 100%;
-                                                  text-align: center;
-                                                "
-                                                class="my-0 py-0"
-                                              />
+                                                <hr
+                                                  v-if="
+                                                    ind < item.mis.length - 1
+                                                  "
+                                                  style="
+                                                    width: 100%;
+                                                    text-align: center;
+                                                  "
+                                                  class="my-0 py-0"
+                                                />
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
+                                        <div v-else>
+                                          Nessuna attività disponibile in base
+                                          ai filtri selezionati
+                                        </div>
                                       </div>
                                       <div v-else>
-                                        Nessuna attività disponibile in base ai
-                                        filtri selezionati
+                                        Non ci sono attività disponibili in
+                                        questo luogo
                                       </div>
-                                    </div>
-                                    <div v-else>
-                                      Non ci sono attività disponibili
-                                    </div>
-                                  </collapse-item>
-                                </collapse>
+                                    </collapse-item>
+                                  </collapse>
+                                </div>
+                                <div v-else class="my-3">
+                                  Non ci sono attività disponibili in questo
+                                  luogo
+                                </div>
                               </div>
                             </article>
                           </div>
@@ -1600,7 +1631,7 @@ export default {
         insertCodeModal: false,
         featureDevelopment: false,
         errorGettingSottoitinerario: false,
-        loadingVROOMresponse: false
+        loadingVROOMresponse: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -2047,9 +2078,7 @@ export default {
         //alert("Selezionare almeno un'attività oppure scegliere uno degli itinerari predefiniti");
         this.modals.featureDevelopment = true;
       } else {
-
         this.modals.loadingVROOMresponse = true;
-
 
         Array.prototype.forEach.call(this.$store.state.aree, (area) => {
           var POIofArea = this.filteredPOI.filter(

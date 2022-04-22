@@ -2,7 +2,7 @@
   <div class="mt-3">
     <div class="row">
       <div class="col-12 text-left">
-        <h6>{{ it["o:title"] }}</h6>
+        <h6>{{ it["o:title"] }} <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i></h6>
       </div>
     </div>
 

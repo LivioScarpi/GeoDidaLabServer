@@ -46,7 +46,7 @@
         >
           <tab-pane>
             <span slot="label">
-              <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
+              <i class="now-ui-icons design_bullet-list-67"></i>ITINERARIO
             </span>
             <div class="slider">
               <div class="slides">

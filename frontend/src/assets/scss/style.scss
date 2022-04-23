@@ -70,6 +70,20 @@
   padding: 100%;
 }
 
+.swiper-button-next-itinerario::after {
+  color: white;
+  background-color: hsla(0, 0%, 41%, 0.274);
+  border-radius: 5px;
+  padding: 100%;
+}
+
+.swiper-button-prev-itinerario::after {
+  color: white;
+  background-color: hsla(0, 0%, 41%, 0.274);
+  border-radius: 5px;
+  padding: 100%;
+}
+
 /*NUOVO SCSS*/
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
 $main-green: #79dd09 !default;

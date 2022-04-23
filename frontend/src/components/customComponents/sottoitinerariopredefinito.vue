@@ -6,18 +6,16 @@
     :style="[
       isLarge
         ? {
-            'max-width': '28rem',
-            height: '42rem',
-            'max-height': '43rem',
+            height: '50rem',
+            'max-height': '50rem',
             'border-radius': '10px',
           }
         : {
-            'max-width': '28rem',
             'max-sheight': '45rem',
             'border-radius': '10px',
           },
     ]"
-    class="mx-2 postcardattivita attivita orange pb-3"
+    class="mx-4 postcardattivita attivita orange pb-3"
   >
     <div class="mt-3">
       <h5 class="card-title text-center">
@@ -37,6 +35,7 @@
       </h6>
 
       <div class="row">
+        <div class="col-12">
         <tabs
           type="primary"
           tabContentClasses="tab-subcategories"
@@ -48,12 +47,154 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>ITINERARIO
             </span>
-                              <h6 class="text-center mb-4">
-                    Seleziona la
-                    <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto al
-                    nome di un'attività per vedere i dettagli
-                  </h6>
-            <div class="slider">
+            <h6 class="text-center mb-4">
+              Seleziona la
+              <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto al nome
+              di un'attività per vedere i dettagli
+            </h6>
+
+            <swiper
+              :style="[
+                isLarge
+                  ? {
+                      'border-radius': '10px',
+                      height: '30rem',
+                    }
+                  : {
+                      'max-width': '20rem',
+                      'border-radius': '10px',
+                    },
+              ]"
+              ref="mySwiper"
+              class="swiper"
+              navigation
+              :pagination="{ clickable: true }"
+              style="background-color: hsl(17, 100%, 90%); border-radius: 10px;"
+            >
+              <swiper-slide
+                v-for="(poi, poiIndex) in item"
+                :id="poi['poiName'] + 'slide-' + poiIndex"
+                :key="poiIndex"
+              >
+                <div class="row" style="height: 10rem">
+                  <div class="col-12" style="height: 10rem">
+
+                        <img
+                          v-if="poi['media'].length > 0"
+                          :src="poi['media'][0]['o:thumbnail_urls']['large']"
+                          alt="Picture"
+                          style="width: 100%; border-radius: 10px;"
+                        />
+
+                        <img
+                          v-else
+                          src="@/assets/images/bg3.jpg"
+                          alt="Picture"
+                          style="width: 100%; border-radius: 10px;"
+                        />
+
+                        QUA CI VA LA FOTO DEL POI
+
+                    <div class="row">
+                      <div
+                        style="
+                          margin-top: 190px;
+                          margin-bottom: auto;
+                          overflow-y: auto;
+                        "
+                        class="col-12 text-center"
+                      >
+                        <h6 class="mb-0 mx-5">
+                          <i class="bi bi-pin-map-fill mr-2"></i
+                          >{{ poi["geo:Titolo_it"][0]["@value"] }}
+                        </h6>
+
+                        <h4
+                          v-if="
+                            poi['poiName'] !== 'Punto di partenza' &&
+                            poi['poiName'] !== 'Punto di arrivo'
+                          "
+                          class="mb-3 mt-0"
+                        >
+                          Attività
+                        </h4>
+                        <div class="mb-3">
+                          <h6>
+                            Visita
+                            <i
+                              class="ml-2 mt-3 bi bi-info-circle mr-2"
+                              style="cursor: pointer"
+                              v-on:click="
+                                showInfoVisitaPOI(
+                                  areaname,
+                                  poi['geo:Titolo_it'][0]['@value']
+                                )
+                              "
+                            ></i>
+                          </h6>
+                          <i class="bi bi-clock mr-2"></i>
+                          {{ poi["geo:Durata"][0]["@value"] }} minuti
+                        </div>
+
+                        <div
+                          v-for="(
+                            activity, activityIndex
+                          ) in poi.activitiesOfPOIPivot"
+                          :key="'activityInPOI' + activityIndex"
+                          class="mx-3"
+                        >
+                          <div
+                            v-if="
+                              poi['poiName'] !== 'Punto di partenza' &&
+                              poi['poiName'] !== 'Punto di arrivo'
+                            "
+                            class="mb-3"
+                          >
+                            <!--<i
+                                        class="bi bi-clipboard-check-fill mr-2"
+                                      ></i>-->
+                            <!--{{ poiIndex }}.{{activityIndex}} - -->
+                            <h6>
+                              {{ activity["o:title"] }}
+                              <i
+                                class="ml-2 mt-3 bi bi-info-circle mr-2"
+                                style="cursor: pointer"
+                                v-on:click="
+                                  showInfo(activity['o:title'], areaname)
+                                "
+                              ></i>
+                            </h6>
+                            <i class="bi bi-clock mr-2"></i>
+                            {{ activity["geo:Durata"][0]["@value"] }} minuti
+                          </div>
+                        </div>
+
+                        <!-- <div v-if="poi.activitiesOfPOIPivot.length === 0">
+                        Nessuna attività da svolgere
+                      </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </swiper-slide>
+
+              <swiper-slide>CIAO </swiper-slide>
+
+              <swiper-slide>CIAO A TE </swiper-slide>
+
+              <div
+                class="swiper-button-prev"
+                slot="button-prev"
+                @click="swiper.slidePrev()"
+              ></div>
+              <div
+                class="swiper-button-next"
+                slot="button-next"
+                @click="swiper.slideNext()"
+              ></div>
+            </swiper>
+
+            <!-- <div class="slider">
               <div class="slides">
                 <div
                   v-for="(poi, poiIndex) in item"
@@ -74,11 +215,7 @@
                       alt="Picture"
                       style="height: 140px; border-radius: 10px"
                     />
-                    <!-- <img
-                      style="height: 140px; border-radius: 10px"
-                      src="https://media.istockphoto.com/photos/map-with-stick-pins-travel-itinerary-picture-id542818352?k=20&m=542818352&s=170667a&w=0&h=9cGGrnKDuHQB92crkOclu21UjqfNGcQB5zRLPnrfrO8="
-                      alt="Image Title"
-                    /> -->
+
                     <div
                       style="
                         margin-top: 140px;
@@ -103,12 +240,18 @@
                       <div class="mb-3">
                         <h6>
                           Visita
-                          <i class="ml-2 mt-3 bi bi-info-circle mr-2"                           style="cursor: pointer"
-                          v-on:click="showInfoVisitaPOI(areaname, poi['geo:Titolo_it'][0]['@value'])"></i>
+                          <i
+                            class="ml-2 mt-3 bi bi-info-circle mr-2"
+                            style="cursor: pointer"
+                            v-on:click="
+                              showInfoVisitaPOI(
+                                areaname,
+                                poi['geo:Titolo_it'][0]['@value']
+                              )
+                            "
+                          ></i>
                         </h6>
-                        <i
-                          class="bi bi-clock mr-2"
-                        ></i>
+                        <i class="bi bi-clock mr-2"></i>
                         {{ poi["geo:Durata"][0]["@value"] }} minuti
                       </div>
 
@@ -126,10 +269,6 @@
                           "
                           class="mb-3"
                         >
-                          <!--<i
-                                        class="bi bi-clipboard-check-fill mr-2"
-                                      ></i>-->
-                          <!--{{ poiIndex }}.{{activityIndex}} - -->
                           <h6>
                             {{ activity["o:title"] }}
                             <i
@@ -144,17 +283,9 @@
                           {{ activity["geo:Durata"][0]["@value"] }} minuti
                         </div>
                       </div>
-
-                      <!-- <div v-if="poi.activitiesOfPOIPivot.length === 0">
-                        Nessuna attività da svolgere
-                      </div> -->
                     </div>
                   </div>
                 </div>
-                <!-- <div id="slide-2">2</div>
-                <div id="slide-3">3</div>
-                <div id="slide-4">4</div>
-                <div id="slide-5">5</div> -->
               </div>
 
               <a
@@ -164,16 +295,17 @@
                 :key="poiIndex"
                 >{{ poiIndex + 1 }}</a
               >
-            </div>
+            </div> -->
           </tab-pane>
 
           <tab-pane>
             <span slot="label" @click="invalidateMapSizeMethod()" id="Mappa">
               <i class="now-ui-icons travel_info"></i>MAPPA
             </span>
-            <div class="text-justify description col-12 text-black">
+            <div class="text-justify description col-12 text-black row">
+              <div class="col-12">
               <l-map
-                style="width: 370px; height: 400px; border-radius: 10px"
+                style="width: 440px; height: 400px; border-radius: 10px"
                 :zoom="zoom"
                 :center="centerMap"
                 ref="mappaSottoItinerario"
@@ -196,9 +328,11 @@
                   </l-popup>
                 </l-marker>
               </l-map>
+              </div>
             </div>
           </tab-pane>
         </tabs>
+        </div>
       </div>
     </div>
   </card>
@@ -251,6 +385,8 @@ export default {
     Card,
     //Carousel,
     //Slide,
+    Swiper,
+    SwiperSlide,
   },
 
   directives: {
@@ -264,8 +400,8 @@ export default {
       isLoadingVideos: true,
       swiperOption: {
         navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+          nextEl: ".swiper-button-next-itinerario",
+          prevEl: ".swiper-button-prev-itinerario",
         },
       },
 
@@ -424,6 +560,9 @@ export default {
     },
   },
   computed: {
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    },
     isLarge() {
       return this.windowWidth >= 768;
     },

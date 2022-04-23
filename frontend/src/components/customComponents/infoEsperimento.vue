@@ -47,15 +47,15 @@
         </div>
       </slide>
     </carousel>-->
-    <div class="col-lg-6">
+    <div class="col-lg-6 px-1">
       <div class="mt-3">
-        <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
+        <h5 class="card-title text-left ml-2">{{ item["o:title"] }}</h5>
         <div
           class="postcardattivita__bar margin-auto"
           style="display: inline-block"
         ></div>
 
-        <div class="row">
+        <div class="row ">
           <tabs
             type="primary"
             tabContentClasses="tab-subcategories"
@@ -64,12 +64,11 @@
             class="row"
             style="padding-bottom: 0"
           >
-            <tab-pane class="pb-0"             style="padding-bottom: 0"
->
+            <tab-pane class="pb-0" style="padding-bottom: 0">
               <span slot="label">
                 <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
               </span>
-              <div class="text-justify description col-12 text-black text">
+              <div class="px-0 text-justify description col-12 text-black text">
                 <div class="row mx-1 mb-2">
                   <h6 class="mr-2">Descrizione:</h6>
                   <h6 class="font-weight-normal">
@@ -163,8 +162,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6" style="margin-top: auto;
-margin-bottom: auto;">
+    <div class="col-lg-6" style="margin-top: auto; margin-bottom: auto">
       <swiper
         :style="[
           isLarge
@@ -445,7 +443,7 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-.tab-space{
-  padding-bottom: 0px
+.tab-space {
+  padding-bottom: 0px;
 }
 </style>

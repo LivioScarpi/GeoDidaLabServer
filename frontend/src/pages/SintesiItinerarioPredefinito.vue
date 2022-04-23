@@ -68,7 +68,7 @@
 
       <div class="mt-4" v-if="allLoaded">
         <div class="row text-center">
-          <div class="col-lg-4 col-sm-12" v-if="itinerarioLoaded">
+          <div class="col-lg-5 col-sm-12 pr-0" v-if="itinerarioLoaded">
             <sottoitinerariopredefinito
               class="align-top"
               v-for="item in this.itinerario.poiGroupedByArea"
@@ -79,7 +79,7 @@
               @infoActivityVisitPOIClicked="showInfoAtivityVisitPOI"
             ></sottoitinerariopredefinito>
           </div>
-          <div class="col-lg-8 col-sm-12">
+          <div class="col-lg-7 col-sm-12">
             <div class="postcardpercorsi light orange mx-4 mr-5">
               <div class="postcardpercorsi__text text-left pt-3 mt-4">
                 <div style="height: 100%">

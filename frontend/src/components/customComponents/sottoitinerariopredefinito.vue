@@ -48,6 +48,11 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>ITINERARIO
             </span>
+                              <h6 class="text-center mb-4">
+                    Seleziona la
+                    <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto al
+                    nome di un'attività per vedere i dettagli
+                  </h6>
             <div class="slider">
               <div class="slides">
                 <div
@@ -96,8 +101,14 @@
                         Attività
                       </h4>
                       <div class="mb-3">
-                        <h6>Visita</h6>
-                        <i class="bi bi-clock mr-2"></i>
+                        <h6>
+                          Visita
+                          <i class="ml-2 mt-3 bi bi-info-circle mr-2"                           style="cursor: pointer"
+                          v-on:click="showInfoVisitaPOI(areaname, poi['geo:Titolo_it'][0]['@value'])"></i>
+                        </h6>
+                        <i
+                          class="bi bi-clock mr-2"
+                        ></i>
                         {{ poi["geo:Durata"][0]["@value"] }} minuti
                       </div>
 
@@ -119,7 +130,16 @@
                                         class="bi bi-clipboard-check-fill mr-2"
                                       ></i>-->
                           <!--{{ poiIndex }}.{{activityIndex}} - -->
-                          <h6>{{ activity["o:title"] }}</h6>
+                          <h6>
+                            {{ activity["o:title"] }}
+                            <i
+                              class="ml-2 mt-3 bi bi-info-circle mr-2"
+                              style="cursor: pointer"
+                              v-on:click="
+                                showInfo(activity['o:title'], areaname)
+                              "
+                            ></i>
+                          </h6>
                           <i class="bi bi-clock mr-2"></i>
                           {{ activity["geo:Durata"][0]["@value"] }} minuti
                         </div>
@@ -393,6 +413,14 @@ export default {
       };
 
       return timeObject;
+    },
+    showInfo(activityName, areaname) {
+      console.log("MOSTRO INFO DI " + activityName, areaname);
+      this.$emit("infoActivityClicked", activityName, areaname);
+    },
+    showInfoVisitaPOI(areaname, poiName) {
+      console.log("MOSTRO INFO VISITA DI " + areaname + "; " + poiName);
+      this.$emit("infoActivityVisitPOIClicked", areaname, poiName);
     },
   },
   computed: {

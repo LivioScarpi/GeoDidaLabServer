@@ -101,6 +101,13 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
         //height: 100%;
     }
 
+    .postcardpercorsi__preview-txt__schedaItinerarioPredefinito {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        //height: 100%;
+    }
+
     .postcardpercorsi__tagbox {
         display: flex;
         flex-flow: row wrap;

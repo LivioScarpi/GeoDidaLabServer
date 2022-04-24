@@ -313,7 +313,7 @@
             <div class="text-justify description col-12 text-black row">
               <div class="col-12">
               <l-map
-                style="width: 440px; height: 400px; border-radius: 10px"
+                style="width: 60vh; height: 30rem; border-radius: 10px"
                 :zoom="zoom"
                 :center="centerMap"
                 ref="mappaSottoItinerario"

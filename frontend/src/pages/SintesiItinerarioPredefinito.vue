@@ -126,8 +126,6 @@
 
                   <hr />
 
-
-
                   <div v-if="activitySelectedForInfo === null && activityVisitPOISelectedForInfo === null">
                    <h6>
                     Seleziona la

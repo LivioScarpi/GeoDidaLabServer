@@ -119,7 +119,12 @@
                           Attività
                         </h4>
                         <div class="mb-3">
-                          <h6>
+                          <h6 v-on:click="
+                                showInfoVisitaPOI(
+                                  areaname,
+                                  poi['geo:Titolo_it'][0]['@value']
+                                )
+                              " style="cursor: pointer">
                             Visita
                             <i
                               class="ml-2 mt-3 bi bi-info-circle mr-2"
@@ -154,7 +159,10 @@
                                         class="bi bi-clipboard-check-fill mr-2"
                                       ></i>-->
                             <!--{{ poiIndex }}.{{activityIndex}} - -->
-                            <h6>
+                            <h6 style="cursor: pointer"
+                                v-on:click="
+                                  showInfo(activity['o:title'], areaname)
+                                ">
                               {{ activity["o:title"] }}
                               <i
                                 class="ml-2 mt-3 bi bi-info-circle mr-2"

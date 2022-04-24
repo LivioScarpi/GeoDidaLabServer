@@ -182,6 +182,7 @@
         navigation
         :pagination="{ clickable: true }"
         style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
+        v-if="!isLoadingImages && !isLoadingVideos"
       >
         <swiper-slide
           :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
@@ -224,9 +225,10 @@
 
         <div
           v-if="
+          (item.media !== undefined && item.mediaYT !== undefined) && (
             item.media.length > 1 ||
             item.mediaYT.length > 1 ||
-            (item.media.length === 1 && item.mediaYT.length === 1)
+            (item.media.length === 1 && item.mediaYT.length === 1))
           "
           class="swiper-button-prev"
           slot="button-prev"
@@ -234,9 +236,10 @@
         ></div>
         <div
           v-if="
+          (item.media !== undefined && item.mediaYT !== undefined) && (
             item.media.length > 1 ||
             item.mediaYT.length > 1 ||
-            (item.media.length === 1 && item.mediaYT.length === 1)
+            (item.media.length === 1 && item.mediaYT.length === 1))
           "
           class="swiper-button-next"
           slot="button-next"

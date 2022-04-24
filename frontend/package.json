@@ -51,6 +51,7 @@
     "vue-lazytube": "^1.0.2",
     "vue-resource": "^1.5.3",
     "vue-router": "^3.5.2",
+    "vue-ssr-carousel": "^1.4.0",
     "vue-timeline-component": "^0.1.5",
     "vue-waypoint": "^4.2.1",
     "vue-youtube": "^1.4.0",

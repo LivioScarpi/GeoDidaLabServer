@@ -67,8 +67,8 @@
       </div>
 
       <div class="mt-4" v-if="allLoaded">
-        <div class="row text-center">
-          <div class="col-lg-5 col-sm-12 pr-0" v-if="itinerarioLoaded">
+        <div class="row text-center ">
+          <div class="col-lg-5 col-sm-12 px-5" v-if="itinerarioLoaded">
             <sottoitinerariopredefinito
               class="align-top"
               v-for="item in this.itinerario.poiGroupedByArea"
@@ -79,17 +79,19 @@
               @infoActivityVisitPOIClicked="showInfoAtivityVisitPOI"
             ></sottoitinerariopredefinito>
           </div>
-          <div class="col-lg-7 col-sm-12">
-            <div class="postcardpercorsi light orange mx-4 mr-5">
+          <div class="col-lg-7 col-sm-12 pr-3">
+            <div class="row">
+              <div class="col-12">
+            <div class="postcardpercorsi light orange mx-4">
               <div
                 :style="[
-                  isLarge
+                  isLarge && windowWidth > 991
                     ? {
                         'max-height': '49rem',
                         'border-radius': '10px',
                       }
                     : {
-                        'max-height': '45rem',
+                        
                         'border-radius': '10px',
                       },
                 ]"
@@ -183,6 +185,8 @@
                     </Button>
                   </div> -->
                 </div>
+              </div>
+            </div>
               </div>
             </div>
           </div>

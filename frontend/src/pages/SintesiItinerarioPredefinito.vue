@@ -81,7 +81,20 @@
           </div>
           <div class="col-lg-7 col-sm-12">
             <div class="postcardpercorsi light orange mx-4 mr-5">
-              <div class="postcardpercorsi__text text-left pt-3 mt-4">
+              <div
+                :style="[
+                  isLarge
+                    ? {
+                        'max-height': '49rem',
+                        'border-radius': '10px',
+                      }
+                    : {
+                        'max-height': '45rem',
+                        'border-radius': '10px',
+                      },
+                ]"
+                class="postcardpercorsi__text text-left pt-3 mt-4"
+              >
                 <div style="height: 100%">
                   <h1 class="postcardpercorsi__title orange">
                     Dettagli -
@@ -126,12 +139,17 @@
 
                   <hr />
 
-                  <div v-if="activitySelectedForInfo === null && activityVisitPOISelectedForInfo === null">
-                   <h6>
-                    Seleziona la
-                    <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto al
-                    nome di un'attività per vedere i dettagli
-                  </h6> 
+                  <div
+                    v-if="
+                      activitySelectedForInfo === null &&
+                      activityVisitPOISelectedForInfo === null
+                    "
+                  >
+                    <h6>
+                      Seleziona la
+                      <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto
+                      al nome di un'attività per vedere i dettagli
+                    </h6>
                   </div>
 
                   <div v-if="activitySelectedForInfo === null"></div>
@@ -145,8 +163,9 @@
 
                   <div v-if="activityVisitPOISelectedForInfo === null"></div>
                   <div v-else>
+                    <h5>{{visitPOIselectedforInfo}}</h5>
                     <!-- {{activitySelectedForInfo}} -->
-                    {{activityVisitPOISelectedForInfo}}
+                    {{ activityVisitPOISelectedForInfo }}
                   </div>
 
                   <!-- <div
@@ -204,6 +223,8 @@ export default {
       itinerarioLoaded: false,
       activitySelectedForInfo: null,
       activityVisitPOISelectedForInfo: null,
+      visitPOIselectedforInfo: "",
+      windowWidth: 0,
     };
   },
 
@@ -257,8 +278,11 @@ export default {
       );
 
       this.activitySelectedForInfo = null;
-
-      this.activityVisitPOISelectedForInfo = "La visita del " + poiName + " consiste in una visita del luogo guidati da una persona che spiegherà tutto il necessario";
+      this.visitPOIselectedforInfo = poiName;
+      this.activityVisitPOISelectedForInfo =
+        "La visita del " +
+        poiName +
+        " consiste in una visita del luogo guidati da una persona che spiegherà tutto il necessario";
 
       // console.log(this.itinerario.poiGroupedByArea[areaname]);
 
@@ -278,9 +302,19 @@ export default {
     },
   },
 
-  created() {},
+  created() {
+    this.windowWidth = $(window).width();
 
-  computed: {},
+    $(window).resize(() => {
+      this.windowWidth = $(window).width();
+    });
+  },
+
+  computed: {
+    isLarge() {
+      return this.windowWidth >= 768;
+    },
+  },
 
   watch: {
     itinerarioLoaded(newValue, oldValue) {

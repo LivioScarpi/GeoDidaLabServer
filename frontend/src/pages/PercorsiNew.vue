@@ -3253,9 +3253,14 @@ export default {
 
         console.log("CI STIAMO CON I TEMPI!");
       } else {
-        alert(
-          "Rimuovere qualche attività per poter selezionare quest'ultima."
-        );
+        if (
+          this.percent < 100 &&
+          !(timeCheck <= this.$store.state.timeAvailable.milliseconds)
+        ) {
+          alert(
+            "Rimuovere qualche attività per poter selezionare quest'ultima."
+          );
+        }
       }
 
       console.log(this.$store.state.totalTimeSelected);
@@ -3269,9 +3274,8 @@ export default {
       console.log("TOTAL ITINERARY E' CAMBIATOO!");
       console.log(oldValue);
 
+      console.log("PRIMA");
       console.log(newValue);
-
-      this.$store.state.sottoitinerari = newValue;
 
       var numbersOfAreasWithSomethingSelected = [
         ...new Set(this.$store.state.areasWithSomethingSelected),
@@ -3281,6 +3285,27 @@ export default {
       if (numbersOfAreasWithSomethingSelected.length !== 0) {
         if (numbersOfAreasWithSomethingSelected.length === newValue.length) {
           console.log("VADO ALLA PROSSIMA PAGINA!");
+
+          //TODO: provare ad ordinare la risposta sulla base del miglior percorso tra aree
+
+          var sortOrder = [];
+          sortOrder.length = this.bestPathBetweenAreas.length;
+          for (var i = 0; i < this.bestPathBetweenAreas.length; i++) {
+            sortOrder[i] = "Itinerario_" + this.bestPathBetweenAreas[i];
+          }
+
+          console.log("SORT ORDER");
+          console.log(sortOrder);
+
+          console.log("DOPO");
+
+          console.log(newValue);
+
+          newValue.sort(function (a, b) {
+            return sortOrder.indexOf(a.name) - sortOrder.indexOf(b.name);
+          });
+
+          this.$store.state.sottoitinerari = newValue;
 
           router.push({
             name: "sintesiitinerario",

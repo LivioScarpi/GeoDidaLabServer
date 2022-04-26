@@ -24,7 +24,9 @@
           </h6> -->
           <!-- {{ this.$store.state.totalTimeSelected }} -->
 
-          <!-- {{ this.$store.state.areasWithSomethingSelected }} -->
+          {{ this.$store.state.areasWithSomethingSelected }}
+          {{ setAreasSelected }}
+          {{ timeBetweenAreas }}
           <h6>Tempo a disposizione occupato</h6>
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
@@ -1499,6 +1501,7 @@ import Tabs from "../components/Tabs/Tabs.vue";
 import "../utils/costMatrices";
 import { costMatrix } from "../utils/costMatrices";
 import KProgress from "k-progress";
+import { costMatrixAreas } from "../utils/costMatricesAreas";
 
 export default {
   name: "PercorsiNew",
@@ -1802,6 +1805,18 @@ export default {
 
       selectedTab: "ElencoPercorsi",
       // this.$store.state.areasWithSomethingSelected: [],
+
+      timeBetweenAreas: 0,
+      bestPathBetweenAreas: null,
+      bestOldPath: [],
+      oldTotalCostBetweenAreas: 0,
+
+      areasIndexes: {
+        Torino: 0,
+        Ivrea: 1,
+        "GeoDidaLab - Ivrea": 2,
+        "Anfiteatro Morenico d'Ivrea": 3,
+      },
     };
   },
 
@@ -3025,9 +3040,44 @@ export default {
         });
       }
     },
+
+    permute(nums) {
+      var result = [];
+      var backtrack = (i, nums) => {
+        if (i === nums.length) {
+          result.push(nums.slice());
+          return;
+        }
+        for (let j = i; j < nums.length; j++) {
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+          backtrack(i + 1, nums);
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+        }
+      };
+      backtrack(0, nums);
+      console.log(result);
+      return result;
+    },
+
+    arrayEquals(a, b) {
+      return (
+        Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index])
+      );
+    },
   },
 
   computed: {
+    setAreasSelected() {
+      var uniqueArray = this.$store.state.areasWithSomethingSelected.filter(
+        function (item, pos, self) {
+          return self.indexOf(item) == pos;
+        }
+      );
+      return uniqueArray;
+    },
     centerMap() {
       var sumLat = 0;
       var sumLng = 0;
@@ -3134,6 +3184,82 @@ export default {
   },
 
   watch: {
+    setAreasSelected(newValue, oldValue) {
+      console.log("WATCH");
+      console.log(newValue);
+      var perm = this.permute(newValue);
+      console.log(perm);
+
+      var costoTotale = 9999999999;
+      var bestPath = [];
+
+      Array.prototype.forEach.call(perm, (permutation) => {
+        var cost = 0;
+        for (var i = 0; i < permutation.length - 1; i++) {
+          var indexStartArea = this.areasIndexes[permutation[i]];
+          var indexNextArea = this.areasIndexes[permutation[i + 1]];
+
+          console.log(
+            "Prenodil costo tra l'area di indice: " +
+              indexStartArea +
+              " e l'area di indice " +
+              indexNextArea
+          );
+
+          cost += costMatrixAreas[indexStartArea][indexNextArea];
+        }
+
+        console.log(
+          "Il costo per la permutazione " + permutation + " è " + cost
+        );
+
+        if (cost < costoTotale) {
+          costoTotale = cost;
+          bestPath = permutation;
+        }
+      });
+
+      if (bestPath === []) {
+        costoTotale = 0;
+      }
+
+      //TODO: set cost
+
+      this.timeBetweenAreas = costoTotale;
+      this.bestPathBetweenAreas = bestPath;
+
+      console.log("LA MIGLIOR PERMUTAZIONE E': " + this.bestPathBetweenAreas);
+      console.log("LA MIGLIOR PERMUTAZIONE HA COSTO: " + this.timeBetweenAreas);
+
+      var timeCheck =
+        this.$store.state.totalTimeSelected + this.timeBetweenAreas * 60000;
+
+      console.log(this.bestOldPath);
+      console.log(this.bestPathBetweenAreas);
+      console.log(
+        this.arrayEquals(this.bestOldPath, this.bestPathBetweenAreas)
+      );
+      if (
+        !this.arrayEquals(this.bestOldPath, this.bestPathBetweenAreas) &&
+        this.percent < 100 &&
+        timeCheck <= this.$store.state.timeAvailable.milliseconds
+      ) {
+        this.$store.state.totalTimeSelected -= this.oldTotalCostBetweenAreas; //rimuovo il vecchio costo
+        this.$store.state.totalTimeSelected += this.timeBetweenAreas * 60000;
+
+        this.oldTotalCostBetweenAreas = this.timeBetweenAreas * 60000; // aggiorno il vecchio costo
+
+        this.bestOldPath = this.bestPathBetweenAreas; // aggiorno il vecchio bestOldPath
+
+        console.log("CI STIAMO CON I TEMPI!");
+      } else {
+        alert(
+          "Rimuovere qualche attività per poter selezionare quest'ultima."
+        );
+      }
+
+      console.log(this.$store.state.totalTimeSelected);
+    },
     filteredPOI(newValue, oldValue) {
       //TODO: remove me
       //console.log("FILTERED POI WATCHER");
@@ -3336,5 +3462,4 @@ body {
   padding-top: 5rem;
   transform: translate(-50%, -50%);
 }
-
 </style>

@@ -596,7 +596,7 @@
           <div class="row" v-else>
             <div class="col-12">
               <l-map
-                style="width: 60vh; height: 30rem; border-radius: 10px"
+                style="width: 45vh; height: 30rem; border-radius: 10px; margin: auto"
                 :zoom="zoom"
                 :center="centerMap"
                 ref="mappaSottoItinerario"

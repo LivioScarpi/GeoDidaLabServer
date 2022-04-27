@@ -24,10 +24,16 @@
           </h6> -->
           <!-- {{ this.$store.state.totalTimeSelected }} -->
 
-          {{ this.$store.state.areasWithSomethingSelected }}
+          <!-- {{ this.$store.state.areasWithSomethingSelected }}
           {{ setAreasSelected }}
-          {{ timeBetweenAreas }}
+          {{ timeBetweenAreas }} -->
+          <h6 class="card-title text-center">
+            Il tempo occupato include anche gli spostamenti in auto da un'area
+            all'altra.
+          </h6>
+
           <h6>Tempo a disposizione occupato</h6>
+
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
         <div class="col-2 text-center"></div>

@@ -1,12 +1,18 @@
 <template>
   <div>
     <div class="section text-black pt-3">
+              <i
+          class="bi bi-arrow-left ml-3"
+          style="font-size: 2rem; color: black; cursor: pointer"
+          v-on:click="goBack()"
+        ></i>
       <div class="container">
-        <h2 v-if="this.itinerario !== null" class="title pt-0">
+                
+        <!-- <h2 v-if="this.itinerario !== null" class="title pt-0">
           {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}
         </h2>
         <h2 v-else class="title pt-0">Itinerario senza nome</h2>
-        <h5 class="description mb-3">Sintesi dell'itinerario selezionato.</h5>
+        <h5 class="description mb-3">Sintesi dell'itinerario selezionato.</h5> -->
         <!--
         <h5
           class="card-title text-center"
@@ -44,17 +50,18 @@
           Il tempo totale include anche gli spostamenti in auto da un'area
           all'altra.
         </h6> -->
-        <div class="row mb-0 text-center">
+
+        <!-- <div class="row mb-0 text-center">
           <h6 class="px-5 mx-lg-5">
             Puoi prenotare il tuo itinerario premendo il bottone "Prenota
             itinerario". Ti verrà fornito il codice identificativo del tuo
             itinerario, salvalo e conservalo per poter poi consultare nuovamente
             l'itinerario.
           </h6>
-        </div>
+        </div> -->
       </div>
 
-      <div class="row mt-3 text-center">
+      <!-- <div class="row mt-3 text-center">
         <div class="col-12">
           <Button
             type="primary"
@@ -64,113 +71,236 @@
             >Prenota itinerario
           </Button>
         </div>
-      </div>
+      </div> -->
 
       <div class="mt-4" v-if="allLoaded">
-        <div class="row text-center ">
-          <div class="col-lg-5 col-sm-12 px-5" v-if="itinerarioLoaded">
-            <sottoitinerariopredefinito
-              class="align-top"
-              v-for="item in this.itinerario.poiGroupedByArea"
-              :item="item"
-              :areaname="item[0]['areaDiAppartenenza'][0]['display_title']"
-              :key="item.name"
-              @infoActivityClicked="showInfoAtivity"
-              @infoActivityVisitPOIClicked="showInfoAtivityVisitPOI"
-            ></sottoitinerariopredefinito>
-          </div>
-          <div class="col-lg-7 col-sm-12 pr-3">
-            <div class="row">
-              <div class="col-12">
-            <div class="postcardpercorsi light orange mx-4">
+        <div class="row text-center">
+          <div class="col-lg-4 col-sm-12 px-5" v-if="itinerarioLoaded">
+            <div style="height: 100%; text-align: left">
+              <h5 class="postcardpercorsi__title orange">
+                <b
+                  >Dettagli -
+                  {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}</b
+                >
+              </h5>
+
+              <div class="postcardpercorsi__bar" style="height: 4px"></div>
               <div
-                :style="[
-                  isLarge && windowWidth > 991
-                    ? {
-                        'max-height': '49rem',
-                        'border-radius': '10px',
-                      }
-                    : {
-                        
-                        'border-radius': '10px',
-                      },
-                ]"
-                class="postcardpercorsi__text text-left pt-3 mt-4"
+                class="postcardpercorsi__preview-txt mb-3"
+                v-if="itinerario['dcterms:description'] !== undefined"
               >
-                <div style="height: 100%">
-                  <h1 class="postcardpercorsi__title orange">
-                    Dettagli -
-                    {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}
-                  </h1>
+                {{ itinerario["dcterms:description"][0]["@value"] }}
+              </div>
+              <div class="postcardpercorsi__preview-txt mb-3" v-else>
+                Nessuna descrizione disponibile
+              </div>
 
-                  <div class="postcardpercorsi__bar" style="height: 4px"></div>
+              <h6>Interessi:</h6>
+              <template
+                v-for="(ambito, index) in itinerario['geo:appartiene_a_ambito']"
+                style="display: inline-block"
+              >
+                {{ ambito["display_title"] }}
+                <template
+                  v-if="
+                    index < itinerario['geo:appartiene_a_ambito'].length - 2
+                  "
+                  >,</template
+                >
+
+                <template
+                  v-if="
+                    index === itinerario['geo:appartiene_a_ambito'].length - 2
+                  "
+                >
+                  e
+                </template>
+              </template>
+
+              <hr />
+
+              <!-- <div
+                v-if="
+                  activitySelectedForInfo === null &&
+                  activityVisitPOISelectedForInfo === null
+                "
+              >
+                <h6>
+                  Seleziona la
+                  <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto al
+                  nome di un'attività per vedere i dettagli
+                </h6>
+              </div> -->
+
+              <div v-if="!showDetails" style="max-height: 480px; overflow-y: scroll">
+                <div
+                  v-for="(poi, index) in itinerario.poi"
+                  :key="'poi' + (index + 200)"
+                >
                   <div
-                    class="postcardpercorsi__preview-txt mb-3"
-                    v-if="itinerario['dcterms:description'] !== undefined"
+                    class="row border mr-1 mb-3 postcard orange"
+                    style="border-radius: 10px; cursor: pointer"
+                    v-on:click="
+                            selectMarkerOnMap(
+                              poi['geo:Titolo_it'][0]['@value'],
+                              'Visita del luogo',
+                              poi['areaDiAppartenenza'][0]['display_title']
+                            )
+                          "
                   >
-                    {{ itinerario["dcterms:description"][0]["@value"] }}
-                  </div>
-                  <div class="postcardpercorsi__preview-txt mb-3" v-else>
-                    Nessuna descrizione disponibile
+                    <div
+                      class="col-2 text-center px-0"
+                      style="
+                        background-color: #4f9bff;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+                        cursor: pointer;
+
+                        display: flex;
+
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    ></div>
+                    <div class="col-10 text-left py-2">
+                      <div class="row">
+                        <div class="col-12">
+                          <b>VISITA DEL LUOGO</b>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <i class="bi bi-pin-map-fill mr-2"></i
+                          >{{ poi["geo:Titolo_it"][0]["@value"] }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <i class="bi bi-map mr-2"></i>
+                          {{ poi["areaDiAppartenenza"][0]["display_title"] }}
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <i class="bi bi-clock mr-2"></i
+                          >{{ poi["geo:Durata"][0]["@value"] }} minuti
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <Button
+                          type="primary"
+                          size="small"
+                          v-on:click="
+                            selectMarkerOnMap(
+                              poi['geo:Titolo_it'][0]['@value'],
+                              'Visita del luogo',
+                              poi['areaDiAppartenenza'][0]['display_title']
+                            )
+                          "
+                          class="m-2 textButtonColor"
+                          >Visualizza dettagli
+                        </Button>
+                      </div>
+                    </div>
                   </div>
 
-                  <h6>Interessi:</h6>
-                  <template
-                    v-for="(ambito, index) in itinerario[
-                      'geo:appartiene_a_ambito'
-                    ]"
-                    style="display: inline-block"
+                  <div
+                    v-for="(it, ind) in poi.activitiesOfPOIPivot"
+                    :key="'availableActivities' + (ind + 200)"
+                    class=""
                   >
-                    {{ ambito["display_title"] }}
-                    <template
-                      v-if="
-                        index < itinerario['geo:appartiene_a_ambito'].length - 2
-                      "
-                      >,</template
+                    <div
+                      class="row border mr-1 mb-3 postcard orange"
+                      style="border-radius: 10px"
+                    >
+                      <div
+                        class="col-2 text-center px-0"
+                        style="
+                          background-color: #4f9bff;
+                          border-top-left-radius: 10px;
+                          border-bottom-left-radius: 10px;
+                          cursor: pointer;
+
+                          display: flex;
+
+                          justify-content: center;
+                          align-items: center;
+                        "
+                      ></div>
+                      <div class="col-10 text-left py-2">
+                        <div class="row">
+                          <div class="col-12">
+                            <b>{{ it["o:title"].toUpperCase() }}</b>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-pin-map-fill mr-2"></i
+                            >{{ poi["geo:Titolo_it"][0]["@value"] }}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-map mr-2"></i>
+                            {{ poi["areaDiAppartenenza"][0]["display_title"] }}
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                            <i class="bi bi-clock mr-2"></i
+                            >{{ it["geo:Durata"][0]["@value"] }} minuti
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <Button
+                            type="primary"
+                            size="small"
+                            v-on:click="
+                              selectMarkerOnMap(
+                                poi['geo:Titolo_it'][0]['@value'],
+                                it['o:title'],
+                                poi['areaDiAppartenenza'][0]['display_title']
+                              )
+                            "
+                            class="m-2 textButtonColor"
+                            >Visualizza dettagli
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                </div>
+              </div>
+              <div v-else>
+                <div class="row mt-2">
+                  <div class="col-12">
+                    <!--TODO: sistemare pagine e step-->
+                    <i
+                      class="bi bi-arrow-left ml-3"
+                      style="font-size: 1.5rem; color: black; cursor: pointer"
+                      v-on:click="showDetails = false"
+                    >
+                      Visualizza elenco attività</i
                     >
 
-                    <template
-                      v-if="
-                        index ===
-                        itinerario['geo:appartiene_a_ambito'].length - 2
-                      "
-                    >
-                      e
-                    </template>
-                  </template>
-
-                  <hr />
-
-                  <div
-                    v-if="
-                      activitySelectedForInfo === null &&
-                      activityVisitPOISelectedForInfo === null
-                    "
-                  >
-                    <h6>
-                      Seleziona la
-                      <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i> accanto
-                      al nome di un'attività per vedere i dettagli
-                    </h6>
-                  </div>
-
-                  <div v-if="activitySelectedForInfo === null"></div>
-                  <div v-else>
-                    <!-- {{activitySelectedForInfo}} -->
-                    <infoEsperimento
+                    <esperimento
                       class="align-top"
                       :item="activitySelectedForInfo"
-                    ></infoEsperimento>
+                      v-if="activitySelectedForInfo !== null"
+                    ></esperimento>
+<div class="row mx-2 mt-3">
+                    {{activityVisitPOISelectedForInfo}}
+</div>
                   </div>
+                </div>
+              </div>
 
-                  <div v-if="activityVisitPOISelectedForInfo === null"></div>
-                  <div v-else>
-                    <h5>{{visitPOIselectedforInfo}}</h5>
-                    <!-- {{activitySelectedForInfo}} -->
-                    {{ activityVisitPOISelectedForInfo }}
-                  </div>
-
-                  <!-- <div
+              <!-- <div
                     :class="{
                       'text-left mt-5': isLarge,
                       'text-center': !isLarge,
@@ -184,9 +314,148 @@
                       >Seleziona itinerario
                     </Button>
                   </div> -->
-                </div>
-              </div>
             </div>
+
+            <!-- <sottoitinerariopredefinito
+              class="align-top"
+              v-for="item in this.itinerario.poiGroupedByArea"
+              :item="item"
+              :areaname="item[0]['areaDiAppartenenza'][0]['display_title']"
+              :key="item.name"
+              @infoActivityClicked="showInfoAtivity"
+              @infoActivityVisitPOIClicked="showInfoAtivityVisitPOI"
+            ></sottoitinerariopredefinito> -->
+          </div>
+          <div class="col-lg-8 col-sm-12 pr-3">
+            <div class="row px-4">
+              <div class="col-12">
+                <!-- <div class="postcardpercorsi light orange mx-4">
+                  <div
+                    :style="[
+                      isLarge && windowWidth > 991
+                        ? {
+                            'max-height': '49rem',
+                            'border-radius': '10px',
+                          }
+                        : {
+                            'border-radius': '10px',
+                          },
+                    ]"
+                    class="postcardpercorsi__text text-left pt-3 mt-4"
+                  >
+                    <div style="height: 100%">
+                      <h1 class="postcardpercorsi__title orange">
+                        Dettagli -
+                        {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}
+                      </h1>
+
+                      <div
+                        class="postcardpercorsi__bar"
+                        style="height: 4px"
+                      ></div>
+                      <div
+                        class="postcardpercorsi__preview-txt mb-3"
+                        v-if="itinerario['dcterms:description'] !== undefined"
+                      >
+                        {{ itinerario["dcterms:description"][0]["@value"] }}
+                      </div>
+                      <div class="postcardpercorsi__preview-txt mb-3" v-else>
+                        Nessuna descrizione disponibile
+                      </div>
+
+                      <h6>Interessi:</h6>
+                      <template
+                        v-for="(ambito, index) in itinerario[
+                          'geo:appartiene_a_ambito'
+                        ]"
+                        style="display: inline-block"
+                      >
+                        {{ ambito["display_title"] }}
+                        <template
+                          v-if="
+                            index <
+                            itinerario['geo:appartiene_a_ambito'].length - 2
+                          "
+                          >,</template
+                        >
+
+                        <template
+                          v-if="
+                            index ===
+                            itinerario['geo:appartiene_a_ambito'].length - 2
+                          "
+                        >
+                          e
+                        </template>
+                      </template>
+
+                      <hr />
+
+                      <div
+                        v-if="
+                          activitySelectedForInfo === null &&
+                          activityVisitPOISelectedForInfo === null
+                        "
+                      >
+                        <h6>
+                          Seleziona la
+                          <i class="ml-2 mt-3 bi bi-info-circle mr-2"></i>
+                          accanto al nome di un'attività per vedere i dettagli
+                        </h6>
+                      </div>
+
+                      <div v-if="activitySelectedForInfo === null"></div>
+                      <div v-else>
+                        <infoEsperimento
+                          class="align-top"
+                          :item="activitySelectedForInfo"
+                        ></infoEsperimento>
+                      </div>
+
+                      <div
+                        v-if="activityVisitPOISelectedForInfo === null"
+                      ></div>
+                      <div v-else>
+                        <h5>{{ visitPOIselectedforInfo }}</h5>
+                        {{ activityVisitPOISelectedForInfo }}
+                      </div>
+
+                    </div>
+                  </div>
+                </div> -->
+
+                <l-map
+                  style="height: 700px; border-radius: 10px"
+                  :zoom="zoom"
+                  :center="centerMap"
+                  ref="mappaSottoItinerario"
+                >
+                  <l-tile-layer
+                    :url="url"
+                    :attribution="attribution"
+                  ></l-tile-layer>
+                  <l-marker
+                    v-for="(marker, index) in markers"
+                    :lat-lng="marker.marker.getLatLng()"
+                    :key="'marker' + index"
+                  >
+                    <l-icon
+                      v-if="marker.poiSelected"
+                      :icon-url="require('../icons/selectedPOI.png')"
+                    ></l-icon>
+                    <l-icon
+                      v-if="!marker.poiSelected"
+                      :icon-url="require('../icons/unselectedPOI.png')"
+                    ></l-icon>
+                    <l-popup :options="anchorOptions">
+                      <div class="px-3">
+                        <div class="row">
+                          <h5>{{ marker.POItitle }}</h5>
+                        </div>
+                      </div>
+                    </l-popup>
+                  </l-marker>
+                </l-map>
               </div>
             </div>
           </div>
@@ -205,6 +474,18 @@ import store from "../store";
 import $ from "jquery";
 import sottoitinerariopredefinito from "../components/customComponents/sottoitinerariopredefinito.vue";
 import infoEsperimento from "../components/customComponents/infoEsperimento";
+import {
+  LCircleMarker,
+  LGeoJson,
+  LMap,
+  LMarker,
+  LPopup,
+  LIcon,
+  LTileLayer,
+  LControl,
+} from "vue2-leaflet";
+import esperimento from "../components/customComponents/esperimento";
+import router from "../router";
 
 const Common = require("@/Common.vue").default;
 
@@ -214,9 +495,20 @@ export default {
   name: "sintesiitinerariopredefinito",
   bodyClass: "strumenti-esperimenti-page",
   components: {
-    sottoitinerariopredefinito,
+    //Component Leaflet map
+    LMap,
+    LTileLayer,
+    //LGeoJson,
+    LMarker,
+    LPopup,
+    //LCircleMarker,
+    LIcon,
+    //LControl,
+
+    //sottoitinerariopredefinito,
     Button,
-    infoEsperimento,
+    //infoEsperimento,
+    esperimento,
   },
   data() {
     return {
@@ -229,6 +521,22 @@ export default {
       activityVisitPOISelectedForInfo: null,
       visitPOIselectedforInfo: "",
       windowWidth: 0,
+
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 16,
+      center: [45.47724690648075, 7.888264286334166],
+      //markerLatLng: [51.504, -0.159],
+      map: null,
+      geojson: null,
+      markers: [],
+      markersPolylines: [],
+      anchorOptions: { offset: L.point(0, -30) },
+
+      coord: null,
+
+      showDetails: false,
     };
   },
 
@@ -240,9 +548,18 @@ export default {
 
     this.itinerarioLoaded = true;
     //console.log(store.state.sottoitinerari);
+
+    this.createMarkerArray();
+    this.initializeMarkersOfFilteredPOI();
   },
 
   methods: {
+        goBack() {
+      console.log("GO BACK");
+      router.go(-1);
+
+      //router.replace({ path: "/percorsi" });
+    },
     sendEmail() {
       var emailAddress = "test@gmail.com";
       var subject = "Prenotazione itinerario codice: " + this.itineraryCode;
@@ -254,26 +571,42 @@ export default {
       mail.click();
     },
 
-    showInfoAtivity(activityName, areaname) {
+    showInfoAtivity(poiName, activityName, areaname) {
       console.log("SONO IN showInfoAtivity: " + activityName + "; " + areaname);
 
-      console.log(this.itinerario.poiGroupedByArea[areaname]);
+      if (activityName !== "Visita del luogo") {
+        console.log(this.itinerario.poiGroupedByArea[areaname]);
 
-      this.activityVisitPOISelectedForInfo = null;
+        this.activityVisitPOISelectedForInfo = null;
 
-      Array.prototype.forEach.call(
-        this.itinerario.poiGroupedByArea[areaname],
-        (poi) => {
-          Array.prototype.forEach.call(poi.activitiesOfPOIPivot, (activity) => {
-            if (activity["o:title"] === activityName) {
-              this.activitySelectedForInfo = activity;
-              console.log("Activity trovata");
-            }
-          });
-        }
-      );
+        Array.prototype.forEach.call(
+          this.itinerario.poiGroupedByArea[areaname],
+          (poi) => {
+            Array.prototype.forEach.call(
+              poi.activitiesOfPOIPivot,
+              (activity) => {
+                console.log("activity title");
+                console.log(activity["o:title"]);
+                if (activity["o:title"] === activityName) {
+                  this.activitySelectedForInfo = activity;
+                  console.log("Activity trovata");
+                }
+              }
+            );
+          }
+        );
 
-      console.log(this.activitySelectedForInfo);
+        this.activityVisitPOISelectedForInfo = "";
+
+        console.log(this.activitySelectedForInfo);
+      } else {
+        this.activityVisitPOISelectedForInfo =
+        "La visita del " +
+        poiName +
+        " consiste in una visita del luogo guidati da una persona che spiegherà tutto il necessario";
+
+        this.activitySelectedForInfo = null;
+      }
     },
 
     showInfoAtivityVisitPOI(areaname, poiName) {
@@ -304,6 +637,87 @@ export default {
 
       // console.log(this.activitySelectedForInfo);
     },
+
+    createMarkerArray() {
+      //Punto di partenza
+      //this.markersPolylines.push(this.startPoint);
+      console.log("createMarkerArray");
+      Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+        console.log(poi);
+        var POIlat = poi["marker"]["o-module-mapping:lat"];
+        var POIlng = poi["marker"]["o-module-mapping:lng"];
+
+        var POIcoordinates = [POIlat, POIlng];
+
+        this.markersPolylines.push(POIcoordinates);
+      });
+
+      //Punto di arrivo
+      //this.markersPolylines.push(this.endPoint);
+
+      //console.log(this.markersPolylines);
+    },
+
+    initializeMarkersOfFilteredPOI() {
+      console.log("initializeMarkersOfFilteredPOI");
+      this.markers = [];
+
+      Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+        //viene usato anche per il punto di arrivo
+        var isStartingPoint =
+          poi["poiName"] === "Punto di partenza" ||
+          poi["poiName"] === "Punto di arrivo";
+
+        if (isStartingPoint) {
+          this.markers.push({
+            marker: L.marker([
+              poi["marker"]["o-module-mapping:lat"],
+              poi["marker"]["o-module-mapping:lng"],
+            ]),
+            color: "#1585bd",
+            strokeColor: "#1b4f88",
+            circleColor: "#ffffff",
+            POItitle: poi["geo:Titolo_it"][0]["@value"],
+            //TODo: aggiungere attributi
+            isStartPoint: isStartingPoint,
+            poiSelected: false,
+          });
+        } else {
+          this.markers.push({
+            marker: L.marker([
+              poi["marker"]["o-module-mapping:lat"],
+              poi["marker"]["o-module-mapping:lng"],
+            ]),
+            color: "#1585bd",
+            strokeColor: "#1b4f88",
+            circleColor: "#ffffff",
+            POItitle: poi["geo:Titolo_it"][0]["@value"],
+            //TODo: aggiungere attributi
+            isStartPoint: isStartingPoint,
+            poiSelected: false,
+          });
+        }
+      });
+
+      console.log(this.markers);
+
+      this.markersCreated = true;
+    },
+
+    selectMarkerOnMap(poiName, activityName, areaName) {
+      console.log("POI NAME: " + poiName);
+
+      this.showDetails = true;
+      Array.prototype.forEach.call(this.markers, (marker) => {
+        if (marker.POItitle === poiName) {
+          marker.poiSelected = true;
+        } else {
+          marker.poiSelected = false;
+        }
+      });
+
+      this.showInfoAtivity(poiName, activityName, areaName);
+    },
   },
 
   created() {
@@ -317,6 +731,27 @@ export default {
   computed: {
     isLarge() {
       return this.windowWidth >= 768;
+    },
+
+    centerMap() {
+      var sumLat = 0;
+      var sumLng = 0;
+
+      Array.prototype.forEach.call(this.markers, (marker) => {
+        console.log(marker.marker["_latlng"]);
+
+        sumLat += marker.marker["_latlng"].lat;
+        sumLng += marker.marker["_latlng"].lng;
+      });
+
+      var middleLat = sumLat / this.markers.length;
+      var middleLng = sumLng / this.markers.length;
+
+      if (isNaN(middleLat) || isNaN(middleLng)) {
+        return [45.47724690648075, 7.888264286334166];
+      } else {
+        return [middleLat, middleLng];
+      }
     },
   },
 

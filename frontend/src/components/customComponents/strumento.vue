@@ -1,7 +1,20 @@
 <template>
   <card
     v-if="!isLoadingImages"
-    style="width: 28rem; height: 33rem; border-radius: 10px"
+    :style="[
+      isLarge
+        ? {
+            'max-width': '28rem',
+            height: '32rem',
+            'max-height': '32rem',
+            'border-radius': '10px',
+          }
+        : {
+            'max-width': '28rem',
+            'max-sheight': '45rem',
+            'border-radius': '10px',
+          },
+    ]"
     class="mx-2 postcardattivita attivita orange"
   >
     <swiper
@@ -40,7 +53,7 @@
 
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-            <div
+      <div
         class="postcardattivita__bar margin-auto"
         style="display: inline-block"
       ></div>
@@ -86,6 +99,7 @@
 import TabPane from "../Tabs/Tab.vue";
 import Tabs from "../Tabs/Tabs.vue";
 import Card from "../Cards/Card.vue";
+import $ from "jquery";
 
 import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
@@ -107,7 +121,18 @@ export default {
   data() {
     return {
       isLoadingImages: true,
+      windowWidth: 0,
     };
+  },
+
+  created() {
+    this.windowWidth = $(window).width();
+
+    $(window).resize(() => {
+      this.windowWidth = $(window).width();
+    });
+
+    console.log("WIDTH: " + this.windowWidth);
   },
 
   mounted() {
@@ -122,6 +147,9 @@ export default {
   computed: {
     swiper() {
       return this.$refs.mySwiperStrumenti.$swiper;
+    },
+    isLarge() {
+      return this.windowWidth >= 768;
     },
   },
 };

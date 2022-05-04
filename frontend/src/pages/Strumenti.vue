@@ -4,17 +4,31 @@
       <div class="container">
         <h2 class="title pt-0">STRUMENTI</h2>
         <div class="row">
-          <h5 class="description mb-0">Elenco di strumenti usati al GeoDidaLab!</h5>
+          <h5 class="description mb-0">
+            Elenco di strumenti usati al GeoDidaLab!
+          </h5>
         </div>
       </div>
       <div class="mt-4" v-if="allLoaded">
-        <div class="row text-center">
+        <div class="row text-center d-none d-lg-block">
           <div class="col-12">
             <strumento
+              class="align-top"
               v-for="(item, index) in this.$store.state.strumenti"
               :key="index"
               :item="item"
             ></strumento>
+          </div>
+        </div>
+
+        <div
+          class="row mx-3"
+          style="text-align: center"
+          v-for="(item, index) in this.$store.state.strumenti"
+          :key="index"
+        >
+          <div class="col-12 d-block d-lg-none">
+            <strumento class="align-top" :item="item"></strumento>
           </div>
         </div>
       </div>

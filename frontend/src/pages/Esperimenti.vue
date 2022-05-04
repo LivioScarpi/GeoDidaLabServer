@@ -8,13 +8,23 @@
         </h5>
       </div>
       <div class="mt-4" v-if="allLoaded">
-        <div class="row text-center">
-          <div class="col-12">
+        <div class="row text-center d-none d-lg-block">
+          <div class="col-12 ">
             <esperimento
               class="align-top"
               v-for="item in this.$store.state.esperimenti"
               :item="item"
               :key="item.name"
+            ></esperimento>
+          </div>
+        </div>
+
+        <div class="row mx-3" style="text-align: center" v-for="item in this.$store.state.esperimenti" :key="item.name">
+          <div class="col-12  d-block d-lg-none">
+            <esperimento
+              class="align-top"
+              :item="item"
+              
             ></esperimento>
           </div>
         </div>

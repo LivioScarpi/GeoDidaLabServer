@@ -45,9 +45,9 @@
         :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
         v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
       >
-        <div class="embed-responsive embed-responsive-16by9">
+        <div class="embed-responsive embed-responsive-16by9 ">
           <iframe
-            class="embed-responsive-item"
+            class="embed-responsive-item "
             frameborder="0"
             :src="videoSource()"
             allowfullscreen
@@ -63,6 +63,7 @@
               right: 0px;
               bottom: 0px;
               border-radius: 10px;
+              margin-y: auto;
             "
             height="100%"
             width="100%"

@@ -337,7 +337,7 @@
                           >
                           <div class="mt-4">
                             <esperimento
-                              class="align-top"
+                              class="align-top text-center"
                               :item="activitySelectedForInfo"
                               v-if="activitySelectedForInfo !== null"
                             ></esperimento>
@@ -545,14 +545,14 @@
                       <i
                         class="bi bi-arrow-left ml-3"
                         style="font-size: 1.5rem; color: black; cursor: pointer"
-                        v-on:click="showDetails = false"
+                        v-on:click="goBackAndResetMarkersIcon()"
                       >
                         Visualizza elenco attività</i
                       >
 
                       <div class="mt-4">
                         <esperimento
-                          class="align-top"
+                          class="align-top text-center"
                           :item="activitySelectedForInfo"
                           v-if="activitySelectedForInfo !== null"
                         ></esperimento>
@@ -890,6 +890,13 @@ export default {
 
       this.showInfoAtivity(poiName, activityName, areaName);
     },
+
+    goBackAndResetMarkersIcon(){
+      this.showDetails = false;
+      Array.prototype.forEach.call(this.markers, (marker) => {
+        marker.poiSelected = false;
+      });
+    }
   },
 
   created() {

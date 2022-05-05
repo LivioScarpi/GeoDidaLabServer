@@ -382,6 +382,16 @@
                           </div>
                         </l-popup>
                       </l-marker>
+
+                      <l-control>
+                        <div class="legend">
+                          <h4>Legenda</h4>
+                          <i style="background: #e35747"></i
+                          ><span>Luogo con l'attività selezionata</span><br />
+                          <i style="background: #437fc5"></i
+                          ><span>Luogo presente nell'itinerario</span><br />
+                        </div>
+                      </l-control>
                     </l-map>
                   </div>
                 </div>
@@ -625,6 +635,16 @@
                       </div>
                     </l-popup>
                   </l-marker>
+
+                  <l-control>
+                    <div class="legend">
+                      <h4>Legenda</h4>
+                      <i style="background: #e35747"></i
+                      ><span>Luogo con l'attività selezionata</span><br />
+                      <i style="background: #437fc5"></i
+                      ><span>Luogo presente nell'itinerario</span><br />
+                    </div>
+                  </l-control>
                 </l-map>
               </div>
             </div>
@@ -673,7 +693,7 @@ export default {
     LPopup,
     //LCircleMarker,
     LIcon,
-    //LControl,
+    LControl,
 
     //sottoitinerariopredefinito,
     Button,
@@ -892,12 +912,12 @@ export default {
       this.showInfoAtivity(poiName, activityName, areaName);
     },
 
-    goBackAndResetMarkersIcon(){
+    goBackAndResetMarkersIcon() {
       this.showDetails = false;
       Array.prototype.forEach.call(this.markers, (marker) => {
         marker.poiSelected = false;
       });
-    }
+    },
   },
 
   created() {

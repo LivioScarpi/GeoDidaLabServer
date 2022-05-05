@@ -596,7 +596,7 @@
               <div class="col-12">
                 <l-map
                   style="height: 700px; border-radius: 10px"
-                  :zoom="zoom"
+                  :zoom="zoomLarge"
                   :center="centerMap"
                   ref="mappaSottoItinerario"
                 >
@@ -696,6 +696,7 @@ export default {
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 16,
+      zoomLarge: 11,
       center: [45.47724690648075, 7.888264286334166],
       //markerLatLng: [51.504, -0.159],
       map: null,

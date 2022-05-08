@@ -7,49 +7,6 @@
         v-on:click="goBack()"
       ></i>
       <div class="container">
-        <!-- <h2 v-if="this.itinerario !== null" class="title pt-0">
-          {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}
-        </h2>
-        <h2 v-else class="title pt-0">Itinerario senza nome</h2>
-        <h5 class="description mb-3">Sintesi dell'itinerario selezionato.</h5> -->
-        <!--
-        <h5
-          class="card-title text-center"
-          v-if="
-            parseInt(totalTimeObject.hours) === 1 &&
-            parseInt(totalTimeObject.minutes) === 0
-          "
-        >
-          Tempo totale: {{ totalTimeObject.hours }} ora
-        </h5>
-        <h5
-          class="card-title text-center"
-          v-else-if="parseInt(totalTimeObject.hours) === 1"
-        >
-          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ora e
-          {{ parseInt(totalTimeObject.minutes) }} minuti
-        </h5>
-        <h5
-          class="card-title text-center"
-          v-else-if="parseInt(totalTimeObject.hours) > 0 && parseInt(totalTimeObject.minutes) === 0"
-        >
-          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ore
-        </h5>
-        <h5
-          class="card-title text-center"
-          v-else-if="parseInt(totalTimeObject.hours) > 0"
-        >
-          Tempo totale: {{ parseInt(totalTimeObject.hours) }} ore e
-          {{ parseInt(totalTimeObject.minutes) }} minuti
-        </h5>
-        <h5 class="card-title text-center" v-else>
-          Tempo totale: {{ parseInt(totalTimeObject.minutes) }} minuti
-        </h5>-->
-        <!-- <h6 class="card-title text-center" v-if="this.$store.state.sottoitinerari.length > 1">
-          Il tempo totale include anche gli spostamenti in auto da un'area
-          all'altra.
-        </h6> -->
-
         <!-- <div class="row mb-0 text-center">
           <h6 class="px-5 mx-lg-5">
             Puoi prenotare il tuo itinerario premendo il bottone "Prenota
@@ -77,13 +34,62 @@
           <div class="col-lg-4 col-sm-12 px-5" v-if="itinerarioLoaded">
             <div style="height: 100%; text-align: left">
               <h5 class="postcardpercorsi__title orange">
-                <b
-                  >Dettagli -
-                  {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}</b
-                >
+                <b>Dettagli - </b>
+
+                <b v-if="this.itinerario !== null" class="title pt-0">
+                  {{ this.itinerario["geo:Titolo_it"][0]["@value"] }}
+                </b>
+                <b v-else class="title pt-0">Itinerario senza nome</b>
               </h5>
 
-              <div class="postcardpercorsi__bar" style="height: 4px"></div>
+              <h6
+                class="card-title"
+                v-if="
+                  parseInt(totalTimeObject.hours) === 1 &&
+                  parseInt(totalTimeObject.minutes) === 0
+                "
+              >
+                 <i class="bi bi-clock mr-2"></i
+                                > {{ totalTimeObject.hours }} ora
+              </h6>
+              <h6
+                class="card-title"
+                v-else-if="parseInt(totalTimeObject.hours) === 1"
+              >
+                 <i class="bi bi-clock mr-2"></i
+                                > {{ parseInt(totalTimeObject.hours) }} ora e
+                {{ parseInt(totalTimeObject.minutes) }} minuti
+              </h6>
+              <h6
+                class="card-title"
+                v-else-if="
+                  parseInt(totalTimeObject.hours) > 0 &&
+                  parseInt(totalTimeObject.minutes) === 0
+                "
+              >
+                 <i class="bi bi-clock mr-2"></i
+                                > {{ parseInt(totalTimeObject.hours) }} ore
+              </h6>
+              <h6
+                class="card-title"
+                v-else-if="parseInt(totalTimeObject.hours) > 0"
+              >
+                 <i class="bi bi-clock mr-2"></i
+                                > {{ parseInt(totalTimeObject.hours) }} ore e
+                {{ parseInt(totalTimeObject.minutes) }} minuti
+              </h6>
+              <h6 class="card-title" v-else>
+                 <i class="bi bi-clock mr-2"></i
+                                > {{ parseInt(totalTimeObject.minutes) }} minuti
+              </h6>
+
+                Il tempo totale include anche gli spostamenti in auto da un'area
+                all'altra.
+
+
+              <div class="mt-3 postcardpercorsi__bar" style="height: 4px"></div>
+                            <h6>Descrizione</h6>
+
               <div
                 class="postcardpercorsi__preview-txt mb-3"
                 v-if="itinerario['dcterms:description'] !== undefined"
@@ -681,6 +687,9 @@ const Common = require("@/Common.vue").default;
 
 import { Button } from "element-ui";
 
+import { indexPOIitinerario1 } from "../utils/itinerarioIvreaStones/indexPOIitinerario1.js";
+import { costItinerario1 } from "../utils/itinerarioIvreaStones/itinerario1.js";
+
 export default {
   name: "sintesiitinerariopredefinito",
   bodyClass: "strumenti-esperimenti-page",
@@ -730,6 +739,10 @@ export default {
       showDetails: false,
 
       selectedTab: "ElencoAttività",
+
+      costBetweenPOI: null,
+      indexesCostPOI: null,
+      totalTimeObject: {},
     };
   },
 
@@ -742,8 +755,21 @@ export default {
     this.itinerarioLoaded = true;
     //console.log(store.state.sottoitinerari);
 
+    if (
+      this.itinerario["geo:Titolo_it"][0]["@value"].includes("Ivrea Stones")
+    ) {
+      console.log("prendo i costi dell'itinerario 1");
+      this.costBetweenPOI = costItinerario1;
+      this.indexesCostPOI = indexPOIitinerario1;
+    }
+
+    console.log(this.costBetweenPOI);
+    console.log(this.indexesCostPOI);
+
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();
+
+    this.totalTimeObject = this.msToTime(this.totalTime);
   },
 
   methods: {
@@ -918,6 +944,26 @@ export default {
         marker.poiSelected = false;
       });
     },
+
+    msToTime(duration) {
+      var milliseconds = Math.floor((duration % 1000) / 100),
+        seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      var timeObject = {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: milliseconds,
+      };
+
+      return timeObject;
+    },
   },
 
   created() {
@@ -931,6 +977,53 @@ export default {
   computed: {
     isLarge() {
       return this.windowWidth >= 768;
+    },
+
+    totalTime() {
+      var totalTimePOI = 0;
+      console.log("totalTimeActivities");
+      console.log(this.itinerario.poi);
+
+      Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+        totalTimePOI += parseInt(poi["geo:Durata"][0]["@value"]) * 60000; // convertiamo i minuti in millisecondi
+
+        Array.prototype.forEach.call(poi.activitiesOfPOIPivot, (activity) => {
+          totalTimePOI += activity.durataMillisecondi;
+        });
+      });
+
+      console.log("INIZIO A SOMMARE GLI SPOSTAMENTI");
+      console.log(this.indexesCostPOI);
+
+      //Sommo i tempi di tragitto da un'area all'altra
+      for (var i = 0; i < this.itinerario.poi.length - 1; i++) {
+        console.log("CICLO " + i);
+        var fromIndex = 0;
+        var toIndex = 0;
+
+        Array.prototype.forEach.call(this.indexesCostPOI, (poiIndexes) => {
+          if (poiIndexes.poiName == this.itinerario.poi[i]["o:title"]) {
+            console.log("HO TROVATO L'INDICE FROM");
+            fromIndex = poiIndexes.poiID;
+          }
+
+          if (poiIndexes.poiName == this.itinerario.poi[i + 1]["o:title"]) {
+            console.log("HO TROVATO L'INDICE TO");
+            toIndex = poiIndexes.poiID;
+          }
+        });
+
+        console.log("FROM INDEX: " + fromIndex);
+        console.log("TO INDEX: " + toIndex);
+
+        totalTimePOI += this.costBetweenPOI[fromIndex][toIndex] * 60000; // convertiamo i tempi da minuti in millisecondi
+
+        //fromIndex = this.indexPOIitinerario1[]
+      }
+
+      //console.log(totalTimePOI);
+
+      return totalTimePOI;
     },
 
     centerMap() {

@@ -2149,7 +2149,7 @@ export default {
                 //se l'utente vuole visitare il POI viene aggiunto il Job
                 var visitPOIjob = {
                   id: jobID, //1, //l'id deve essere stabilito a priori, ad esempio: lago licheni -> 1
-                  description: poi["geo:Titolo_it"][0]["@value"] + "_Visita",
+                  description: poi["geo:Titolo_it"][0]["@value"] + "_Visita del luogo",
                   service: this.getMilliseconds(poi["geo:Durata"][0]["@value"]),
                   location: [
                     poi.marker["o-module-mapping:lng"],

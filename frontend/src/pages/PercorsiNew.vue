@@ -13,6 +13,7 @@
         </h4>
       </div>
     </div>
+
     <div v-if="currentStep === 1">
       <div class="row px-3 mb-3">
         <div class="col-2 text-center"></div>
@@ -29,6 +30,28 @@
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
         <div class="col-2 text-center"></div>
+      </div>
+      <div class="row my-3">
+        <div class="col-12">
+          <Button
+              v-if="currentStep >= 1"
+              size="large"
+              round
+              v-on:click="incrementStep()"
+              class="buttonAlignRight m-2 blueButton"
+              style="background-color: cornflowerblue"
+          >Avanti
+          </Button>
+          <Button
+              v-if="currentStep >= 1"
+              size="large"
+              type="warning"
+              round
+              v-on:click="goBack()"
+              class="buttonAlignLeft m-2 textButtonColor"
+          >Indietro
+          </Button>
+        </div>
       </div>
 
       <div class="row px-3">
@@ -1325,28 +1348,7 @@
       </div>
     </div>
 
-    <div class="row pt-3">
-      <div class="col-12">
-        <Button
-          v-if="currentStep >= 1"
-          size="large"
-          round
-          v-on:click="incrementStep()"
-          class="buttonAlignRight m-2 blueButton"
-          style="background-color: cornflowerblue"
-          >Avanti
-        </Button>
-        <Button
-          v-if="currentStep >= 1"
-          size="large"
-          type="warning"
-          round
-          v-on:click="goBack()"
-          class="buttonAlignLeft m-2 textButtonColor"
-          >Indietro
-        </Button>
-      </div>
-    </div>
+
 
     <modal
       :show.sync="modals.featureDevelopment"

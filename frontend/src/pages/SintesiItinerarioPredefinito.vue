@@ -42,53 +42,11 @@
                 <b v-else class="title pt-0">Itinerario senza nome</b>
               </h5>
 
-              <h6
-                class="card-title"
-                v-if="
-                  parseInt(totalTimeObject.hours) === 1 &&
-                  parseInt(totalTimeObject.minutes) === 0
-                "
-              >
-                 <i class="bi bi-clock mr-2"></i
-                                > {{ totalTimeObject.hours }} ora
-              </h6>
-              <h6
-                class="card-title"
-                v-else-if="parseInt(totalTimeObject.hours) === 1"
-              >
-                 <i class="bi bi-clock mr-2"></i
-                                > {{ parseInt(totalTimeObject.hours) }} ora e
-                {{ parseInt(totalTimeObject.minutes) }} minuti
-              </h6>
-              <h6
-                class="card-title"
-                v-else-if="
-                  parseInt(totalTimeObject.hours) > 0 &&
-                  parseInt(totalTimeObject.minutes) === 0
-                "
-              >
-                 <i class="bi bi-clock mr-2"></i
-                                > {{ parseInt(totalTimeObject.hours) }} ore
-              </h6>
-              <h6
-                class="card-title"
-                v-else-if="parseInt(totalTimeObject.hours) > 0"
-              >
-                 <i class="bi bi-clock mr-2"></i
-                                > {{ parseInt(totalTimeObject.hours) }} ore e
-                {{ parseInt(totalTimeObject.minutes) }} minuti
-              </h6>
-              <h6 class="card-title" v-else>
-                 <i class="bi bi-clock mr-2"></i
-                                > {{ parseInt(totalTimeObject.minutes) }} minuti
-              </h6>
-
-                Il tempo totale include anche gli spostamenti in auto da un'area
-                all'altra.
-
+              Il tempo totale include anche gli spostamenti in auto da un'area
+              all'altra.
 
               <div class="mt-3 postcardpercorsi__bar" style="height: 4px"></div>
-                            <h6>Descrizione</h6>
+              <h6>Descrizione</h6>
 
               <div
                 class="postcardpercorsi__preview-txt mb-3"
@@ -121,6 +79,49 @@
                   e
                 </template>
               </template>
+
+              <div class="mt-3">
+                <h6
+                  class="card-title"
+                  v-if="
+                    parseInt(totalTimeObject.hours) === 1 &&
+                    parseInt(totalTimeObject.minutes) === 0
+                  "
+                >
+                  <i class="bi bi-clock mr-2"></i>
+                  {{ totalTimeObject.hours }} ora
+                </h6>
+                <h6
+                  class="card-title"
+                  v-else-if="parseInt(totalTimeObject.hours) === 1"
+                >
+                  <i class="bi bi-clock mr-2"></i>
+                  {{ parseInt(totalTimeObject.hours) }} ora e
+                  {{ parseInt(totalTimeObject.minutes) }} minuti
+                </h6>
+                <h6
+                  class="card-title"
+                  v-else-if="
+                    parseInt(totalTimeObject.hours) > 0 &&
+                    parseInt(totalTimeObject.minutes) === 0
+                  "
+                >
+                  <i class="bi bi-clock mr-2"></i>
+                  {{ parseInt(totalTimeObject.hours) }} ore
+                </h6>
+                <h6
+                  class="card-title"
+                  v-else-if="parseInt(totalTimeObject.hours) > 0"
+                >
+                  <i class="bi bi-clock mr-2"></i>
+                  {{ parseInt(totalTimeObject.hours) }} ore e
+                  {{ parseInt(totalTimeObject.minutes) }} minuti
+                </h6>
+                <h6 class="card-title" v-else>
+                  <i class="bi bi-clock mr-2"></i>
+                  {{ parseInt(totalTimeObject.minutes) }} minuti
+                </h6>
+              </div>
 
               <hr />
 
@@ -200,8 +201,11 @@
 
                               justify-content: center;
                               align-items: center;
+                              color: #ffffff;
                             "
-                          ></div>
+                          >
+                            <h5>{{ index }}</h5>
+                          </div>
                           <div class="col-10 text-left py-2">
                             <div class="row">
                               <div class="col-12">
@@ -271,8 +275,11 @@
 
                                 justify-content: center;
                                 align-items: center;
+                                color: #ffffff;
                               "
-                            ></div>
+                            >
+                              <h5>{{ index }}</h5>
+                            </div>
                             <div class="col-10 text-left py-2">
                               <div class="row">
                                 <div class="col-12">
@@ -436,8 +443,11 @@
 
                           justify-content: center;
                           align-items: center;
+                          color: #ffffff;
                         "
-                      ></div>
+                      >
+                        <h5>{{ index }}</h5>
+                      </div>
                       <div class="col-10 text-left py-2">
                         <div class="row">
                           <div class="col-12">
@@ -503,8 +513,11 @@
 
                             justify-content: center;
                             align-items: center;
+                            color: #ffffff;
                           "
-                        ></div>
+                        >
+                          <h5>{{ index }}</h5>
+                        </div>
                         <div class="col-10 text-left py-2">
                           <div class="row">
                             <div class="col-12">
@@ -711,6 +724,7 @@ export default {
   },
   data() {
     return {
+      counter: 0,
       itinerario: null,
       isLoadingImages: true,
       isLoadingVideos: true,
@@ -773,6 +787,9 @@ export default {
   },
 
   methods: {
+    incrementCounter () {
+      this.counter = this.counter+1;
+    },
     goBack() {
       console.log("GO BACK");
       router.go(-1);

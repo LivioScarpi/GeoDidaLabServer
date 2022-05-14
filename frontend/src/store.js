@@ -41,6 +41,8 @@ const store = new Vuex.Store({
 
         sottoitinerari: [],
 
+        activitiesSelectedList: [],
+
 
         media: {
             mediaEsperimenti: [],

@@ -1906,6 +1906,25 @@ export default {
 
     this.$store.state.areasWithSomethingSelected = [];
 
+    //SINCRONIZZO I FILTERED POI CON LA LISTA DELLE ATTIVITA SELEZIONATE
+    Array.prototype.forEach.call(
+      store.state.activitiesSelectedList,
+      (actListItem) => {
+        Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+          if (actListItem['o:title'] === 'Visita ' + poi['geo:Titolo_it'][0]['@value']) {
+            poi.visitPOI = true;
+          }
+
+          Array.prototype.forEach.call(poi.mis, (activity) => {
+            if (actListItem['o:title'] === activity['o:title']) {
+              activity.selected = true;
+              poi.poiHasActivitiesSelected = true;
+            }
+          });
+        });
+      }
+    );
+
     Array.prototype.forEach.call(this.filteredPOI, (poi) => {
       console.log("POI");
       console.log(poi);
@@ -2637,8 +2656,7 @@ export default {
 
                     store.state.activitiesSelectedList.unshift(activityTmp);
 
-                                      console.log("FINE PRIMO IF!!!!! : " + activity["o:title"]);
-
+                    console.log("FINE PRIMO IF!!!!! : " + activity["o:title"]);
                   }
 
                   // aggiungo una volta l'area per l'attività selezionata
@@ -2648,14 +2666,12 @@ export default {
 
                   console.log("1 : " + activity["o:title"]);
 
-
                   poi.numberOfActivitiesSelectedInPOI += 1;
 
                   this.$store.state.totalTimeSelected +=
                     parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
 
                   console.log("2 : " + activity["o:title"]);
-
 
                   //l'attività è stata appena selezionata
                   var activityTmp = JSON.parse(JSON.stringify(activity));
@@ -2666,13 +2682,11 @@ export default {
                   activityTmp["o:title"] = activity["o:title"];
                   activityTmp.isVisit = false;
 
-                                    console.log("3 : " + activity["o:title"]);
-
+                  console.log("3 : " + activity["o:title"]);
 
                   store.state.activitiesSelectedList.unshift(activityTmp);
 
-                   console.log("AL FONDO DELL'IF!!!!! : " + activity["o:title"]);
-
+                  console.log("AL FONDO DELL'IF!!!!! : " + activity["o:title"]);
                 } else {
                   //rimuovo l'attività dalla lista delle attività
                   var indexOfActivity = 0;

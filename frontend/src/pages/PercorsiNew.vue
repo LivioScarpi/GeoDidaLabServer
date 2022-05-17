@@ -2383,9 +2383,11 @@ export default {
       console.log(poiName);
 
       Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
+        console.log("STAMPO IL POI");
+        console.log(poi);
         if (poi["geo:Titolo_it"][0]["@value"] === poiName) {
           //TODO: remove me
-          console.log("POI TROVATO");
+          console.log("POI TROVATO: " + poi["geo:Titolo_it"][0]["@value"]);
           this.$set(poi, "visitPOI", !poi.visitPOI);
           console.log(poi.visitPOI);
           console.log(poi);
@@ -2420,14 +2422,23 @@ export default {
             //rimuovo l'attività dalla lista delle attività
             var indexOfActivity = 0;
 
-            for (var i = 0; i < store.state.activitiesSelectedList.length; i++) {
+            for (
+              var i = 0;
+              i < store.state.activitiesSelectedList.length;
+              i++
+            ) {
+              console.log(store.state.activitiesSelectedList[i]["o:title"]);
+
+              console.log("Visita " + poiName);
               if (
-                (store.state.activitiesSelectedList[i]["geo:Titolo_it"][0]["@value"] =
-                  poiName)
+                store.state.activitiesSelectedList[i]["o:title"] ===
+                "Visita " + poiName
               ) {
                 indexOfActivity = i;
               }
             }
+
+            console.log("INDEX: " + indexOfActivity);
 
             store.state.activitiesSelectedList.splice(indexOfActivity, 1);
             //ho rimosso l'attivitàà dalla lista delle attività
@@ -2486,12 +2497,22 @@ export default {
             //rimuovo l'attività dalla lista delle attività
             var indexOfActivity = 0;
 
-            for (var i = 0; i < store.state.activitiesSelectedList.length; i++) {
-              console.log("NOME NELLA LISTA: " + store.state.activitiesSelectedList[i]["geo:Titolo_it"][0]["@value"]);
+            for (
+              var i = 0;
+              i < store.state.activitiesSelectedList.length;
+              i++
+            ) {
+              console.log(
+                "NOME NELLA LISTA: " +
+                  store.state.activitiesSelectedList[i]["geo:Titolo_it"][0][
+                    "@value"
+                  ]
+              );
 
               if (
-                (store.state.activitiesSelectedList[i]["geo:Titolo_it"][0]["@value"] ===
-                  poiName)
+                store.state.activitiesSelectedList[i]["geo:Titolo_it"][0][
+                  "@value"
+                ] === poiName
               ) {
                 console.log("HO TROVATO L'INDICE: " + i);
                 indexOfActivity = i;
@@ -2580,14 +2601,19 @@ export default {
                 (this.percent < 100 &&
                   timeCheck <= this.$store.state.timeAvailable.milliseconds)
               ) {
+                console.log("ECCOCI!!!!! : " + activity["o:title"]);
+
                 // se l'attività è selezionata e la voglio deselezionare
                 activity.selected = !activity.selected;
 
                 if (activity.selected) {
+                  console.log("SIAMO QUA!!!!! : " + activity["o:title"]);
                   if (
                     poi.numberOfActivitiesSelectedInPOI === 0 &&
                     !poi.visitPOI
                   ) {
+                    console.log("PRIMO IF!!!!! : " + activity["o:title"]);
+
                     this.$set(poi, "visitPOI", true);
                     //se visitPOI è false e se non c'è nessuna attività selezionata e viene selezionata ora allora dobbiamo aggiungere anche il tempo di visita del POI
                     this.$store.state.totalTimeSelected +=
@@ -2610,6 +2636,9 @@ export default {
                     activityTmp.isVisit = true;
 
                     store.state.activitiesSelectedList.unshift(activityTmp);
+
+                                      console.log("FINE PRIMO IF!!!!! : " + activity["o:title"]);
+
                   }
 
                   // aggiungo una volta l'area per l'attività selezionata
@@ -2617,27 +2646,51 @@ export default {
                     poi["geo:appartiene_a_area"][0]["display_title"]
                   ); // aggiungo l'area all'array delle aree con qualcosa di selezionato all'interno
 
+                  console.log("1 : " + activity["o:title"]);
+
+
                   poi.numberOfActivitiesSelectedInPOI += 1;
 
                   this.$store.state.totalTimeSelected +=
                     parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
 
+                  console.log("2 : " + activity["o:title"]);
+
+
                   //l'attività è stata appena selezionata
-                  var activityTmp = activity;
+                  var activityTmp = JSON.parse(JSON.stringify(activity));
                   activityTmp["geo:Durata"] = activity["geo:Durata"];
                   activityTmp["geo:appartiene_a_area"] =
                     poi["geo:appartiene_a_area"];
                   activityTmp["geo:Titolo_it"] = poi["geo:Titolo_it"];
+                  activityTmp["o:title"] = activity["o:title"];
                   activityTmp.isVisit = false;
 
+                                    console.log("3 : " + activity["o:title"]);
+
+
                   store.state.activitiesSelectedList.unshift(activityTmp);
+
+                   console.log("AL FONDO DELL'IF!!!!! : " + activity["o:title"]);
+
                 } else {
                   //rimuovo l'attività dalla lista delle attività
                   var indexOfActivity = 0;
 
-                  for (var i = 0; i < store.state.activitiesSelectedList.length; i++) {
+                  for (
+                    var i = 0;
+                    i < store.state.activitiesSelectedList.length;
+                    i++
+                  ) {
+                    console.log("ACTIVITYNAME: " + activityName);
+                    console.log(
+                      "STORE NAME: " +
+                        store.state.activitiesSelectedList[i]["o:title"]
+                    );
+
                     if (
-                      activityName === store.state.activitiesSelectedList[i]["o:title"]
+                      activityName ===
+                      store.state.activitiesSelectedList[i]["o:title"]
                     ) {
                       indexOfActivity = i;
                     }
@@ -2687,15 +2740,29 @@ export default {
                       i < store.state.activitiesSelectedList.length;
                       i++
                     ) {
+                      console.log(
+                        "NOME NELLA LISTA: " +
+                          store.state.activitiesSelectedList[i][
+                            "geo:Titolo_it"
+                          ][0]["@value"]
+                      );
+
                       if (
-                        (store.state.activitiesSelectedList[i]["geo:Titolo_it"] =
-                          poi["geo:Titolo_it"])
+                        store.state.activitiesSelectedList[i][
+                          "geo:Titolo_it"
+                        ][0]["@value"] === poiName
                       ) {
+                        console.log("HO TROVATO L'INDICE: " + i);
                         indexOfActivity = i;
                       }
                     }
 
-                    store.state.activitiesSelectedList.splice(indexOfActivity, 1);
+                    //TODO: qua
+
+                    store.state.activitiesSelectedList.splice(
+                      indexOfActivity,
+                      1
+                    );
                     //ho rimosso l'attivitàà dalla lista delle attività
 
                     //rimuovo una volta l'area  dalle aree con qualcosa di selezionato
@@ -2743,7 +2810,7 @@ export default {
         Array.prototype.forEach.call(tmpFilteredPOI, (poi) => {
           if (
             poi.poiHasActivitiesSelected &&
-            poi["geo:appartiene_a_area"][0]["display_title"] == area["o:title"]
+            poi["geo:appartiene_a_area"][0]["display_title"] === area["o:title"]
           ) {
             areaHasActivitiesSelected = true;
           }

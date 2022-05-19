@@ -45,9 +45,9 @@
         :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
         v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
       >
-        <div class="embed-responsive embed-responsive-16by9 ">
+        <div class="embed-responsive embed-responsive-16by9">
           <iframe
-            class="embed-responsive-item "
+            class="embed-responsive-item"
             frameborder="0"
             :src="videoSource()"
             allowfullscreen
@@ -157,18 +157,12 @@
                 </h6>
               </div>
               <div class="row mx-1 mb-2">
-                <h6 class="mr-2">Interessi:</h6>
-                <div
-                  v-for="(interesse, index) in item['geo:ha_interesse']"
-                  :key="index"
-                >
-                  <h6 class="font-weight-normal">
-                    {{ interesse["display_title"] }}
-                    <span v-if="index < item['geo:ha_interesse'].length - 1"
-                      >,
-                    </span>
-                  </h6>
-                </div>
+                <h6 class="mr-2">
+                  Interessi:
+                  <span class="font-weight-normal">{{
+                    getInterestList(item["geo:ha_interesse"]).join(", ")
+                  }}</span>
+                </h6>
               </div>
               <div class="row mx-1 mb-2">
                 <h6 class="mr-2">Durata:</h6>
@@ -310,6 +304,15 @@ export default {
           this.item["mediaYT"][0]["o:source"].split("/watch?v=").pop() +
           "?modestbranding=1&playsinline=1&rel=0"
         );
+    },
+    getInterestList(list) {
+      var newList = [];
+
+      for (var i = 0; i < list.length; i++) {
+        newList.push(list[i]["display_title"]);
+      }
+
+      return newList;
     },
   },
   computed: {

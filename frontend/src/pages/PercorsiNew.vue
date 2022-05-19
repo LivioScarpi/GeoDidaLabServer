@@ -3407,8 +3407,14 @@ export default {
         if (numbersOfAreasWithSomethingSelected.length === newValue.length) {
           console.log("VADO ALLA PROSSIMA PAGINA!");
 
+          var itineraryAlreadyExist = false;
+          var itineraryCode = null;
           router.push({
             name: "sintesiitinerario",
+            params: {
+              itineraryAlreadyExist,
+              itineraryCode
+            }
           });
         } else {
           //alert("Si è verificato un errore");

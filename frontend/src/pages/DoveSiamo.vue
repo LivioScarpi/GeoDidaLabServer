@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="page-header clear-filter" filter-color="orange">
+    <!-- <div class="page-header clear-filter" filter-color="orange">
       <parallax
         class="page-header-image"
         :style="{ 'background-image': 'url(' + imageUrl + ')' }"
@@ -12,8 +12,8 @@
         </div>
         <h3 class="title">GEODIDALAB</h3>
       </div>
-    </div>
-    <div class="section">
+    </div> -->
+    <div class="section pt-0">
       <div class="container"></div>
       <div class="row">
         <div class="col-md-10 ml-auto mr-auto">

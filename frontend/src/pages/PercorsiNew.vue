@@ -1105,7 +1105,8 @@
                                 <div class="postcard__preview-txt">
                                   {{ item["dcterms:description"][0]["@value"] }}
                                 </div>
-                                <h6>Interessi:</h6>
+
+                                <!-- <h6>Interessi:</h6>
                                 <template
                                   v-for="(interest, index) in item[
                                     'geo:ha_interesse'
@@ -1129,7 +1130,16 @@
                                   >
                                     e
                                   </template>
-                                </template>
+                                </template> -->
+
+                                <h6>
+                                  Interessi:
+                                  <span class="font-weight-normal">{{
+                                    getInterestList(
+                                      item["geo:ha_interesse"]
+                                    ).join(", ")
+                                  }}</span>
+                                </h6>
 
                                 <ul class="postcard__tagbox">
                                   <li class="tag__item__title mr-3">
@@ -1911,12 +1921,15 @@ export default {
       store.state.activitiesSelectedList,
       (actListItem) => {
         Array.prototype.forEach.call(this.filteredPOI, (poi) => {
-          if (actListItem['o:title'] === 'Visita ' + poi['geo:Titolo_it'][0]['@value']) {
+          if (
+            actListItem["o:title"] ===
+            "Visita " + poi["geo:Titolo_it"][0]["@value"]
+          ) {
             poi.visitPOI = true;
           }
 
           Array.prototype.forEach.call(poi.mis, (activity) => {
-            if (actListItem['o:title'] === activity['o:title']) {
+            if (actListItem["o:title"] === activity["o:title"]) {
               activity.selected = true;
               poi.poiHasActivitiesSelected = true;
             }
@@ -2081,6 +2094,15 @@ export default {
   },
 
   methods: {
+    getInterestList(list) {
+      var newList = [];
+
+      for (var i = 0; i < list.length; i++) {
+        newList.push(list[i]["display_title"]);
+      }
+
+      return newList;
+    },
     someMethod(event) {
       // do something to let the user decide
       // then redirect if necessary

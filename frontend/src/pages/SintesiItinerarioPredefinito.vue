@@ -58,29 +58,19 @@
                 Nessuna descrizione disponibile
               </div>
 
-              <h6>Interessi:</h6>
-              <template
-                v-for="(ambito, index) in itinerario['geo:appartiene_a_ambito']"
-                style="display: inline-block"
-              >
-                {{ ambito["display_title"] }}
-                <template
-                  v-if="
-                    index < itinerario['geo:appartiene_a_ambito'].length - 2
-                  "
-                  >,</template
-                >
+              <h6>
+                Interessi:
+                <span class="font-weight-normal">{{
+                  getInterestList(itinerario["geo:appartiene_a_ambito"]).join(
+                    ", "
+                  )
+                }}</span>
+              </h6>
 
-                <template
-                  v-if="
-                    index === itinerario['geo:appartiene_a_ambito'].length - 2
-                  "
-                >
-                  e
-                </template>
-              </template>
-
-              <div class="mt-3">
+                            <div class="mt-3" v-if="totalTimeObject.hours === undefined || totalTimeObject.minutes === undefined">
+                              <h6><i class="bi bi-clock mr-2"></i> Tempo non conosciuto </h6>
+                            </div>
+              <div v-else class="mt-3">
                 <h6
                   class="card-title"
                   v-if="
@@ -278,7 +268,7 @@
                                 color: #ffffff;
                               "
                             >
-                              <h5>{{ index }}</h5>
+                              <h5><i class="fa fa-thermometer-three-quarters fa-lg px-1"></i></h5>
                             </div>
                             <div class="col-10 text-left py-2">
                               <div class="row">
@@ -787,8 +777,17 @@ export default {
   },
 
   methods: {
-    incrementCounter () {
-      this.counter = this.counter+1;
+    getInterestList(list) {
+      var newList = [];
+
+      for (var i = 0; i < list.length; i++) {
+        newList.push(list[i]["display_title"]);
+      }
+
+      return newList;
+    },
+    incrementCounter() {
+      this.counter = this.counter + 1;
     },
     goBack() {
       console.log("GO BACK");

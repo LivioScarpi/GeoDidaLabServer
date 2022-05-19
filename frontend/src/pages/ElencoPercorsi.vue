@@ -79,7 +79,7 @@
                   Nessuna descrizione disponibile
                 </div>
 
-                <h6>Interessi:</h6>
+                <!-- <h6>Interessi:</h6>
                 <template
                   v-for="(ambito, index) in itinerario[
                     'geo:appartiene_a_ambito'
@@ -101,7 +101,16 @@
                   >
                     e
                   </template>
-                </template>
+                </template> -->
+
+                <h6>
+                  Interessi:
+                  <span class="font-weight-normal">{{
+                    getInterestList(itinerario["geo:appartiene_a_ambito"]).join(
+                      ", "
+                    )
+                  }}</span>
+                </h6>
               </div>
               <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
                 <Button
@@ -179,7 +188,6 @@ export default {
   },
 
   async created() {
-
     this.windowWidth = $(window).width();
 
     $(window).resize(() => {
@@ -281,6 +289,15 @@ export default {
   mounted() {},
 
   methods: {
+    getInterestList(list) {
+      var newList = [];
+
+      for (var i = 0; i < list.length; i++) {
+        newList.push(list[i]["display_title"]);
+      }
+
+      return newList;
+    },
     goBack() {
       console.log("GO BACK");
       router.go(-1);

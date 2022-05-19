@@ -32,15 +32,31 @@
           >
             <i class="fab fa-facebook"></i>
           </a>
+          <a
+            href="https://api.whatsapp.com/send?phone=393332923953&app=facebook&entry_point=page_cta"
+            class="btn whatsapp-color btn-round btn-lg btn-icon"
+            rel="tooltip"
+            title="Scrivici su whatsapp!"
+          >
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a
+            href="mailto: info@geodidalab.it"
+            class="btn mail-color btn-round btn-lg btn-icon"
+            rel="tooltip"
+            title="Scrivici via mail!"
+          >
+            <i class="fab fa fa-envelope mt-0 pt-0"></i>
+          </a>
         </div>
-        <h3 class="title">Il Geodidalab</h3>
-        <h5 class="description">
-          Il GeoDidaLab è un laboratorio di educazione ambientale e ricerca
-          didattica gestito dal Dipartimento di Scienze della Terra
-          dell’Università di Torino che dal 2013 propone attività didattiche per
-          le scuole di ogni ordine e grado, attività di formazione per gli
-          insegnanti e promuove progetti di ricerca scientifica in ambito
-          geologico-ambientale e didattico.
+        <h3 class="title">Puoi contattarci nei seguenti modi</h3>
+        <h5 class="text-center"><i class="bi bi-telephone-fill"></i> 333 292 3953</h5>
+        <h5 class="text-center"><i class="fab fa-whatsapp"></i><a
+            href="https://api.whatsapp.com/send?phone=393332923953&app=facebook&entry_point=page_cta"
+          > +39 333 292 3953</a></h5>
+        <h5 class="text-center">
+          <i class="fa fa-envelope"></i>
+          <a href="mailto: info@geodidalab.it"> info@geodidalab.it </a>
         </h5>
       </div>
     </div>
@@ -50,8 +66,7 @@
 export default {
   name: "profile",
   bodyClass: "profile-page",
-  components: {
-  },
+  components: {},
 
   data() {
     return {
@@ -61,12 +76,28 @@ export default {
 };
 </script>
 <style>
+.whatsapp-color {
+  background-color: #58be67 !important;
+}
+
+.whatsapp-color:hover {
+  background-color: #6daf77 !important;
+}
+
 .facebook-color {
   background-color: #3b5998 !important;
 }
 
 .facebook-color:hover {
   background-color: #6388d5 !important;
+}
+
+.mail-color {
+  background-color: #b4c9f7 !important;
+}
+
+.mail-color:hover {
+  background-color: rgb(131, 151, 196) !important;
 }
 
 .youtube-color {

@@ -225,7 +225,7 @@
                   <Button
                       type="primary"
                       size="small"
-                      v-on:click="saveItinerary()"
+                      v-on:click="bookItinerary()"
                       class="textButtonColor"
                   >Prenota itinerario
                   </Button>
@@ -967,6 +967,16 @@ export default {
         marker.poiSelected = false;
       });
     },
+    bookItinerary() {
+      console.log("Book Itinerary");
+
+      console.log("ITINERARIO: ");
+      console.log(this.itinerario);
+
+      var self = this;
+
+      self.sendEmail();
+    },
     saveItinerary() {
       console.log("Save itinerary");
 
@@ -975,41 +985,41 @@ export default {
 
       var self = this;
 
-      self.sendEmail();
+      //self.sendEmail();
 
       //TODO: salvare l'itinerario sul DB
-      // console.log("FACCIO LA QUERY");
+      console.log("FACCIO LA QUERY");
 
-      // $.ajax({
-      //   url: "/geodidalab/api/itinerari/",
-      //   type: "POST",
-      //   dataType: "json",
-      //   contentType: "application/json",
-      //   data: JSON.stringify(this.itinerario),
-      //   success: function (result) {
-      //     //self.geojson = result;
-      //     console.log("RISPOSTA: ");
-      //     console.log(result);
+      $.ajax({
+        url: "/geodidalab/api/itinerari/",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(this.itinerario),
+        success: function (result) {
+          //self.geojson = result;
+          console.log("RISPOSTA: ");
+          console.log(result);
 
-      //     self.itineraryCode = result;
+          self.itineraryCode = result;
 
-      //     // self.modals.itineraryCodeGeneratedWithError = false;
-      //     // self.modals.itineraryCodeGenerated = true;
+          // self.modals.itineraryCodeGeneratedWithError = false;
+          // self.modals.itineraryCodeGenerated = true;
 
-      //     //TODO: inviare mail con il metodo send mail
-      //     //self.sendEmail();
+          //TODO: inviare mail con il metodo send mail
+          //self.sendEmail();
 
-      //   },
-      //   error: function (error) {
-      //     console.log("error: ");
-      //     console.log(error);
+        },
+        error: function (error) {
+          console.log("error: ");
+          console.log(error);
 
-      //     // self.modals.itineraryCodeGenerated = false;
-      //     // self.modals.itineraryCodeGeneratedWithError = true;
-      //   },
-      // });
+          // self.modals.itineraryCodeGenerated = false;
+          // self.modals.itineraryCodeGeneratedWithError = true;
+        },
+      });
 
-      // console.log("FINE QUERY");
+      console.log("FINE QUERY");
     },
 
     createMarkerArray() {

@@ -1555,6 +1555,7 @@ import {
 import VueTimepicker from "vue2-timepicker";
 import store from "../store";
 import * as L from "leaflet";
+import { costMatrixAreas } from "../utils/costMatricesAreas";
 
 import "vue-collapsible-component/lib/vue-collapsible.css";
 import Collapsible from "vue-collapsible-component";
@@ -2435,25 +2436,38 @@ export default {
 
           //TODO: aggiungere area alla lista delle aree con qualcosa di selezionato
           if (poi.visitPOI) {
-            this.$store.state.totalTimeSelected +=
-              parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //aggiungo la durata della visita del POI
+            var timeCheck =
+              this.$store.state.totalTimeSelected +
+              parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
 
-            console.log("PUSHO");
+            if (
+              this.percent < 100 &&
+              timeCheck <= this.$store.state.timeAvailable.milliseconds
+            ) {
+              this.$store.state.totalTimeSelected +=
+                parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //aggiungo la durata della visita del POI
 
-            this.$store.state.areasWithSomethingSelected.push(
-              poi["geo:appartiene_a_area"][0]["display_title"]
-            );
+              console.log("PUSHO");
 
-            //l'attività è stata appena selezionata
-            var activityTmp = {};
-            activityTmp["geo:Durata"] = poi["geo:Durata"];
-            activityTmp["geo:appartiene_a_area"] = poi["geo:appartiene_a_area"];
-            activityTmp["geo:Titolo_it"] = poi["geo:Titolo_it"];
-            activityTmp["o:title"] =
-              "Visita " + poi["geo:Titolo_it"][0]["@value"];
-            activityTmp.isVisit = true;
+              this.$store.state.areasWithSomethingSelected.push(
+                poi["geo:appartiene_a_area"][0]["display_title"]
+              );
 
-            store.state.activitiesSelectedList.unshift(activityTmp);
+              //l'attività è stata appena selezionata
+              var activityTmp = {};
+              activityTmp["geo:Durata"] = poi["geo:Durata"];
+              activityTmp["geo:appartiene_a_area"] =
+                poi["geo:appartiene_a_area"];
+              activityTmp["geo:Titolo_it"] = poi["geo:Titolo_it"];
+              activityTmp["o:title"] =
+                "Visita " + poi["geo:Titolo_it"][0]["@value"];
+              activityTmp.isVisit = true;
+
+              store.state.activitiesSelectedList.unshift(activityTmp);
+            } else {
+              alert("Errore, rimuovi qualche attività per poter inserire questa e stare nei tempi");
+              this.$set(poi, "visitPOI", !poi.visitPOI);
+            }
           } else {
             this.$store.state.totalTimeSelected -=
               parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //rimuovo la durata della visita del POI
@@ -3298,6 +3312,23 @@ export default {
         });
       }
     },
+    permute(input) {
+      var permArr = [],
+        usedChars = [];
+      return (function main() {
+        for (var i = 0; i < input.length; i++) {
+          var ch = input.splice(i, 1)[0];
+          usedChars.push(ch);
+          if (input.length == 0) {
+            permArr.push(usedChars.slice());
+          }
+          main();
+          input.splice(i, 0, ch);
+          usedChars.pop();
+        }
+        return permArr;
+      })();
+    },
   },
 
   computed: {
@@ -3322,7 +3353,9 @@ export default {
       }
     },
     percent() {
+      console.log(this.bestPath);
       //totalTimeSelected : x = millisecondiTotali : 100
+
       var perc =
         (this.$store.state.totalTimeSelected * 100) /
         this.$store.state.timeAvailable.milliseconds;
@@ -3404,6 +3437,88 @@ export default {
 
       return someActivitiesVisible;
     },
+
+    bestPath() {
+      var bestTime = 9999999999;
+      var areas = [...new Set(this.$store.state.areasWithSomethingSelected)];
+
+      var permutation = this.permute(areas);
+
+      console.log(permutation);
+
+      for (var k = 0; k < permutation.length; k++) {
+        //Sommo i tempi di tragitto da un'area all'altra
+        var areas = permutation[k];
+        var time = 0;
+        for (var i = 0; i < areas.length - 1; i++) {
+          var fromArea = areas[i];
+          var toArea = areas[i + 1];
+
+          var fromAreaIndex = -1;
+          var toAreaIndex = -1;
+
+          switch (fromArea) {
+            case "Torino":
+              fromAreaIndex = 0;
+              break;
+            case "Ivrea":
+              fromAreaIndex = 1;
+              break;
+            case "GeoDidaLab - Ivrea":
+              fromAreaIndex = 2;
+              break;
+            case "Anfiteatro Morenico d'Ivrea":
+              fromAreaIndex = 3;
+              break;
+            default:
+              fromAreaIndex = -1;
+          }
+
+          switch (toArea) {
+            case "Torino":
+              toAreaIndex = 0;
+              break;
+            case "Ivrea":
+              toAreaIndex = 1;
+              break;
+            case "GeoDidaLab - Ivrea":
+              toAreaIndex = 2;
+              break;
+            case "Anfiteatro Morenico d'Ivrea":
+              toAreaIndex = 3;
+              break;
+            default:
+              toAreaIndex = -1;
+          }
+
+          console.log("FROM AREA: " + fromArea + "; TO AREA: " + toArea);
+          console.log(
+            "FROM AREA INDEX: " +
+              fromAreaIndex +
+              "; TO AREA INDEX: " +
+              toAreaIndex
+          );
+          console.log(costMatrixAreas[fromAreaIndex][toAreaIndex]);
+          console.log(costMatrixAreas);
+
+          time += costMatrixAreas[fromAreaIndex][toAreaIndex] * 60000; //nella matrice i valori sono espressi in minuti!
+        }
+        console.log(permutation[k]);
+
+        console.log(time);
+
+        if (time < bestTime) {
+          bestTime = time;
+        }
+      }
+
+      // se abbiamo solo un'area o 0 non c'è tempo di
+      if (permutation.length <= 1) {
+        bestTime = 0;
+      }
+
+      return bestTime;
+    },
   },
 
   watch: {
@@ -3435,8 +3550,8 @@ export default {
             name: "sintesiitinerario",
             params: {
               itineraryAlreadyExist,
-              itineraryCode
-            }
+              itineraryCode,
+            },
           });
         } else {
           //alert("Si è verificato un errore");

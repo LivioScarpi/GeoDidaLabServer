@@ -142,8 +142,19 @@
                 <b v-else class="title pt-0">Itinerario senza nome</b> -->
               </h5>
 
-              Il tempo totale include anche gli spostamenti in auto da un'area
-              all'altra.
+              <div v-if="$store.state
+                    .sottoitinerari.length > 1">
+                Il tempo totale include anche gli spostamenti in auto da un'area
+                all'altra.
+
+                <div
+                  class="mt-3"
+                  v-for="(time, index) in travellingTime"
+                  :key="index"
+                >
+                  {{ time }} <i class="bi bi-clock mr-2"></i>
+                </div>
+              </div>
 
               <div class="mt-3 postcardpercorsi__bar" style="height: 4px"></div>
               <!-- <h6>Descrizione</h6> -->
@@ -227,11 +238,11 @@
               <div v-if="itineraryCode === null" class="row mt-3">
                 <div class="col-12">
                   <Button
-                      type="primary"
-                      size="small"
-                      v-on:click="bookItinerary()"
-                      class="textButtonColor"
-                  >Prenota itinerario
+                    type="primary"
+                    size="small"
+                    v-on:click="bookItinerary()"
+                    class="textButtonColor"
+                    >Prenota itinerario
                   </Button>
                 </div>
               </div>
@@ -742,7 +753,7 @@
             <div class="row px-4">
               <div class="col-12">
                 <l-map
-                  style="height: 700px; border-radius: 10px"
+                  style="height: 800px; border-radius: 10px"
                   :zoom="zoomLarge"
                   :center="centerMap"
                   ref="mappaSottoItinerario"
@@ -871,10 +882,13 @@ export default {
       itinerario: null,
 
       isMobile: false,
+
+      travellingTime: [],
     };
   },
 
   mounted() {
+    this.setTravellingTime();
     this.isMobile = isMobile;
 
     console.log("Sotto Itinerari: ");
@@ -1021,7 +1035,6 @@ export default {
 
           //TODO: inviare mail con il metodo send mail
           //self.sendEmail();
-
         },
         error: function (error) {
           console.log("error: ");
@@ -1124,6 +1137,74 @@ export default {
       };
 
       return timeObject;
+    },
+
+    setTravellingTime() {
+      var areas = [];
+
+      //Recupero le aree a cui appartengono i sottoitinerari
+      Array.prototype.forEach.call(
+        this.$store.state.sottoitinerari,
+        (sottoitinerario) => {
+          var areaName = sottoitinerario.name.substring(11);
+          areas.push(areaName);
+        }
+      );
+
+      //Sommo i tempi di tragitto da un'area all'altra
+      for (var i = 0; i < areas.length - 1; i++) {
+        var string = "";
+        var fromArea = areas[i];
+        var toArea = areas[i + 1];
+
+        var fromAreaIndex = -1;
+        var toAreaIndex = -1;
+
+        switch (fromArea) {
+          case "Torino":
+            fromAreaIndex = 0;
+            break;
+          case "Ivrea":
+            fromAreaIndex = 1;
+            break;
+          case "GeoDidaLab - Ivrea":
+            fromAreaIndex = 2;
+            break;
+          case "Anfiteatro Morenico d'Ivrea":
+            fromAreaIndex = 3;
+            break;
+          default:
+            fromAreaIndex = -1;
+        }
+
+        switch (toArea) {
+          case "Torino":
+            toAreaIndex = 0;
+            break;
+          case "Ivrea":
+            toAreaIndex = 1;
+            break;
+          case "GeoDidaLab - Ivrea":
+            toAreaIndex = 2;
+            break;
+          case "Anfiteatro Morenico d'Ivrea":
+            toAreaIndex = 3;
+            break;
+          default:
+            toAreaIndex = -1;
+        }
+
+        string =
+          "Tempo di spostamento in auto da " +
+          fromArea +
+          " a " +
+          toArea +
+          ": " +
+          costMatrixAreas[fromAreaIndex][toAreaIndex] +
+          " minuti \n";
+
+        this.travellingTime.push(string);
+      }
     },
     //ui-1_simple-remove
   },

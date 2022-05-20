@@ -81,6 +81,8 @@ export default {
   },
 
   mounted() {
+    
+
     console.log("Esperimenti: ");
     console.log(store.state.esperimenti);
   },

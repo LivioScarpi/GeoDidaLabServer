@@ -89,7 +89,7 @@
 
 <script>
 export default {
-  name: "svgScuolaSecondariaPrimoGrado",
+  name: "svgScuolaSecondariaSecondoGrado",
 
   components: {},
 

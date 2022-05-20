@@ -1,28 +1,46 @@
 <template>
-  <router-link :to="item.pageDestination">
-    <div class="card zoom text-black" style="width: 20rem; margin: 10px; border-radius: 10px"> <!--TODO: riuovere l'attributo style inline-->
-      <img slot="image" class="card-img-top card-img bg-light" style="border-radius: 10px 10px 0 0" :src="item.imgSrc" alt="Card image cap" >
+  <div @click="goToPage">
+    <div
+      class="card zoom text-black"
+      style="width: 20rem; margin: 10px; border-radius: 10px"
+    >
+      <!--TODO: riuovere l'attributo style inline-->
+      <img
+        slot="image"
+        class="card-img-top card-img bg-light"
+        style="border-radius: 10px 10px 0 0"
+        :src="item.imgSrc"
+        alt="Card image cap"
+      />
       <div class="card-body">
-        <h4 class="card-title"><b>{{ item.title }}</b></h4>
+        <h4 class="card-title">
+          <b>{{ item.title }}</b>
+        </h4>
       </div>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
 import VueRouter from "vue-router";
+import router from "../../router";
 
 export default {
-  name: 'card',
-  props: ['item'],
+  name: "card",
+  props: ["item"],
   methods: {
     mounted() {
-      this.msg = "MESSAGGIO"
-    }
+    },
+    goToPage() {
+      document.body.scrollTop = 0;
+
+      if (router.history.current.name !== this.item.pageDestination) {
+        router.push({ path: this.item.pageDestination });
+      }
+    },
   },
-  components: {
-  }
-}
+  components: {},
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -46,13 +64,15 @@ a {
 }
 
 .zoom {
-  transition: transform .2s; /* Animation */
+  transition: transform 0.2s; /* Animation */
   margin: 0 auto;
   cursor: pointer;
 }
 
 .zoom:hover {
-  transform: scale(1.08); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  transform: scale(
+    1.08
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 .card-img-top {
@@ -60,5 +80,4 @@ a {
   height: 20rem;
   object-fit: cover;
 }
-
 </style>

@@ -22,7 +22,10 @@
         </h5>
         <h5
           class="card-title text-center"
-          v-else-if="parseInt(totalTimeObject.hours) > 0 && parseInt(totalTimeObject.minutes) === 0"
+          v-else-if="
+            parseInt(totalTimeObject.hours) > 0 &&
+            parseInt(totalTimeObject.minutes) === 0
+          "
         >
           Tempo totale: {{ parseInt(totalTimeObject.hours) }} ore
         </h5>
@@ -36,10 +39,16 @@
         <h5 class="card-title text-center" v-else>
           Tempo totale: {{ parseInt(totalTimeObject.minutes) }} minuti
         </h5>
-        <h6 class="card-title text-center" v-if="this.$store.state.sottoitinerari.length > 1">
+        <h6
+          class="card-title text-center"
+          v-if="this.$store.state.sottoitinerari.length > 1"
+        >
           Il tempo totale include anche gli spostamenti in auto da un'area
           all'altra.
         </h6>
+
+        <h6 class="card-title text-center" v-for="time in tempoSpostamenti" :key="time">{{ time }}</h6>
+
         <div v-if="itineraryCode === null" class="row mb-0 text-center">
           <h6 class="px-5 mx-lg-5">
             Puoi prenotare il tuo itinerario premendo il bottone "Prenota
@@ -884,6 +893,14 @@ export default {
       isMobile: false,
 
       travellingTime: [],
+      tempoSpostamenti: [],
+
+      areasIndexes: {
+        Torino: 0,
+        Ivrea: 1,
+        "GeoDidaLab - Ivrea": 2,
+        "Anfiteatro Morenico d'Ivrea": 3,
+      },
     };
   },
 
@@ -920,6 +937,35 @@ export default {
     }
 
     this.allLoaded = true;
+    var path = this.$store.state.sottoitinerari.map((item) =>
+      item.name.replace("Itinerario_", "")
+    );
+
+    console.log("PATH");
+    console.log(path);
+
+    var string = "";
+
+    for (var i = 0; i < path.length - 1; i++) {
+      var tmpString = "";
+      var indexStartArea = this.areasIndexes[path[i]];
+      var indexNextArea = this.areasIndexes[path[i + 1]];
+
+      tmpString += "Tempo in auto tra  '" + path[i] + "' e '" + path[i + 1] + "' : " + costMatrixAreas[indexStartArea][indexNextArea] + "minuti";
+
+      console.log(
+        "Prenodil costo tra l'area di indice: " +
+          indexStartArea +
+          " e l'area di indice " +
+          indexNextArea
+      );
+
+      this.tempoSpostamenti.push(tmpString);
+      //cost += costMatrixAreas[indexStartArea][indexNextArea];
+    }
+
+console.log(this.tempoSpostamenti);
+    
   },
 
   created() {},

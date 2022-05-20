@@ -17,7 +17,23 @@
       <div class="row px-3 mb-3">
         <div class="col-2 text-center"></div>
         <div class="col-8 text-center">
+          <!-- <h6>
+            <b>Tempo a disposizione: </b>
+            {{ $store.state.timeAvailable.hour }} ore e
+            {{ $store.state.timeAvailable.minutes }} minuti
+          </h6> -->
+          <!-- {{ this.$store.state.totalTimeSelected }} -->
+
+          <!-- {{ this.$store.state.areasWithSomethingSelected }}
+          {{ setAreasSelected }}
+          {{ timeBetweenAreas }} -->
+          <h6 class="card-title text-center">
+            Il tempo occupato include anche gli spostamenti in auto da un'area
+            all'altra.
+          </h6>
+
           <h6>Tempo a disposizione occupato</h6>
+
           <k-progress :percent="percent" color="#389e0d"></k-progress>
         </div>
         <div class="col-2 text-center"></div>
@@ -676,7 +692,6 @@ import {
 import VueTimepicker from "vue2-timepicker";
 import store from "../store";
 import * as L from "leaflet";
-import { costMatrixAreas } from "../utils/costMatricesAreas";
 
 import "vue-collapsible-component/lib/vue-collapsible.css";
 import Collapsible from "vue-collapsible-component";
@@ -702,6 +717,7 @@ import svgScuolaSecondariaPrimoGrado from "../components/customComponents/svg/sv
 import svgScuolaSecondariaSecondoGrado from "../components/customComponents/svg/svgScuolaSecondariaSecondoGrado";
 import svgUniversita from "../components/customComponents/svg/svgUniversita";
 import svgPerTutti from "../components/customComponents/svg/svgPerTutti";
+import { costMatrixAreas } from "../utils/costMatricesAreas";
 
 export default {
   name: "PercorsiNew",
@@ -1015,6 +1031,18 @@ export default {
 
       selectedTab: "ElencoPercorsi",
       // this.$store.state.areasWithSomethingSelected: [],
+
+      timeBetweenAreas: 0,
+      bestPathBetweenAreas: null,
+      bestOldPath: [],
+      oldTotalCostBetweenAreas: 0,
+
+      areasIndexes: {
+        Torino: 0,
+        Ivrea: 1,
+        "GeoDidaLab - Ivrea": 2,
+        "Anfiteatro Morenico d'Ivrea": 3,
+      },
     };
   },
 
@@ -2450,26 +2478,44 @@ export default {
         });
       }
     },
-    permute(input) {
-      var permArr = [],
-        usedChars = [];
-      return (function main() {
-        for (var i = 0; i < input.length; i++) {
-          var ch = input.splice(i, 1)[0];
-          usedChars.push(ch);
-          if (input.length == 0) {
-            permArr.push(usedChars.slice());
-          }
-          main();
-          input.splice(i, 0, ch);
-          usedChars.pop();
+
+    permute(nums) {
+      var result = [];
+      var backtrack = (i, nums) => {
+        if (i === nums.length) {
+          result.push(nums.slice());
+          return;
         }
-        return permArr;
-      })();
+        for (let j = i; j < nums.length; j++) {
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+          backtrack(i + 1, nums);
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+        }
+      };
+      backtrack(0, nums);
+      console.log(result);
+      return result;
+    },
+
+    arrayEquals(a, b) {
+      return (
+        Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index])
+      );
     },
   },
 
   computed: {
+    setAreasSelected() {
+      var uniqueArray = this.$store.state.areasWithSomethingSelected.filter(
+        function (item, pos, self) {
+          return self.indexOf(item) == pos;
+        }
+      );
+      return uniqueArray;
+    },
     centerMap() {
       var sumLat = 0;
       var sumLng = 0;
@@ -2660,6 +2706,87 @@ export default {
   },
 
   watch: {
+    setAreasSelected(newValue, oldValue) {
+      console.log("WATCH");
+      console.log(newValue);
+      var perm = this.permute(newValue);
+      console.log(perm);
+
+      var costoTotale = 9999999999;
+      var bestPath = [];
+
+      Array.prototype.forEach.call(perm, (permutation) => {
+        var cost = 0;
+        for (var i = 0; i < permutation.length - 1; i++) {
+          var indexStartArea = this.areasIndexes[permutation[i]];
+          var indexNextArea = this.areasIndexes[permutation[i + 1]];
+
+          console.log(
+            "Prenodil costo tra l'area di indice: " +
+              indexStartArea +
+              " e l'area di indice " +
+              indexNextArea
+          );
+
+          cost += costMatrixAreas[indexStartArea][indexNextArea];
+        }
+
+        console.log(
+          "Il costo per la permutazione " + permutation + " è " + cost
+        );
+
+        if (cost < costoTotale) {
+          costoTotale = cost;
+          bestPath = permutation;
+        }
+      });
+
+      if (bestPath === []) {
+        costoTotale = 0;
+      }
+
+      //TODO: set cost
+
+      this.timeBetweenAreas = costoTotale;
+      this.bestPathBetweenAreas = bestPath;
+
+      console.log("LA MIGLIOR PERMUTAZIONE E': " + this.bestPathBetweenAreas);
+      console.log("LA MIGLIOR PERMUTAZIONE HA COSTO: " + this.timeBetweenAreas);
+
+      var timeCheck =
+        this.$store.state.totalTimeSelected + this.timeBetweenAreas * 60000;
+
+      console.log(this.bestOldPath);
+      console.log(this.bestPathBetweenAreas);
+      console.log(
+        this.arrayEquals(this.bestOldPath, this.bestPathBetweenAreas)
+      );
+      if (
+        !this.arrayEquals(this.bestOldPath, this.bestPathBetweenAreas) &&
+        this.percent < 100 &&
+        timeCheck <= this.$store.state.timeAvailable.milliseconds
+      ) {
+        this.$store.state.totalTimeSelected -= this.oldTotalCostBetweenAreas; //rimuovo il vecchio costo
+        this.$store.state.totalTimeSelected += this.timeBetweenAreas * 60000;
+
+        this.oldTotalCostBetweenAreas = this.timeBetweenAreas * 60000; // aggiorno il vecchio costo
+
+        this.bestOldPath = this.bestPathBetweenAreas; // aggiorno il vecchio bestOldPath
+
+        console.log("CI STIAMO CON I TEMPI!");
+      } else {
+        if (
+          this.percent < 100 &&
+          !(timeCheck <= this.$store.state.timeAvailable.milliseconds)
+        ) {
+          alert(
+            "Rimuovere qualche attività per poter selezionare quest'ultima."
+          );
+        }
+      }
+
+      console.log(this.$store.state.totalTimeSelected);
+    },
     filteredPOI(newValue, oldValue) {
       //TODO: remove me
       //console.log("FILTERED POI WATCHER");
@@ -2669,9 +2796,8 @@ export default {
       console.log("TOTAL ITINERARY E' CAMBIATOO!");
       console.log(oldValue);
 
+      console.log("PRIMA");
       console.log(newValue);
-
-      this.$store.state.sottoitinerari = newValue;
 
       var numbersOfAreasWithSomethingSelected = [
         ...new Set(this.$store.state.areasWithSomethingSelected),
@@ -2684,6 +2810,27 @@ export default {
 
           var itineraryAlreadyExist = false;
           var itineraryCode = null;
+          //TODO: provare ad ordinare la risposta sulla base del miglior percorso tra aree
+
+          var sortOrder = [];
+          sortOrder.length = this.bestPathBetweenAreas.length;
+          for (var i = 0; i < this.bestPathBetweenAreas.length; i++) {
+            sortOrder[i] = "Itinerario_" + this.bestPathBetweenAreas[i];
+          }
+
+          console.log("SORT ORDER");
+          console.log(sortOrder);
+
+          console.log("DOPO");
+
+          console.log(newValue);
+
+          newValue.sort(function (a, b) {
+            return sortOrder.indexOf(a.name) - sortOrder.indexOf(b.name);
+          });
+
+          this.$store.state.sottoitinerari = newValue;
+
           router.push({
             name: "sintesiitinerario",
             params: {

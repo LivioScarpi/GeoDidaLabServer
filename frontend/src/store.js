@@ -43,6 +43,7 @@ const store = new Vuex.Store({
 
         activitiesSelectedList: [],
 
+        isMobile: false,
 
         media: {
             mediaEsperimenti: [],

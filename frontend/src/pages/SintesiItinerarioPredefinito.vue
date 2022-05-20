@@ -401,11 +401,12 @@
               </div>
 
               <div class="d-none d-lg-block">
-                <div
+                                <div
                   v-if="!showDetails"
-                  style="max-height: 480px; overflow-y: scroll"
-                  class="mb-4"
+                  style="height: 500px"
+                  class="scrollbox mb-4"
                 >
+                  <div class="scrollbox-content">
                   <div
                     v-for="(poi, index) in itinerario.poi"
                     :key="'poi' + (index + 200)"
@@ -555,6 +556,7 @@
                       </div>
                     </div>
                     <!-- </div> -->
+                  </div>
                   </div>
                 </div>
                 <div v-else>

@@ -149,69 +149,76 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
-            <div class="text-justify description col-12 text-black text">
-              <div class="row mx-1 mb-2">
-                <h6 class="mr-2">Difficoltà:</h6>
-                <h6 class="font-weight-normal">
-                  {{ item["geo:ha_difficolta"][0]["display_title"] }}
-                </h6>
-              </div>
-              <div class="row mx-1 mb-2">
-                <h6 class="mr-2">
-                  Interessi:
-                  <span class="font-weight-normal">{{
-                    getInterestList(item["geo:ha_interesse"]).join(", ")
-                  }}</span>
-                </h6>
-              </div>
-              <div class="row mx-1 mb-2">
-                <h6 class="mr-2">Durata:</h6>
-                <h6 class="font-weight-normal">
-                  {{ item["geo:Durata"][0]["@value"] }} minuti
-                  <i class="bi bi-clock mr-2"></i>
-                </h6>
-              </div>
-              <div class="row mx-1 mb-2">
-                <h6 class="mr-2">Location:</h6>
-                <h6 class="font-weight-normal">
-                  {{ item["geo:situato_in"][0]["display_title"].substring(6) }}
-                  <!--In questo modo si rimuove il prefisso "PIVOT_"-->
-                  <i class="bi bi-pin-map-fill mr-2"></i>
-                </h6>
-              </div>
-              <div class="row mx-1">
-                <h6 class="mr-2">Strumenti usati:</h6>
-                <div v-if="item['geo:usa_strumento'] !== undefined">
-                  <template
-                    v-for="(strumento, index) in item['geo:usa_strumento']"
-                    style="display: inline-block"
-                  >
-                    <h6 class="font-weight-normal" :key="index">
-                      {{ strumento["display_title"] }}
-                    </h6>
+            <div
+              class="text-left description col-12 text-black text"
+              :class="{ 'text-justify scrollbox': !isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !isMobile }">
+                <div class="row mx-1 mb-2">
+                  <h6 class="mr-2">Difficoltà:</h6>
+                  <h6 class="font-weight-normal">
+                    {{ item["geo:ha_difficolta"][0]["display_title"] }}
+                  </h6>
+                </div>
+                <div class="row mx-1 mb-2">
+                  <h6 class="mr-2">
+                    Interessi:
+                    <span class="font-weight-normal">{{
+                      getInterestList(item["geo:ha_interesse"]).join(", ")
+                    }}</span>
+                  </h6>
+                </div>
+                <div class="row mx-1 mb-2">
+                  <h6 class="mr-2">Durata:</h6>
+                  <h6 class="font-weight-normal">
+                    {{ item["geo:Durata"][0]["@value"] }} minuti
+                    <i class="bi bi-clock mr-2"></i>
+                  </h6>
+                </div>
+                <div class="row mx-1 mb-2">
+                  <h6 class="mr-2">Location:</h6>
+                  <h6 class="font-weight-normal">
+                    {{
+                      item["geo:situato_in"][0]["display_title"].substring(6)
+                    }}
+                    <!--In questo modo si rimuove il prefisso "PIVOT_"-->
+                    <i class="bi bi-pin-map-fill mr-2"></i>
+                  </h6>
+                </div>
+                <div class="row mx-1">
+                  <h6 class="mr-2">Strumenti usati:</h6>
+                  <div v-if="item['geo:usa_strumento'] !== undefined">
                     <template
-                      v-if="index < item['geo:usa_strumento'].length - 2"
-                      ><h6 class="font-weight-normal" :key="index">
-                        ,
-                      </h6></template
+                      v-for="(strumento, index) in item['geo:usa_strumento']"
+                      style="display: inline-block"
                     >
+                      <h6 class="font-weight-normal" :key="index">
+                        {{ strumento["display_title"] }}
+                      </h6>
+                      <template
+                        v-if="index < item['geo:usa_strumento'].length - 2"
+                        ><h6 class="font-weight-normal" :key="index">
+                          ,
+                        </h6></template
+                      >
 
-                    <template
-                      v-if="index === item['geo:usa_strumento'].length - 2"
-                    >
-                      <h6 class="font-weight-normal" :key="index">e</h6>
+                      <template
+                        v-if="index === item['geo:usa_strumento'].length - 2"
+                      >
+                        <h6 class="font-weight-normal" :key="index">e</h6>
+                      </template>
                     </template>
-                  </template>
-                </div>
-                <div v-else>
-                  <h6 class="font-weight-normal">Nessuno</h6>
-                </div>
-                <!-- <h6
+                  </div>
+                  <div v-else>
+                    <h6 class="font-weight-normal">Nessuno</h6>
+                  </div>
+                  <!-- <h6
                   class="font-weight-normal"
                   v-if="item['geo:usa_strumento'] !== undefined"
                 >
                   {{ item["geo:usa_strumento"][0]["display_title"] }}
                 </h6> -->
+                </div>
               </div>
             </div>
           </tab-pane>
@@ -220,8 +227,13 @@
             <span slot="label">
               <i class="now-ui-icons travel_info"></i>DESCRIZIONE
             </span>
-            <div class="text-justify description col-12 text-black">
-              <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+            <div
+              class="text-justify description col-12 text-black text"
+              :class="{ 'scrollbox': !isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !isMobile }">
+                <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+              </div>
             </div>
           </tab-pane>
         </tabs>
@@ -244,6 +256,7 @@ import { Carousel, Slide } from "vue-carousel";
 
 import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
+import { isMobile } from "mobile-device-detect";
 
 const Common = require("@/Common.vue").default;
 
@@ -276,6 +289,7 @@ export default {
           prevEl: ".swiper-button-prev",
         },
       },
+      isMobile: false,
     };
   },
   created() {
@@ -332,6 +346,7 @@ export default {
   },
 
   mounted() {
+    this.isMobile = isMobile;
     console.log("monto esperimeto: ");
     console.log(this.item);
     // console.log(this.$device);
@@ -347,6 +362,7 @@ export default {
       this.item.mediaYT = ytVideoList;
       self.isLoadingVideos = false;
     });
+    console.log(isMobile);
 
     console.log("MOUNTED");
     console.log(this);

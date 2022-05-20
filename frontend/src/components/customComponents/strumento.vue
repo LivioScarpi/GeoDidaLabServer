@@ -69,14 +69,21 @@
             <span slot="label">
               <i class="now-ui-icons design_bullet-list-67"></i>PANORAMICA
             </span>
-            <div class="text-justify description col-12 text-black">
-              <div class="row mx-1 mb-2">
-                <h6 class="mr-2">Situato in:</h6>
-                <h6 class="font-weight-normal">
-                  {{ item["geo:situato_in"][0]["display_title"].substring(6) }}
-                  <!--In questo modo si rimuove il prefisso "PIVOT_"-->
-                  <i class="bi bi-pin-map-fill mr-2"></i>
-                </h6>
+            <div
+              class="text-left description col-12 text-black text"
+              :class="{ 'text-justify scrollbox': !$store.state.isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !$store.state.isMobile }">
+                <div class="row mx-1 mb-2">
+                  <h6 class="mr-2">Situato in:</h6>
+                  <h6 class="font-weight-normal">
+                    {{
+                      item["geo:situato_in"][0]["display_title"].substring(6)
+                    }}
+                    <!--In questo modo si rimuove il prefisso "PIVOT_"-->
+                    <i class="bi bi-pin-map-fill mr-2"></i>
+                  </h6>
+                </div>
               </div>
             </div>
           </tab-pane>
@@ -85,8 +92,13 @@
             <span slot="label">
               <i class="now-ui-icons travel_info"></i>DESCRIZIONE
             </span>
-            <div class="text-justify description col-12 text-blacl text">
-              <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+            <div
+              class="text-justify description col-12 text-black text"
+              :class="{ scrollbox: !$store.state.isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !$store.state.isMobile }">
+                <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+              </div>
             </div>
           </tab-pane>
         </tabs>

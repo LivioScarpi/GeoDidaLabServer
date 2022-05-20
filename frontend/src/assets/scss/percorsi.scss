@@ -562,3 +562,14 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
     background-size: 18px;
     background-color: rgba(255, 255, 255, 1);
   }
+
+  .scrollbox {
+    overflow: auto;
+    visibility: hidden;
+  }
+  
+  .scrollbox-content,
+  .scrollbox:hover,
+  .scrollbox:focus {
+    visibility: visible;
+  }

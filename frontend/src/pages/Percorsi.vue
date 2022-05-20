@@ -611,11 +611,14 @@ export default {
 
             var itinerario = result;
 
+            store.state.sottoitinerari[0] = itinerario;
+            var itineraryAlreadyExist = true;
+            var itineraryCode = self.pathCodeInserted;
             router.push({
-              name: "percorsoselezionato",
+              name: "sintesiitinerario",
               params: {
-                itinerario,
-                page: "percorsi",
+                itineraryAlreadyExist,
+                itineraryCode
               },
             });
           },

@@ -5,8 +5,8 @@
       isLarge
         ? {
             'max-width': '28rem',
-            height: '32rem',
-            'max-height': '32rem',
+            height: '34rem',
+            'max-height': '34rem',
             'border-radius': '10px',
           }
         : {

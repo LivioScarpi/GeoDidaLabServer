@@ -64,8 +64,8 @@
 </template>
 <script>
 export default {
-  name: "profile",
-  bodyClass: "profile-page",
+  name: "contatti",
+  bodyClass: "contact-page",
   components: {},
 
   data() {

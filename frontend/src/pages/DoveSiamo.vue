@@ -19,10 +19,16 @@
         <div class="col-md-10 ml-auto mr-auto">
           <h4 class="title text-center">Dove siamo?</h4>
           <div class="col-12 text-center mb-3">
-            <i class="fa fa-map-pin fa-sm px-1" style="color: indianred"></i> Ci puoi trovare in <u><a href="https://www.google.com/maps/dir/?api=1&amp;destination=45.477466179593%2C7.8914880752563">Via Lago S. Michele, 15 10015 Ivrea, Piemonte</a></u>
+            <i class="fa fa-map-pin fa-sm px-1" style="color: indianred"></i> Ci
+            puoi trovare in
+            <u
+              ><a
+                href="https://www.google.com/maps/dir/?api=1&amp;destination=45.477466179593%2C7.8914880752563"
+                >Via Lago S. Michele, 15 10015 Ivrea, Piemonte</a
+              ></u
+            >
           </div>
           <div class="col-12 px-5">
-            
             <l-map
               style="height: 500px; border-radius: 10px"
               :zoom="zoom"
@@ -52,15 +58,16 @@
           <h4 class="title text-center">I nostri luoghi</h4>
         </div>
         <tabs
-          pills
-          class="nav-align-center"
-          tab-content-classes="gallery"
-          tab-nav-classes="nav-pills-just-icons"
+          tabContentClasses="tab-subcategories"
+          square
+          centered
+          
           type="primary"
         >
-          <tab-pane title="Profile">
-            <i slot="label" class="now-ui-icons design_image"></i>
-
+          <tab-pane title="Geodidalab">
+            <span slot="label">
+              GEODIDALAB
+            </span>
             <div class="col-md-10 ml-auto mr-auto">
               <div class="row collections">
                 <div class="col-md-6 text-right">
@@ -73,6 +80,11 @@
                     alt=""
                     class="img-raised"
                   />
+                  <img
+                    :src="require('../assets/images/geodidalab/lago/lago5.jpg')"
+                    alt=""
+                    class="img-raised"
+                  />
                 </div>
                 <div class="col-md-6">
                   <img
@@ -81,7 +93,12 @@
                     class="img-raised"
                   />
                   <img
-                    :src="require('../assets/images/geodidalab/lago/lago4.png')"
+                    :src="require('../assets/images/geodidalab/lago/lago4.jpg')"
+                    alt=""
+                    class="img-raised"
+                  />
+                  <img
+                    :src="require('../assets/images/geodidalab/lago/lago6.jpg')"
                     alt=""
                     class="img-raised"
                   />
@@ -90,9 +107,10 @@
             </div>
           </tab-pane>
 
-          <tab-pane title="Home">
-            <i slot="label" class="now-ui-icons location_world"></i>
-
+          <tab-pane title="Ivrea">
+            <span slot="label">
+              IVREA
+            </span>
             <div class="col-md-10 ml-auto mr-auto">
               <div class="row collections">
                 <div class="col-md-6">
@@ -138,6 +156,11 @@
 <script>
 import { Tabs, TabPane } from "@/components";
 import { LMap, LMarker, LPopup, LTileLayer } from "vue2-leaflet";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faFlask } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faFlask)
 
 export default {
   name: "profile",
@@ -149,6 +172,7 @@ export default {
     LTileLayer,
     LMarker,
     LPopup,
+    //FontAwesomeIcon
   },
 
   data() {

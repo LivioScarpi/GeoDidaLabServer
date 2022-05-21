@@ -596,7 +596,7 @@ export default {
     },
 
     checkCodeAndGetPath() {
-      console.log("checkCodeAndGetPath");
+      console.log("checkCodeAndGetPath SONO QUA!!!!");
       console.log(this.pathCodeInserted);
 
       if (this.pathCodeInserted.trim().length !== 0) {
@@ -608,19 +608,26 @@ export default {
           success: function (result) {
             console.log("RISPOSTA: ");
             console.log(result);
+            console.log(result === null);
+            console.log("STAMPO ANCHE QUESTO!");
 
-            var itinerario = result;
+            if(result !== null) {
+              var itinerario = result;
 
-            store.state.sottoitinerari[0] = itinerario;
-            var itineraryAlreadyExist = true;
-            var itineraryCode = self.pathCodeInserted;
-            router.push({
-              name: "sintesiitinerario",
-              params: {
-                itineraryAlreadyExist,
-                itineraryCode
-              },
-            });
+              store.state.sottoitinerari[0] = itinerario;
+              var itineraryAlreadyExist = true;
+              var itineraryCode = self.pathCodeInserted;
+              router.push({
+                name: "sintesiitinerario",
+                params: {
+                  itineraryAlreadyExist,
+                  itineraryCode
+                },
+              });
+            } else {
+              console.log("L'itinerario non esiste!");
+              self.modals.itineraryCodeNotValid = true;
+            }
           },
           error: function (error) {
             console.log("error: ");

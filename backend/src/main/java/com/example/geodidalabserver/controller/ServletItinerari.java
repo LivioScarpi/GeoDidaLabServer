@@ -6,6 +6,8 @@ import com.example.geodidalabserver.controller.ResponseController;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,9 +23,18 @@ import java.util.Random;
 public class ServletItinerari extends HttpServlet {
 
     ResponseController responseController;
+    String url = "";
+    String user = "";
+    String pwd = "";
 
     @Override
-    public void init() {
+    public void init(ServletConfig conf) throws ServletException {
+        super.init(conf);
+        ServletContext ctx = conf.getServletContext();
+        this.url = ctx.getInitParameter("DB-URL");
+        this.user = ctx.getInitParameter("user");
+        this.pwd = ctx.getInitParameter("pwd");
+
         responseController = ResponseController.getInstance();
     }
 
@@ -89,15 +100,17 @@ public class ServletItinerari extends HttpServlet {
 
     private void inserisciItinerario(HttpServletRequest req, HttpServletResponse resp) {
         try {
+
+
             // Initialize the database
-            Connection con = DatabaseConnection.initializeDatabase();
+            Connection con = DatabaseConnection.initializeDatabase(this.url, this.user, this.pwd);
 
             java.util.Date date = new java.util.Date();
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             java.sql.Timestamp sqlTime = new java.sql.Timestamp(date.getTime());
 
             PreparedStatement ps = con
-                    .prepareStatement("insert into Itinerario values(?, ?, ?, ?)");
+                    .prepareStatement("insert into itinerario values(?, ?, ?, ?)");
 
             String randomId = generateRandomSAlphanumericString();
 
@@ -106,7 +119,7 @@ public class ServletItinerari extends HttpServlet {
             while (idAlreadyExists) {
                 //controllo se l'ID Esiste già nel DB
                 PreparedStatement checkPS = con
-                        .prepareStatement("select * from Itinerario where ID = ?");
+                        .prepareStatement("select * from itinerario where ID = ?");
 
                 checkPS.setString(1, randomId);
 
@@ -155,7 +168,7 @@ public class ServletItinerari extends HttpServlet {
     private void ottieniItinerario(HttpServletRequest req, HttpServletResponse resp) {
         try {
             // Initialize the database
-            Connection con = DatabaseConnection.initializeDatabase();
+            Connection con = DatabaseConnection.initializeDatabase(this.url, this.user, this.pwd);
 
             String idItinerario = req.getPathInfo().replace("/", "");
 
@@ -163,7 +176,7 @@ public class ServletItinerari extends HttpServlet {
 
             //controllo se l'ID Esiste già nel DB
             PreparedStatement ps = con
-                    .prepareStatement("select * from Itinerario where ID = ?");
+                    .prepareStatement("select * from itinerario where ID = ?");
 
             ps.setString(1, idItinerario);
 

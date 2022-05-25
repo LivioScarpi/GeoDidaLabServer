@@ -55,7 +55,7 @@
 
       <div class="row">
         <div class="col-md-6 ml-auto mr-auto">
-          <h4 class="title text-center">I nostri luoghi {{media.length}}</h4>
+          <h4 class="title text-center">I nostri luoghi</h4>
         </div>
 
         

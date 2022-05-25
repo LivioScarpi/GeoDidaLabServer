@@ -539,11 +539,11 @@
                             </div>
                           </l-control>
 
-                          <l-geo-json
+                          <!-- <l-geo-json
                             v-for="(geoj, index) in geoJsonArray"
                             :key="index"
                             :geojson="geoj"
-                          ></l-geo-json>
+                          ></l-geo-json> -->
                         </l-map>
                       </div>
                     </div>
@@ -733,7 +733,7 @@ export default {
     //Component Leaflet map
     LMap,
     LTileLayer,
-    LGeoJson,
+    //LGeoJson,
     LMarker,
     LPopup,
     LCircleMarker,

@@ -55,19 +55,58 @@
 
       <div class="row">
         <div class="col-md-6 ml-auto mr-auto">
-          <h4 class="title text-center">I nostri luoghi</h4>
+          <h4 class="title text-center">I nostri luoghi {{media.length}}</h4>
         </div>
+
+        
+
         <tabs
           tabContentClasses="tab-subcategories"
           square
           centered
-          
           type="primary"
         >
-          <tab-pane title="Geodidalab">
-            <span slot="label">
-              GEODIDALAB
-            </span>
+          <tab-pane
+            v-for="(place, index) in places"
+            :key="index"
+            :title="place"
+          >
+            <span slot="label"> {{ place }} </span>
+            <div class="col-md-10 ml-auto mr-auto collections">
+              <ul style="display: grid; grid-template-columns: repeat(2, 1fr)">
+                <li
+                  v-for="(item, index) in filteredMedia(place)"
+                  :key="index"
+                  style="display: inline"
+                  class="m-3"
+                >
+                  <img style="height: 100%; width: 100%" v-bind:src="item['thumbnail_display_urls']['large']" :alt="item['dcterms:description']['@value']"/>
+                </li>
+              </ul>
+
+              <!-- <div
+                v-for="ind in getIndex(place)"
+                :key="ind"
+                class="row collections"
+              >
+                <div class="col-md-6 text-right">
+                  <img
+                    :src="media[ind]['thumbnail_display_urls']['large']"
+                    class="img-raised"
+                  />
+                </div>
+                <div class="col-md-6 text-right">
+                  <img
+                    :src="media[ind]['thumbnail_display_urls']['large']"
+                    alt=""
+                    class="img-raised"
+                  />
+                </div>
+              </div> -->
+            </div>
+          </tab-pane>
+          <!-- <tab-pane title="Geodidalab">
+            <span slot="label"> GEODIDALAB </span>
             <div class="col-md-10 ml-auto mr-auto">
               <div class="row collections">
                 <div class="col-md-6 text-right">
@@ -105,12 +144,10 @@
                 </div>
               </div>
             </div>
-          </tab-pane>
+          </tab-pane> -->
 
-          <tab-pane title="Ivrea">
-            <span slot="label">
-              IVREA
-            </span>
+          <!-- <tab-pane title="Ivrea">
+            <span slot="label"> IVREA </span>
             <div class="col-md-10 ml-auto mr-auto">
               <div class="row collections">
                 <div class="col-md-6">
@@ -147,7 +184,7 @@
                 </div>
               </div>
             </div>
-          </tab-pane>
+          </tab-pane> -->
         </tabs>
       </div>
     </div>
@@ -156,11 +193,13 @@
 <script>
 import { Tabs, TabPane } from "@/components";
 import { LMap, LMarker, LPopup, LTileLayer } from "vue2-leaflet";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faFlask } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faFlask } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faFlask)
+const Common = require("@/Common.vue").default;
+
+library.add(faFlask);
 
 export default {
   name: "profile",
@@ -187,7 +226,37 @@ export default {
       map: null,
       geojson: null,
       markers: [],
+      media: [],
+      allLoaded: [],
     };
+  },
+
+  created() {
+    // eseguo la query per gli esperimenti solo la prima volta che apro la pagina degli Esperimenti
+
+    /**
+     * 118 : class id Misurazione
+     * 130 : class id Attivita
+     */
+
+    var self = this;
+
+    Common.getElemsByClass(this, 134, (res) => {
+      self.media = res.body;
+      self.allLoaded = true;
+    });
+  },
+
+  computed: {
+    places() {
+      return [...new Set(this.media.map((place) => place["o:title"]))];
+    },
+  },
+
+  methods: {
+    filteredMedia(place) {
+      return this.media.filter((pl) => pl["o:title"] === place);
+    },
   },
 };
 </script>

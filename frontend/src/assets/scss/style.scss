@@ -227,7 +227,7 @@ a, a:hover {
 
     .tag__item__selected {
       display: inline-block;
-      background: #9eca58cc;
+      background: #f09b56cc;
       border-radius: 3px;
       padding: 2.5px 10px;
       margin: 0 5px 5px 0;
@@ -235,9 +235,9 @@ a, a:hover {
       user-select: none;
       transition: background-color 0.3s;
 
-      &:hover {
-        background: #9eca58cc;
-      }
+      // &:hover {
+      //   background: #9eca58cc;
+      // }
     }
 
     .tag__item__unselected {
@@ -465,9 +465,9 @@ a, a:hover {
 .postcard .postcard__tagbox .orange.play:hover {
 	background: $main-orange;
 }
-.orange .postcard__title:hover {
-	color: $main-orange;
-}
+// .orange .postcard__title:hover {
+// 	color: $main-orange;
+// }
 .orange .postcard__bar {
 	background-color: $main-orange;
 }

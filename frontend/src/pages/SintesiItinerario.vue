@@ -435,7 +435,7 @@
                                 color: #ffffff;
                               "
                             >
-                              <h5>{{ index }}</h5>
+                              <h5>{{ getCount(index, ind) }}</h5>
                             </div>
                             <div class="col-10 text-left py-2">
                               <div class="row">
@@ -663,7 +663,7 @@
                               color: #ffffff;
                             "
                           >
-                            <h5>{{ index }}</h5>
+                            <h5>{{ getCount(index, ind) }}</h5>
                           </div>
                           <div class="col-10 text-left py-2">
                             <div class="row">
@@ -922,6 +922,8 @@ export default {
         "GeoDidaLab - Ivrea": 2,
         "Anfiteatro Morenico d'Ivrea": 3,
       },
+
+      poiIndex: 1,
     };
   },
 
@@ -1003,6 +1005,26 @@ export default {
       router.go(-1);
 
       //router.replace({ path: "/percorsi" });
+    },
+
+    getCount(i, j) {
+      var countActivities = 0;
+      for (var x = 0; x <= i - 1; x++) {
+        countActivities += 1;
+        if (i === x) {
+          for (var k = 0; k < j; k++) {
+            for (var h = 0; h <= this.itinerario.poi[i].activitiesInPOI; h++) {
+              countActivities += 1;
+            }
+          }
+        }
+      }
+
+      countActivities = countActivities + j;
+
+      console.log("countActivities: " + countActivities);
+
+      return countActivities;
     },
 
     selectMarkerOnMap(poiName, activityName) {

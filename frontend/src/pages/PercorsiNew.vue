@@ -336,7 +336,7 @@
                                     :class="
                                       item.visitPOI
                                         ? 'tag__item__selected'
-                                        : 'tag__item__unselected'
+                                        : 'tag__item__selected'
                                     "
                                     v-on:click="
                                       visitPlaceClicked(
@@ -344,11 +344,12 @@
                                       )
                                     "
                                   >
-                                    <i
+                                    <!-- <i
                                       v-if="item.visitPOI"
                                       class="fas fa-check mr-2"
                                     ></i
-                                    ><template v-if="!item.visitPOI"
+                                    > -->
+                                    <template v-if="!item.visitPOI"
                                       >Seleziona la visita del luogo</template
                                     >
                                     <template v-else
@@ -407,7 +408,7 @@
                                                     <li
                                                       v-if="it.selected"
                                                       class="
-                                                        tag__item__unselected
+                                                        tag__item__selected
                                                       "
                                                       v-on:click="
                                                         changeSelection(

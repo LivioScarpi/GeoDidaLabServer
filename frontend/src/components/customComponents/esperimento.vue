@@ -236,6 +236,34 @@
               </div>
             </div>
           </tab-pane>
+
+          <tab-pane>
+            <span slot="label">
+              <i class="now-ui-icons design_image"></i>IMMAGINI
+            </span>
+            <div
+              class="text-justify description col-12 text-black text"
+              :class="{ 'scrollbox': !isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !isMobile }">
+                <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+              </div>
+            </div>
+          </tab-pane>
+
+          <tab-pane>
+            <span slot="label">
+              <i class="now-ui-icons media-1_button-play"></i>VIDEO
+            </span>
+            <div
+              class="text-justify description col-12 text-black text"
+              :class="{ 'scrollbox': !isMobile }"
+            >
+              <div :class="{ 'scrollbox-content': !isMobile }">
+                <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+              </div>
+            </div>
+          </tab-pane>
         </tabs>
       </div>
     </div>

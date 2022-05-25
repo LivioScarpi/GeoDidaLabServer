@@ -151,8 +151,7 @@
                 <b v-else class="title pt-0">Itinerario senza nome</b> -->
               </h5>
 
-              <div v-if="$store.state
-                    .sottoitinerari.length > 1">
+              <div v-if="$store.state.sottoitinerari.length > 1">
                 Il tempo totale include anche gli spostamenti in auto da un'area
                 all'altra.
 
@@ -242,6 +241,17 @@
                   <i class="bi bi-clock mr-2"></i>
                   {{ parseInt(totalTimeObject.minutes) }} minuti
                 </h6>
+              </div>
+              <div v-if="itineraryCode === null" class="row mt-3">
+                <div class="col-12">
+                  <Button
+                    type="primary"
+                    size="small"
+                    v-on:click="copyItineraryCode()"
+                    class="textButtonColor"
+                    >Copia codice itinerario
+                  </Button>
+                </div>
               </div>
 
               <div v-if="itineraryCode === null" class="row mt-3">
@@ -826,6 +836,17 @@ import router from "../router";
 import esperimento from "../components/customComponents/esperimento";
 import { isMobile } from "mobile-device-detect";
 
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
+import Vue from "vue";
+
+Vue.use(Toast, {
+  transition: "Vue-Toastification__bounce",
+  maxToasts: 20,
+  newestOnTop: true,
+});
+
 import {
   LCircleMarker,
   LGeoJson,
@@ -951,7 +972,14 @@ export default {
       var indexStartArea = this.areasIndexes[path[i]];
       var indexNextArea = this.areasIndexes[path[i + 1]];
 
-      tmpString += "Tempo in auto tra  '" + path[i] + "' e '" + path[i + 1] + "' : " + costMatrixAreas[indexStartArea][indexNextArea] + "minuti";
+      tmpString +=
+        "Tempo in auto tra  '" +
+        path[i] +
+        "' e '" +
+        path[i + 1] +
+        "' : " +
+        costMatrixAreas[indexStartArea][indexNextArea] +
+        "minuti";
 
       console.log(
         "Prenodil costo tra l'area di indice: " +
@@ -964,8 +992,7 @@ export default {
       //cost += costMatrixAreas[indexStartArea][indexNextArea];
     }
 
-console.log(this.tempoSpostamenti);
-    
+    console.log(this.tempoSpostamenti);
   },
 
   created() {},
@@ -1038,6 +1065,44 @@ console.log(this.tempoSpostamenti);
       this.showDetails = false;
       Array.prototype.forEach.call(this.markers, (marker) => {
         marker.poiSelected = false;
+      });
+    },
+    copyItineraryCode() {
+      // navigator clipboard api needs a secure context (https)
+      if (navigator.clipboard && window.isSecureContext) {
+        // navigator clipboard api method'
+        navigator.clipboard.writeText(String(this.itineraryCode));
+      } else {
+        // text area method
+        let textArea = document.createElement("textarea");
+        textArea.value = String(this.itineraryCode);
+        // make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        new Promise((res, rej) => {
+          // here the magic happens
+          document.execCommand("copy") ? res() : rej();
+          textArea.remove();
+        });
+      }
+
+      this.$toast("Codice itinerario copiato negli appunti!", {
+        position: "top-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
       });
     },
     bookItinerary() {

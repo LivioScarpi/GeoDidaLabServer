@@ -1008,23 +1008,47 @@ export default {
     },
 
     getCount(i, j) {
+      console.log("i: " + i + "; j: " + j);
       var countActivities = 0;
-      for (var x = 0; x <= i - 1; x++) {
-        countActivities += 1;
-        if (i === x) {
-          for (var k = 0; k < j; k++) {
-            for (var h = 0; h <= this.itinerario.poi[i].activitiesInPOI; h++) {
-              countActivities += 1;
+              var k = 0;
+              var l = 0;
+      for (var x = 1; x <= i; x++) {
+        console.log(
+          "CONTO IL POI CHE HA " + this.itinerario.poi[x].activitiesInPOI.length
+        );
+        //countActivities += 1;
+
+
+        for (
+          var h = 0;
+          h < this.itinerario.poi[x].activitiesInPOI.length;
+          h++
+        ) {
+          if (x === i) {
+            
+            if (l < j) {
+              console.log("k: " + k + ", j: " + j);
+              console.log("CONTO L'ATTIVITA " + k);
+
+              
+              
+              l +=1;
             }
+          } else {
+            console.log("ELSE k: " + k + ", j: " + j);
+            console.log("ELSE CONTO L'ATTIVITA " + k);
+
+            k += 1;
           }
         }
       }
 
-      countActivities = countActivities + j;
+k += l;
+      //countActivities = countActivities + j;
 
-      console.log("countActivities: " + countActivities);
+      console.log("countActivities: " + k);
 
-      return countActivities;
+      return k;
     },
 
     selectMarkerOnMap(poiName, activityName) {

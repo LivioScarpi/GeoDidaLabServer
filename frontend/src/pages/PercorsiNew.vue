@@ -348,7 +348,12 @@
                                       v-if="item.visitPOI"
                                       class="fas fa-check mr-2"
                                     ></i
-                                    >Seleziona la visita del luogo
+                                    ><template v-if="!item.visitPOI"
+                                      >Seleziona la visita del luogo</template
+                                    >
+                                    <template v-else
+                                      >Deseleziona la visita del luogo</template
+                                    >
                                   </li>
                                 </ul>
                                 <div v-if="item['mis'].length > 0">

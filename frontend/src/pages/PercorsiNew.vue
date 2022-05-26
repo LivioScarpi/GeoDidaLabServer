@@ -2603,10 +2603,13 @@ export default {
     someActivitiesSelected() {
       //TODO: remove me
       //console.log("someActivitiesSelected");
+      // return (
+      //   this.filteredPOI.filter(
+      //     (poi) => poi.poiHasActivitiesSelected || poi.visitPOI
+      //   ).length > 0
+      // );
       return (
-        this.filteredPOI.filter(
-          (poi) => poi.poiHasActivitiesSelected || poi.visitPOI
-        ).length > 0
+        this.$store.state.activitiesSelectedList.length > 0
       );
     },
 

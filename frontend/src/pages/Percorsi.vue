@@ -69,19 +69,47 @@
                 Scegli il tempo che hai a disposizione
               </div>
               <ul class="postcardpercorsi__tagbox">
-                <li class="tag__item" v-on:click="enabledRadio = '1'">
+                <li
+                  :class="
+                    enabledRadio === '1'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="enabledRadio = '1'"
+                >
                   <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
                   >Mattina
                 </li>
-                <li class="tag__item" v-on:click="enabledRadio = '2'">
+                <li
+                  :class="
+                    enabledRadio === '2'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="enabledRadio = '2'"
+                >
                   <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
                   >Pomeriggio
                 </li>
-                <li class="tag__item" v-on:click="enabledRadio = '3'">
+                <li
+                  :class="
+                    enabledRadio === '3'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="enabledRadio = '3'"
+                >
                   <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
                   >Tutta la giornata
                 </li>
-                <li class="tag__item" v-on:click="enabledRadio = '4'">
+                <li
+                  :class="
+                    enabledRadio === '4'
+                      ? 'tag__item__selected'
+                      : 'tag__item__unselected'
+                  "
+                  v-on:click="enabledRadio = '4'"
+                >
                   <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
                   >Altro (fascia oraria personalizzata)
                 </li>
@@ -250,19 +278,47 @@
                   Scegli il tempo che hai a disposizione
                 </div>
                 <ul class="postcardpercorsi__tagbox">
-                  <li class="tag__item" v-on:click="enabledRadio = '1'">
+                  <li
+                    :class="
+                      enabledRadio === '1'
+                        ? 'tag__item__selected'
+                        : 'tag__item__unselected'
+                    "
+                    v-on:click="enabledRadio = '1'"
+                  >
                     <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
                     >Mattina
                   </li>
-                  <li class="tag__item" v-on:click="enabledRadio = '2'">
+                  <li
+                    :class="
+                      enabledRadio === '2'
+                        ? 'tag__item__selected'
+                        : 'tag__item__unselected'
+                    "
+                    v-on:click="enabledRadio = '2'"
+                  >
                     <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
                     >Pomeriggio
                   </li>
-                  <li class="tag__item" v-on:click="enabledRadio = '3'">
+                  <li
+                    :class="
+                      enabledRadio === '3'
+                        ? 'tag__item__selected'
+                        : 'tag__item__unselected'
+                    "
+                    v-on:click="enabledRadio = '3'"
+                  >
                     <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
                     >Tutta la giornata
                   </li>
-                  <li class="tag__item" v-on:click="enabledRadio = '4'">
+                  <li
+                    :class="
+                      enabledRadio === '4'
+                        ? 'tag__item__selected'
+                        : 'tag__item__unselected'
+                    "
+                    v-on:click="enabledRadio = '4'"
+                  >
                     <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
                     >Altro (fascia oraria personalizzata)
                   </li>
@@ -361,14 +417,14 @@
                 >
                 </form-group-input>
                 <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
-                <Button
-                  size="small"
-                  type="primary"
-                  v-on:click="checkCodeAndGetPath()"
-                  class="textButtonColor mt-3"
-                  >Inserisci codice
-                </Button>
-              </div>
+                  <Button
+                    size="small"
+                    type="primary"
+                    v-on:click="checkCodeAndGetPath()"
+                    class="textButtonColor mt-3"
+                    >Inserisci codice
+                  </Button>
+                </div>
               </div>
             </div>
 

@@ -1,62 +1,45 @@
 <template>
-  <card
-    v-if="!isLoadingImages"
-    :style="[
-      isLarge
-        ? {
-            'max-width': '28rem',
-            height: '27rem',
-            'max-height': '34rem',
-            'border-radius': '10px',
-          }
-        : {
-            'max-width': '28rem',
-            'max-sheight': '45rem',
-            'border-radius': '10px',
-          },
-    ]"
-    class="mx-2 postcardattivita attivita orange pb-5"
-  >
+  <card v-if="!isLoadingImages" :style="[
+    isLarge
+      ? {
+        'max-width': '28rem',
+        height: '27rem',
+        'max-height': '34rem',
+        'border-radius': '10px',
+      }
+      : {
+        'max-width': '28rem',
+        'max-sheight': '45rem',
+        'border-radius': '10px',
+      },
+  ]" class="mx-2 postcardattivita attivita orange pb-5">
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-      <div
-        class="postcardattivita__bar margin-auto"
-        style="display: inline-block"
-      ></div>
+      <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div>
 
-      <div class="">
-        <ul class="postcardattivita__tagbox mb-4">
-          <li
-            :class="
-              selectedTab === 'Panoramica'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Panoramica'"
-          >
-            Panoramica
-          </li>
-          <li
-            :class="
-              selectedTab === 'Descrizione'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Descrizione'"
-          >
-            Descrizione
-          </li>
-          <li
-            :class="
-              selectedTab === 'Immagini'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Immagini'"
-          >
-            Immagini
-          </li>
-          <!-- <li
+      <ul class="postcardattivita__tagbox mb-4">
+        <li :class="
+          selectedTab === 'Panoramica'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Panoramica'">
+          Panoramica
+        </li>
+        <li :class="
+          selectedTab === 'Descrizione'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Descrizione'">
+          Descrizione
+        </li>
+        <li :class="
+          selectedTab === 'Immagini'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Immagini'">
+          Immagini
+        </li>
+        <!-- <li
             :class="
               selectedTab === 'Video'
                 ? 'tag__item__selected'
@@ -66,14 +49,14 @@
           >
             Video
           </li> -->
-        </ul>
+      </ul>
+
+      <div :class="{ 'text-justify ': !isMobile }">
+
 
         <div v-if="selectedTab === 'Panoramica'" class="col-12">
-          <div
-            class="text-left description col-12 text-black text mt-3"
-            :class="{ 'text-justify scrollbox': !isMobile }"
-          >
-            <div :class="{ 'scrollbox-content': !isMobile }">
+          <div class="text-left description col-12 text-black text mt-3" style="overflow: auto">
+            <div>
               <div class="row mx-1 mb-2">
                 <h6 class="mr-2">Situato in:</h6>
                 <h6 class="font-weight-normal">
@@ -86,54 +69,41 @@
           </div>
         </div>
         <div v-else-if="selectedTab === 'Descrizione'" class="col-12">
-          <div
-            class="text-justify description col-12 text-black text"
-            :class="{ scrollbox: !$store.state.isMobile }"
-          >
-            <div :class="{ 'scrollbox-content': !$store.state.isMobile }">
+          <!-- <div class="text-justify description col-12 text-black text mt-3" style="overflow: auto">
+            <div>
               <b>{{ item["dcterms:description"][0]["@value"] }}</b>
+            </div>
+          </div> -->
+
+          <div class="text-justify description col-12 text-black text mt-3" style="overflow: auto">
+            <div>
+              <div class="row mx-1 mb-2">
+                <b>
+                  {{ item["dcterms:description"][0]["@value"] }}
+                </b>
+              </div>
             </div>
           </div>
         </div>
-        <div v-else-if="selectedTab === 'Immagini'" class="col-12">
-          <swiper
-            v-if="item.media !== undefined && item.media.length !== 0"
-            ref="mySwiperStrumenti"
-            class="swiper"
-            navigation
-            :pagination="{ clickable: true }"
-            style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
-          >
-            <swiper-slide
-              style="height: 185px"
-              v-for="(media, index) in item['media']"
-              :key="index"
-            >
+
+        <div v-else-if="selectedTab === 'Immagini'" class="col-12 text-center">
+          <swiper v-if="item.media !== undefined && item.media.length !== 0" ref="mySwiperStrumenti" class="swiper"
+            navigation :pagination="{ clickable: true }"
+            style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
+            <swiper-slide style="height: 185px" v-for="(media, index) in item['media']" :key="index">
               <img :src="media['o:thumbnail_urls']['large']" class="img" />
             </swiper-slide>
 
-            <div
-              v-if="
-                item.media.length > 1 ||
-                item.mediaYT.length > 1 ||
-                (item.media.length === 1 && item.mediaYT.length === 1)
-              "
-              class="swiper-button-prev"
-              slot="button-prev"
-              @click="swiper.slidePrev()"
-            ></div>
-            <div
-              v-if="item.media.length > 1"
-              class="swiper-button-next"
-              slot="button-next"
-              @click="swiper.slideNext()"
-            ></div>
+            <div v-if="
+              item.media.length > 1 ||
+              item.mediaYT.length > 1 ||
+              (item.media.length === 1 && item.mediaYT.length === 1)
+            " class="swiper-button-prev" slot="button-prev" @click="swiper.slidePrev()"></div>
+            <div v-if="item.media.length > 1" class="swiper-button-next" slot="button-next" @click="swiper.slideNext()">
+            </div>
           </swiper>
 
-          <div
-            v-if="item.media === undefined || item.media.length === 0"
-            class="mt-3 text-black"
-          >
+          <div v-if="item.media === undefined || item.media.length === 0" class="mt-3 text-black">
             Non sono presenti immagini
           </div>
         </div>
@@ -199,8 +169,6 @@
           </div>
         </div> 
       </div>-->
-
-      
       </div>
     </div>
   </card>
@@ -277,7 +245,8 @@ export default {
 .img {
   align-items: center;
   height: 100%;
-  object-fit: cover; /* cover makes the image stretch the width and height of the container */
+  object-fit: cover;
+  /* cover makes the image stretch the width and height of the container */
   border-radius: 10px;
 }
 
@@ -285,7 +254,8 @@ export default {
   overflow: scroll;
   /*text-overflow: ellipsis;*/
   display: -webkit-box;
-  -webkit-line-clamp: 4; /* number of lines to show */
+  -webkit-line-clamp: 4;
+  /* number of lines to show */
   line-clamp: 4;
   -webkit-box-orient: vertical;
 }

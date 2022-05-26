@@ -610,12 +610,15 @@ $main-blue-rgb-015: rgba(0, 118, 189, 0.1) !default;
   }
 
   .scrollbox {
-    overflow: auto;
+      overflow-x: hidden;
+    overflow-y: auto;
     visibility: hidden;
   }
   
   .scrollbox-content,
   .scrollbox:hover,
   .scrollbox:focus {
+    overflow-x: hidden;
+
     visibility: visible;
   }

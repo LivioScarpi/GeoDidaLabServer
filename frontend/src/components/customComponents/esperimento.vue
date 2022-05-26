@@ -1,24 +1,20 @@
 <template>
   <!--TODO: risolvere problema component youtube e CORS policy-->
   <!--prima nel v-i c'era !$device.mobile-->
-  <card
-    v-if="!isLoadingImages && !isLoadingVideos"
-    :style="[
-      isLarge
-        ? {
-            'max-width': '28rem',
-            height: '29rem',
-            'max-height': '43rem',
-            'border-radius': '10px',
-          }
-        : {
-            'max-width': '28rem',
-            'max-sheight': '45rem',
-            'border-radius': '10px',
-          },
-    ]"
-    class="mx-2 postcardattivita attivita orange pb-5"
-  >
+  <card v-if="!isLoadingImages && !isLoadingVideos" :style="[
+    isLarge
+      ? {
+        'max-width': '28rem',
+        height: '29rem',
+        'max-height': '43rem',
+        'border-radius': '10px',
+      }
+      : {
+        'max-width': '28rem',
+        'max-sheight': '45rem',
+        'border-radius': '10px',
+      },
+  ]" class="mx-2 postcardattivita attivita orange pb-5">
     <!--<img
         slot="image"
         class="card-img-top"
@@ -132,61 +128,43 @@
     </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-      <div
-        class="postcardattivita__bar margin-auto"
-        style="display: inline-block"
-      ></div>
+      <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div>
 
-      <div class="">
-        <ul class="postcardattivita__tagbox mb-4">
-          <li
-            :class="
-              selectedTab === 'Panoramica'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Panoramica'"
-          >
-            Panoramica
-          </li>
-          <li
-            :class="
-              selectedTab === 'Descrizione'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Descrizione'"
-          >
-            Descrizione
-          </li>
-          <li
-            :class="
-              selectedTab === 'Immagini'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Immagini'"
-          >
-            Immagini
-          </li>
-          <li
-            :class="
-              selectedTab === 'Video'
-                ? 'tag__item__selected'
-                : 'tag__item__unselected'
-            "
-            v-on:click="selectedTab = 'Video'"
-          >
-            Video
-          </li>
-        </ul>
+      <ul class="postcardattivita__tagbox mb-4">
+        <li :class="
+          selectedTab === 'Panoramica'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Panoramica'">
+          Panoramica
+        </li>
+        <li :class="
+          selectedTab === 'Descrizione'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Descrizione'">
+          Descrizione
+        </li>
+        <li :class="
+          selectedTab === 'Immagini'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Immagini'">
+          Immagini
+        </li>
+        <li :class="
+          selectedTab === 'Video'
+            ? 'tag__item__selected'
+            : 'tag__item__unselected'
+        " v-on:click="selectedTab = 'Video'">
+          Video
+        </li>
+      </ul>
 
+      <div :class="{ 'text-justify ': !isMobile }">
         <div v-if="selectedTab === 'Panoramica'" class="col-12">
-          <div
-            class="text-left description col-12 text-black text mt-3"
-            :class="{ 'text-justify scrollbox': !isMobile }"
-          >
-            <div :class="{ 'scrollbox-content': !isMobile }">
+          <div class="text-left description col-12 text-black text mt-3" style="overflow: auto; ">
+            <div>
               <div class="row mx-1 mb-2">
                 <h6 class="mr-2">Difficoltà:</h6>
                 <h6 class="font-weight-normal">
@@ -197,7 +175,7 @@
                 <h6 class="mr-2">
                   Interessi:
                   <span class="font-weight-normal">{{
-                    getInterestList(item["geo:ha_interesse"]).join(", ")
+                      getInterestList(item["geo:ha_interesse"]).join(", ")
                   }}</span>
                 </h6>
               </div>
@@ -219,23 +197,17 @@
               <div class="row mx-1">
                 <h6 class="mr-2">Strumenti usati:</h6>
                 <div v-if="item['geo:usa_strumento'] !== undefined">
-                  <template
-                    v-for="(strumento, index) in item['geo:usa_strumento']"
-                    style="display: inline-block"
-                  >
+                  <template v-for="(strumento, index) in item['geo:usa_strumento']" style="display: inline-block">
                     <h6 class="font-weight-normal" :key="index">
                       {{ strumento["display_title"] }}
                     </h6>
-                    <template
-                      v-if="index < item['geo:usa_strumento'].length - 2"
-                      ><h6 class="font-weight-normal" :key="index">
+                    <template v-if="index < item['geo:usa_strumento'].length - 2">
+                      <h6 class="font-weight-normal" :key="index">
                         ,
-                      </h6></template
-                    >
+                      </h6>
+                    </template>
 
-                    <template
-                      v-if="index === item['geo:usa_strumento'].length - 2"
-                    >
+                    <template v-if="index === item['geo:usa_strumento'].length - 2">
                       <h6 class="font-weight-normal" :key="index">e</h6>
                     </template>
                   </template>
@@ -254,29 +226,17 @@
           </div>
         </div>
         <div v-else-if="selectedTab === 'Descrizione'" class="col-12">
-          <div
-            class="text-justify description col-12 text-black text mt-3"
-            :class="{ scrollbox: !isMobile }"
-          >
-            <div :class="{ 'scrollbox-content': !isMobile }">
+          <div class="text-justify description col-12 text-black text mt-3" style="overflow: auto; ">
+            <div>
               <b>{{ item["dcterms:description"][0]["@value"] }}</b>
             </div>
           </div>
         </div>
-        <div v-else-if="selectedTab === 'Immagini'" class="col-12">
-          <swiper
-            v-if="item.media !== undefined && item.media.length !== 0"
-            ref="mySwiper"
-            class="swiper"
-            navigation
-            :pagination="{ clickable: true }"
-            style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
-          >
-            <swiper-slide
-              v-for="(media, index) in item.media"
-              :key="index"
-              :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
-            >
+        <div v-else-if="selectedTab === 'Immagini'" class="col-12 text-center">
+          <swiper v-if="item.media !== undefined && item.media.length !== 0" ref="mySwiper" class="swiper" navigation
+            :pagination="{ clickable: true }" style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
+            <swiper-slide v-for="(media, index) in item.media" :key="index"
+              :style="[isLarge ? { height: '230px' } : { height: '199px' }]">
               <img :src="media['o:thumbnail_urls']['large']" class="img" />
             </swiper-slide>
 
@@ -310,48 +270,24 @@
               </div>
             </swiper-slide> -->
 
-            <div
-              v-if="item.media.length > 1"
-              class="swiper-button-prev"
-              slot="button-prev"
-              @click="swiper.slidePrev()"
-            ></div>
-            <div
-              v-if="item.media.length > 1"
-              class="swiper-button-next"
-              slot="button-next"
-              @click="swiper.slideNext()"
-            ></div>
+            <div v-if="item.media.length > 1" class="swiper-button-prev" slot="button-prev" @click="swiper.slidePrev()">
+            </div>
+            <div v-if="item.media.length > 1" class="swiper-button-next" slot="button-next" @click="swiper.slideNext()">
+            </div>
           </swiper>
 
-          <div
-            v-if="item.media === undefined || item.media.length === 0"
-            class="mt-3 text-black"
-          >
+          <div v-if="item.media === undefined || item.media.length === 0" class="mt-3 text-black">
             Non sono presenti immagini
           </div>
         </div>
         <div v-else-if="selectedTab === 'Video'" class="col-12">
-          <swiper
-            v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0"
-            ref="mySwiper"
-            class="swiper"
-            navigation
-            :pagination="{ clickable: true }"
-            style="background-color: hsl(17, 100%, 90%); border-radius: 10px"
-          >
-            <swiper-slide
-              v-for="(media, index) in item.mediaYT"
-              :key="index"
-              :style="[isLarge ? { height: '230px' } : { height: '199px' }]"
-            >
+          <swiper v-if="item.mediaYT !== undefined && item.mediaYT.length !== 0" ref="mySwiper" class="swiper"
+            navigation :pagination="{ clickable: true }"
+            style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
+            <swiper-slide v-for="(media, index) in item.mediaYT" :key="index"
+              :style="[isLarge ? { height: '230px' } : { height: '199px' }]">
               <div class="embed-responsive embed-responsive-16by9">
-                <iframe
-                  class="embed-responsive-item"
-                  frameborder="0"
-                  :src="videoSource()"
-                  allowfullscreen
-                  style="
+                <iframe class="embed-responsive-item" frameborder="0" :src="videoSource()" allowfullscreen style="
                     overflow: hidden;
                     overflow-x: hidden;
                     overflow-y: hidden;
@@ -364,31 +300,17 @@
                     bottom: 0px;
                     border-radius: 10px;
                     margin-y: auto;
-                  "
-                  height="100%"
-                  width="100%"
-                ></iframe>
+                  " height="100%" width="100%"></iframe>
               </div>
             </swiper-slide>
 
-            <div
-              v-if="item.mediaYT.length > 1"
-              class="swiper-button-prev"
-              slot="button-prev"
-              @click="swiper.slidePrev()"
-            ></div>
-            <div
-              v-if="item.mediaYT.length > 1"
-              class="swiper-button-next"
-              slot="button-next"
-              @click="swiper.slideNext()"
-            ></div>
+            <div v-if="item.mediaYT.length > 1" class="swiper-button-prev" slot="button-prev"
+              @click="swiper.slidePrev()"></div>
+            <div v-if="item.mediaYT.length > 1" class="swiper-button-next" slot="button-next"
+              @click="swiper.slideNext()"></div>
           </swiper>
 
-          <div
-            v-if="item.mediaYT === undefined || item.mediaYT.length === 0"
-            class="mt-3 text-black"
-          >
+          <div v-if="item.mediaYT === undefined || item.mediaYT.length === 0" class="mt-3 text-black">
             Non sono presenti video
           </div>
         </div>
@@ -716,7 +638,8 @@ export default {
 .img {
   align-items: center;
   height: 100%;
-  object-fit: cover; /* cover makes the image stretch the width and height of the container */
+  object-fit: cover;
+  /* cover makes the image stretch the width and height of the container */
   border-radius: 10px;
 }
 

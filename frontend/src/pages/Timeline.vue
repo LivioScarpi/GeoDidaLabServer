@@ -64,6 +64,7 @@
                                   <a class="postcardpercorsi__img_link">
                                     <img
                                       :src="event.image"
+                                      style="width: 100%"
                                       alt="Picture"
                                       class="
                                         postcardtimeline__img

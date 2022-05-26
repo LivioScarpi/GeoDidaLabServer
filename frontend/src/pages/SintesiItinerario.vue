@@ -628,10 +628,10 @@
 
                 <div
                     v-if="!showDetails"
-                    style="height: 500px"
-                    class="scrollbox mb-4"
+                    style="height: 500px; overflow: auto"
+                    class=" mb-4"
                 >
-                  <div class="scrollbox-content">
+                  <div >
                     <div
                         v-for="(poi, index) in this.itinerario.poi"
                         :key="'poi' + (index + 200)"

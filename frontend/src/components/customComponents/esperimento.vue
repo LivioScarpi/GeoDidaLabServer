@@ -285,7 +285,7 @@
             navigation :pagination="{ clickable: true }"
             style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
             <swiper-slide v-for="(media, index) in item.mediaYT" :key="index"
-              :style="[isLarge ? { height: '230px' } : { height: '199px' }]">
+              :style="[isLarge ? { height: '210px' } : { height: '145px' }]">
               <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" frameborder="0" :src="videoSource()" allowfullscreen style="
                     overflow: hidden;

@@ -67,9 +67,15 @@
                 }}</span>
               </h6>
 
-                            <div class="mt-3" v-if="totalTimeObject.hours === undefined || totalTimeObject.minutes === undefined">
-                              <h6><i class="bi bi-clock mr-2"></i> Tempo non conosciuto </h6>
-                            </div>
+              <div
+                class="mt-3"
+                v-if="
+                  totalTimeObject.hours === undefined ||
+                  totalTimeObject.minutes === undefined
+                "
+              >
+                <h6><i class="bi bi-clock mr-2"></i> Tempo non conosciuto</h6>
+              </div>
               <div v-else class="mt-3">
                 <h6
                   class="card-title"
@@ -168,7 +174,7 @@
                         v-for="(poi, index) in itinerario.poi"
                         :key="'poi' + (index + 200)"
                       >
-                        <div
+                        <!-- <div
                           class="row border mr-1 mb-3 postcard orange"
                           style="border-radius: 10px; cursor: pointer"
                           v-on:click="
@@ -242,7 +248,7 @@
                               </Button>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
 
                         <div
                           v-for="(it, ind) in poi.activitiesOfPOIPivot"
@@ -268,7 +274,9 @@
                                 color: #ffffff;
                               "
                             >
-                              <h5><i class="fa fa-thermometer-three-quarters fa-lg px-1"></i></h5>
+                              <h5>
+                                {{ getCount(index, ind) }}
+                              </h5>
                             </div>
                             <div class="col-10 text-left py-2">
                               <div class="row">
@@ -401,96 +409,26 @@
               </div>
 
               <div class="d-none d-lg-block">
-                                <div
+                <div
                   v-if="!showDetails"
                   style="height: 500px"
                   class="scrollbox mb-4"
                 >
                   <div class="scrollbox-content">
-                  <div
-                    v-for="(poi, index) in itinerario.poi"
-                    :key="'poi' + (index + 200)"
-                  >
                     <div
-                      class="row border mr-1 mb-3 postcard orange"
-                      style="border-radius: 10px; cursor: pointer"
-                      v-on:click="
-                        selectMarkerOnMap(
-                          poi['geo:Titolo_it'][0]['@value'],
-                          'Visita del luogo',
-                          poi['areaDiAppartenenza'][0]['display_title']
-                        )
-                      "
+                      v-for="(poi, index) in itinerario.poi"
+                      :key="'poi' + (index + 200)"
                     >
-                      <div
-                        class="col-2 text-center px-0"
-                        style="
-                          background-color: #4f9bff;
-                          border-top-left-radius: 10px;
-                          border-bottom-left-radius: 10px;
-                          cursor: pointer;
-
-                          display: flex;
-
-                          justify-content: center;
-                          align-items: center;
-                          color: #ffffff;
-                        "
-                      >
-                        <h5>{{ index }}</h5>
-                      </div>
-                      <div class="col-10 text-left py-2">
-                        <div class="row">
-                          <div class="col-12">
-                            <b>VISITA DEL LUOGO</b>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <i class="bi bi-pin-map-fill mr-2"></i
-                            >{{ poi["geo:Titolo_it"][0]["@value"] }}
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <i class="bi bi-map mr-2"></i>
-                            {{ poi["areaDiAppartenenza"][0]["display_title"] }}
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <div class="col-12">
-                            <i class="bi bi-clock mr-2"></i
-                            >{{ poi["geo:Durata"][0]["@value"] }} minuti
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <Button
-                            type="primary"
-                            size="small"
-                            v-on:click="
-                              selectMarkerOnMap(
-                                poi['geo:Titolo_it'][0]['@value'],
-                                'Visita del luogo',
-                                poi['areaDiAppartenenza'][0]['display_title']
-                              )
-                            "
-                            class="m-2 textButtonColor"
-                            >Visualizza dettagli
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      v-for="(it, ind) in poi.activitiesOfPOIPivot"
-                      :key="'availableActivities' + (ind + 200)"
-                      class=""
-                    >
-                      <div
+                      <!-- <div
                         class="row border mr-1 mb-3 postcard orange"
-                        style="border-radius: 10px"
+                        style="border-radius: 10px; cursor: pointer"
+                        v-on:click="
+                          selectMarkerOnMap(
+                            poi['geo:Titolo_it'][0]['@value'],
+                            'Visita del luogo',
+                            poi['areaDiAppartenenza'][0]['display_title']
+                          )
+                        "
                       >
                         <div
                           class="col-2 text-center px-0"
@@ -512,7 +450,7 @@
                         <div class="col-10 text-left py-2">
                           <div class="row">
                             <div class="col-12">
-                              <b>{{ it["o:title"].toUpperCase() }}</b>
+                              <b>VISITA DEL LUOGO</b>
                             </div>
                           </div>
                           <div class="row">
@@ -533,7 +471,7 @@
                           <div class="row">
                             <div class="col-12">
                               <i class="bi bi-clock mr-2"></i
-                              >{{ it["geo:Durata"][0]["@value"] }} minuti
+                              >{{ poi["geo:Durata"][0]["@value"] }} minuti
                             </div>
                           </div>
 
@@ -544,7 +482,7 @@
                               v-on:click="
                                 selectMarkerOnMap(
                                   poi['geo:Titolo_it'][0]['@value'],
-                                  it['o:title'],
+                                  'Visita del luogo',
                                   poi['areaDiAppartenenza'][0]['display_title']
                                 )
                               "
@@ -553,10 +491,84 @@
                             </Button>
                           </div>
                         </div>
+                      </div> -->
+
+                      <div
+                        v-for="(it, ind) in poi.activitiesOfPOIPivot"
+                        :key="'availableActivities' + (ind + 200)"
+                        class=""
+                      >
+                        <div
+                          class="row border mr-1 mb-3 postcard orange"
+                          style="border-radius: 10px"
+                        >
+                          <div
+                            class="col-2 text-center px-0"
+                            style="
+                              background-color: #4f9bff;
+                              border-top-left-radius: 10px;
+                              border-bottom-left-radius: 10px;
+                              cursor: pointer;
+
+                              display: flex;
+
+                              justify-content: center;
+                              align-items: center;
+                              color: #ffffff;
+                            "
+                          >
+                            <h5>{{ getCount(index, ind) }}</h5>
+                          </div>
+                          <div class="col-10 text-left py-2">
+                            <div class="row">
+                              <div class="col-12">
+                                <b>{{ it["o:title"].toUpperCase() }}</b>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <i class="bi bi-pin-map-fill mr-2"></i
+                                >{{ poi["geo:Titolo_it"][0]["@value"] }}
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <i class="bi bi-map mr-2"></i>
+                                {{
+                                  poi["areaDiAppartenenza"][0]["display_title"]
+                                }}
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-12">
+                                <i class="bi bi-clock mr-2"></i
+                                >{{ it["geo:Durata"][0]["@value"] }} minuti
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <Button
+                                type="primary"
+                                size="small"
+                                v-on:click="
+                                  selectMarkerOnMap(
+                                    poi['geo:Titolo_it'][0]['@value'],
+                                    it['o:title'],
+                                    poi['areaDiAppartenenza'][0][
+                                      'display_title'
+                                    ]
+                                  )
+                                "
+                                class="m-2 textButtonColor"
+                                >Visualizza dettagli
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <!-- </div> -->
                     </div>
-                    <!-- </div> -->
-                  </div>
                   </div>
                 </div>
                 <div v-else>
@@ -753,10 +765,23 @@ export default {
   },
 
   mounted() {
-    this.itinerario = this.$route.params.itinerario;
+    this.itinerario = null;
+    this.itinerario = JSON.parse(JSON.stringify(this.$route.params.itinerario));
 
     console.log("Itinerario ricevuto: ");
     console.log(this.itinerario);
+
+    Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+      console.log("CICLO");
+      var visit = {};
+
+      visit["o:title"] = "Visita del luogo";
+      visit["geo:Durata"] = poi["geo:Durata"];
+
+      console.log(visit);
+
+      poi.activitiesOfPOIPivot.unshift(visit);
+    });
 
     this.itinerarioLoaded = true;
     //console.log(store.state.sottoitinerari);
@@ -982,6 +1007,48 @@ export default {
 
       return timeObject;
     },
+
+    getCount(i, j) {
+      console.log("i: " + i + "; j: " + j);
+      var countActivities = 0;
+      var k = 0;
+      var l = 0;
+      for (var x = 0; x <= i; x++) {
+        console.log(
+          "CONTO IL POI CHE HA " +
+            this.itinerario.poi[x].activitiesOfPOIPivot.length
+        );
+        //countActivities += 1;
+        console.log(this.itinerario.poi[x]);
+
+        for (
+          var h = 0;
+          h < this.itinerario.poi[x].activitiesOfPOIPivot.length;
+          h++
+        ) {
+          if (x === i) {
+            if (l < j) {
+              console.log("k: " + k + ", j: " + j);
+              console.log("CONTO L'ATTIVITA " + k);
+
+              l += 1;
+            }
+          } else {
+            console.log("ELSE k: " + k + ", j: " + j);
+            console.log("ELSE CONTO L'ATTIVITA " + k);
+
+            k += 1;
+          }
+        }
+      }
+
+      k += l;
+      //countActivities = countActivities + j;
+
+      console.log("countActivities: " + k);
+
+      return k + 1;
+    },
   },
 
   created() {
@@ -1014,29 +1081,31 @@ export default {
       console.log(this.indexesCostPOI);
 
       //Sommo i tempi di tragitto da un'area all'altra
-      for (var i = 0; i < this.itinerario.poi.length - 1; i++) {
-        console.log("CICLO " + i);
-        var fromIndex = 0;
-        var toIndex = 0;
+      if (this.indexesCostPOI && this.costBetweenPOI) {
+        for (var i = 0; i < this.itinerario.poi.length - 1; i++) {
+          console.log("CICLO " + i);
+          var fromIndex = 0;
+          var toIndex = 0;
 
-        Array.prototype.forEach.call(this.indexesCostPOI, (poiIndexes) => {
-          if (poiIndexes.poiName == this.itinerario.poi[i]["o:title"]) {
-            console.log("HO TROVATO L'INDICE FROM");
-            fromIndex = poiIndexes.poiID;
-          }
+          Array.prototype.forEach.call(this.indexesCostPOI, (poiIndexes) => {
+            if (poiIndexes.poiName == this.itinerario.poi[i]["o:title"]) {
+              console.log("HO TROVATO L'INDICE FROM");
+              fromIndex = poiIndexes.poiID;
+            }
 
-          if (poiIndexes.poiName == this.itinerario.poi[i + 1]["o:title"]) {
-            console.log("HO TROVATO L'INDICE TO");
-            toIndex = poiIndexes.poiID;
-          }
-        });
+            if (poiIndexes.poiName == this.itinerario.poi[i + 1]["o:title"]) {
+              console.log("HO TROVATO L'INDICE TO");
+              toIndex = poiIndexes.poiID;
+            }
+          });
 
-        console.log("FROM INDEX: " + fromIndex);
-        console.log("TO INDEX: " + toIndex);
+          console.log("FROM INDEX: " + fromIndex);
+          console.log("TO INDEX: " + toIndex);
 
-        totalTimePOI += this.costBetweenPOI[fromIndex][toIndex] * 60000; // convertiamo i tempi da minuti in millisecondi
+          totalTimePOI += this.costBetweenPOI[fromIndex][toIndex] * 60000; // convertiamo i tempi da minuti in millisecondi
 
-        //fromIndex = this.indexPOIitinerario1[]
+          //fromIndex = this.indexPOIitinerario1[]
+        }
       }
 
       //console.log(totalTimePOI);

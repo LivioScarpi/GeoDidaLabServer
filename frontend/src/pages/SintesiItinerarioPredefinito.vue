@@ -69,10 +69,7 @@
 
               <div
                 class="mt-3"
-                v-if="
-                  totalTimeObject.hours === undefined ||
-                  totalTimeObject.minutes === undefined
-                "
+                v-if="indexesCostPOI === null && costBetweenPOI === null"
               >
                 <h6><i class="bi bi-clock mr-2"></i> Tempo non conosciuto</h6>
               </div>
@@ -989,6 +986,7 @@ export default {
     },
 
     msToTime(duration) {
+      console.log("SONO IN msToTIme con " + duration);
       var milliseconds = Math.floor((duration % 1000) / 100),
         seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
@@ -1070,18 +1068,29 @@ export default {
       console.log(this.itinerario.poi);
 
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
-        totalTimePOI += parseInt(poi["geo:Durata"][0]["@value"]) * 60000; // convertiamo i minuti in millisecondi
+        //totalTimePOI += parseInt(poi["geo:Durata"][0]["@value"]) * 60000; // convertiamo i minuti in millisecondi
 
-        Array.prototype.forEach.call(poi.activitiesOfPOIPivot, (activity) => {
-          totalTimePOI += activity.durataMillisecondi;
-        });
+        for (var i = 0; i < poi.activitiesOfPOIPivot.length; i++) {
+          if (i == 0) {
+            totalTimePOI +=
+              parseInt(poi.activitiesOfPOIPivot[i]["geo:Durata"][0]["@value"]) *
+              60000;
+          } else {
+            totalTimePOI +=
+              poi.activitiesOfPOIPivot[i]["geo:Durata"][0]["@value"];
+          }
+        }
       });
+
+      console.log("ORA STAMPO IL TEMPO PRIMA");
+
+      console.log("totalTimePOI: " + totalTimePOI);
 
       console.log("INIZIO A SOMMARE GLI SPOSTAMENTI");
       console.log(this.indexesCostPOI);
 
       //Sommo i tempi di tragitto da un'area all'altra
-      if (this.indexesCostPOI && this.costBetweenPOI) {
+      if (this.indexesCostPOI !== null && this.costBetweenPOI !== null) {
         for (var i = 0; i < this.itinerario.poi.length - 1; i++) {
           console.log("CICLO " + i);
           var fromIndex = 0;
@@ -1108,7 +1117,9 @@ export default {
         }
       }
 
-      //console.log(totalTimePOI);
+      console.log("ORA STAMPO IL TEMPO");
+
+      console.log("totalTimePOI: " + totalTimePOI);
 
       return totalTimePOI;
     },

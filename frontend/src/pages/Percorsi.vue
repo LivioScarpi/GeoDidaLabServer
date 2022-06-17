@@ -3,6 +3,59 @@
     
     <div class="centerTimePicker text-center pt-4 px-lg-5">
       <h4>Scegli un nostro itinerario oppure crealo tu</h4>
+
+
+<div class="postcardpercorsi light orange mx-4">
+        <!-- <div
+          :style="[
+            isLarge
+              ? {
+                  overflow: 'hidden',
+                  'border-radius': '0px 10px 10px 0px',
+                }
+              : {
+                  overflow: 'hidden',
+                  'border-radius': '10px 10px 0px 0px',
+                  width: '100%',
+                  'max-height': '250px',
+                },
+          ]"
+        >
+          <a class="postcardpercorsi__img_link">
+            <img
+              class="postcardpercorsi__img"
+              src="https://picsum.photos/501/500"
+              alt="Image Title"
+            />
+          </a>
+        </div> -->
+        <div class="postcardpercorsi__text pt-3 mt-4">
+          <div style="height: 100%">
+            <h1 class="postcardpercorsi__title orange">
+              Seleziona un itinerario predefinito
+            </h1>
+
+            <div class="postcardpercorsi__bar" style="height: 4px"></div>
+            <div class="postcardpercorsi__preview-txt">
+              Selezionando questa opzione hai la possibilità di scegliere un
+              itinerario tra i vari itinerari predefiniti già creati
+              appositamente, senza il bisogno di doverlo creare da zero.
+            </div>
+            <div
+              :class="{ 'text-left mt-5': isLarge, 'text-center': !isLarge }"
+            >
+              <Button
+                size="small"
+                type="primary"
+                v-on:click="selectDefaultPath()"
+                class="textButtonColor mt-5"
+                >Seleziona itinerario
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="postcardpercorsi light orange mx-4 d-none d-lg-block">
         <!-- <div
           :style="[
@@ -449,56 +502,7 @@
 
       <!--Fine component mobile-->
 
-      <div class="postcardpercorsi light orange mx-4">
-        <!-- <div
-          :style="[
-            isLarge
-              ? {
-                  overflow: 'hidden',
-                  'border-radius': '0px 10px 10px 0px',
-                }
-              : {
-                  overflow: 'hidden',
-                  'border-radius': '10px 10px 0px 0px',
-                  width: '100%',
-                  'max-height': '250px',
-                },
-          ]"
-        >
-          <a class="postcardpercorsi__img_link">
-            <img
-              class="postcardpercorsi__img"
-              src="https://picsum.photos/501/500"
-              alt="Image Title"
-            />
-          </a>
-        </div> -->
-        <div class="postcardpercorsi__text pt-3 mt-4">
-          <div style="height: 100%">
-            <h1 class="postcardpercorsi__title orange">
-              Seleziona un itinerario predefinito
-            </h1>
-
-            <div class="postcardpercorsi__bar" style="height: 4px"></div>
-            <div class="postcardpercorsi__preview-txt">
-              Selezionando questa opzione hai la possibilità di scegliere un
-              itinerario tra i vari itinerari predefiniti già creati
-              appositamente, senza il bisogno di doverlo creare da zero.
-            </div>
-            <div
-              :class="{ 'text-left mt-5': isLarge, 'text-center': !isLarge }"
-            >
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="selectDefaultPath()"
-                class="textButtonColor mt-5"
-                >Seleziona itinerario
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       <modal
         :show.sync="modals.itineraryNotReceivedWithError"

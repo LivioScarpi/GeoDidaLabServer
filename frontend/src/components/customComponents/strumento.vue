@@ -15,7 +15,7 @@
   ]" class="mx-2 postcardattivita attivita orange pb-5">
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-      <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div>
+      <!-- <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div> -->
 
       <ul class="postcardattivita__tagbox mb-4">
         <!-- <li :class="
@@ -90,7 +90,7 @@
           <swiper v-if="item.media !== undefined && item.media.length !== 0" ref="mySwiperStrumenti" class="swiper"
             navigation :pagination="{ clickable: true }"
             style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
-            <swiper-slide style="height: 185px" v-for="(media, index) in item['media']" :key="index">
+            <swiper-slide style="height: 250px" v-for="(media, index) in item['media']" :key="index">
               <img v-img="{group: indexOfStrumento}" :src="media['o:thumbnail_urls']['large']" :alt="item['o:title']" class="img" />
             </swiper-slide>
 

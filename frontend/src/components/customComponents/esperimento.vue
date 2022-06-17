@@ -128,7 +128,7 @@
     </carousel>-->
     <div class="mt-3">
       <h5 class="card-title text-center">{{ item["o:title"] }}</h5>
-      <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div>
+      <!-- <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div> -->
 
       <ul class="postcardattivita__tagbox mb-4">
         <li :class="
@@ -236,7 +236,7 @@
           <swiper v-if="item.media !== undefined && item.media.length !== 0" ref="mySwiper" class="swiper" navigation
             :pagination="{ clickable: true }" style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
             <swiper-slide v-for="(media, index) in item.media" :key="index"
-              :style="[isLarge ? { height: '230px' } : { height: '199px' }]">
+              :style="[isLarge ? { height: '280px' } : { height: '199px' }]">
               <img v-img="{group: indexOfActivity}" :src="media['o:thumbnail_urls']['large']" :alt="item['o:title']" class="img" />
             </swiper-slide>
 

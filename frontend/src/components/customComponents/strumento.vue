@@ -18,13 +18,13 @@
       <div class="postcardattivita__bar margin-auto" style="display: inline-block"></div>
 
       <ul class="postcardattivita__tagbox mb-4">
-        <li :class="
+        <!-- <li :class="
           selectedTab === 'Panoramica'
             ? 'tag__item__selected'
             : 'tag__item__unselected'
         " v-on:click="selectedTab = 'Panoramica'">
           Panoramica
-        </li>
+        </li> -->
         <li :class="
           selectedTab === 'Descrizione'
             ? 'tag__item__selected'
@@ -198,7 +198,7 @@ export default {
 
   data() {
     return {
-      selectedTab: "Panoramica",
+      selectedTab: "Descrizione",
       isLoadingImages: true,
       windowWidth: 0,
     };

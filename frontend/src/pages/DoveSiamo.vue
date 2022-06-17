@@ -221,8 +221,8 @@ export default {
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 16,
-      center: [45.477584999712185, 7.891531998415936],
-      markerLatLng: [45.477584999712185, 7.891531998415936],
+      center: [45.47597654352459, 7.889857414848962],
+      markerLatLng: [45.47597654352459, 7.889857414848962],
       map: null,
       geojson: null,
       markers: [],

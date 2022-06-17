@@ -107,8 +107,8 @@
                           <div class="form-radio text-left col-12 ml-1">
                             <n-checkbox v-for="(item, index) in this.$store.state
                             .expertiseLevels" :key="'difficulty' + index" v-model="item.expertiseLevelSelected" @input="
-                                checkDifficulty(index, item.expertiseLevelName)
-                              ">
+    checkDifficulty(index, item.expertiseLevelName)
+  ">
                               <div class="row">
                                 <div class="col-12">
                                   {{ item.expertiseLevelName }}
@@ -216,8 +216,8 @@
                               <div class="postcard__text">
                                 <h1 class="postcard__title red">
                                   <a>{{
-                                    item["geo:Titolo_it"][0]["@value"]
-                                    }}</a>
+                                      item["geo:Titolo_it"][0]["@value"]
+                                  }}</a>
                                 </h1>
 
                                 <div class="postcard__bar"></div>
@@ -228,10 +228,10 @@
                                 <h6>
                                   Interessi:
                                   <span class="font-weight-normal">{{
-                                    getInterestList(
-                                    item["geo:ha_interesse"]
-                                    ).join(", ")
-                                    }}</span>
+                                      getInterestList(
+                                        item["geo:ha_interesse"]
+                                      ).join(", ")
+                                  }}</span>
                                 </h6>
 
                                 <ul class="postcard__tagbox">
@@ -240,7 +240,7 @@
                                     visita:
 
                                     <template v-if="item['geo:Durata'] !== undefined">{{ item["geo:Durata"][0]["@value"]
-                                      }}
+                                    }}
                                       minuti
                                     </template>
                                     <template v-else>10 minuti </template>
@@ -366,7 +366,7 @@
                         <b>Mappa</b>
                       </h5>
                       <div>
-                        <l-map style="height: 500px; border-radius: 10px" :zoom="zoom" :center="centerMap">
+                        <l-map style="height: 700px; border-radius: 10px" :zoom="zoom" :center="centerMap">
                           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                           <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
                             :key="'marker' + index">
@@ -378,15 +378,17 @@
                                 <div class="row">
                                   <h5>{{ marker.POItitle }}</h5>
                                 </div>
-                                <div class="row text-justify">
+                                <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
                                   {{ marker.description }}
                                 </div>
                                 <div class="row mt-3">
                                   <div class="col-12 text-center ">
-                                    <img v-if="marker.image !== undefined" class="margin-auto" style="border-radius: 5px;" :src="
-                                  marker.image
-                                " alt="Image Title" />
-                                    <img v-else class="postcard__img" src="@/assets/images/bg3.jpg" style="border-radius: 5px;" alt="Image Title" />
+                                    <img v-if="marker.image !== undefined" class="margin-auto"
+                                      style="border-radius: 5px;" :src="
+                                        marker.image
+                                      " alt="Image Title" />
+                                    <img v-else class="postcard__img" src="@/assets/images/bg3.jpg"
+                                      style="border-radius: 5px;" alt="Image Title" />
                                   </div>
                                 </div>
                               </div>
@@ -2813,5 +2815,17 @@ body {
   left: 50%;
   padding-top: 5rem;
   transform: translate(-50%, -50%);
+}
+
+.fadeeffect:after {
+      /* content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 300px; /* 100% - (line-height × 3)
+background: repeating-linear-gradient(rgba(255, 255, 255, 0), #ffffff 35px); */
+  /* line-height */
 }
 </style>

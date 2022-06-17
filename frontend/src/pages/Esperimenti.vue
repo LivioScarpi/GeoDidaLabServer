@@ -12,9 +12,10 @@
           <div class="col-12 ">
             <esperimento
               class="align-top"
-              v-for="item in this.$store.state.esperimenti"
+              v-for="(item, index) in this.$store.state.esperimenti"
               :item="item"
               :key="item.name"
+              :indexOfActivity="index + 1"
             ></esperimento>
           </div>
         </div>
@@ -24,7 +25,8 @@
             <esperimento
               class="align-top"
               :item="item"
-              
+              :key="item.name"
+              :indexOfActivity="index + 1"
             ></esperimento>
           </div>
         </div>

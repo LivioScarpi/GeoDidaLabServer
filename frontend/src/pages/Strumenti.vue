@@ -12,37 +12,21 @@
       <div class="mt-4" v-if="allLoaded">
         <div class="row text-center d-none d-lg-block">
           <div class="col-12">
-            <strumento
-              class="align-top"
-              v-for="(item, index) in this.$store.state.strumenti"
-              :key="index"
-              :item="item"
-            ></strumento>
+            <strumento class="align-top" v-for="(item, index) in this.$store.state.strumenti" :key="index" :item="item"
+              :indexOfStrumento="index + 1"></strumento>
           </div>
         </div>
 
-        <div
-          class="row mx-3"
-          style="text-align: center"
-          v-for="(item, index) in this.$store.state.strumenti"
-          :key="index"
-        >
+        <div class="row mx-3" style="text-align: center" v-for="(item, index) in this.$store.state.strumenti"
+          :key="index">
           <div class="col-12 d-block d-lg-none">
-            <strumento class="align-top" :item="item"></strumento>
+            <strumento class="align-top" :key="index" :item="item" :indexOfStrumento="index + 1"></strumento>
           </div>
         </div>
       </div>
       <div v-else class="loader">
         <svg class="circular">
-          <circle
-            class="path"
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            stroke-width="5"
-            stroke-miterlimit="10"
-          ></circle>
+          <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
         </svg>
       </div>
     </div>

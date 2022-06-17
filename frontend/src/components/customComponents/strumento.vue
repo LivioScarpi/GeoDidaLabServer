@@ -91,7 +91,7 @@
             navigation :pagination="{ clickable: true }"
             style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
             <swiper-slide style="height: 185px" v-for="(media, index) in item['media']" :key="index">
-              <img :src="media['o:thumbnail_urls']['large']" class="img" />
+              <img v-img="{group: indexOfStrumento}" :src="media['o:thumbnail_urls']['large']" :alt="item['o:title']" class="img" />
             </swiper-slide>
 
             <div v-if="
@@ -178,6 +178,7 @@ import TabPane from "../Tabs/Tab.vue";
 import Tabs from "../Tabs/Tabs.vue";
 import Card from "../Cards/Card.vue";
 import $ from "jquery";
+import { isMobile } from "mobile-device-detect";
 
 import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
@@ -186,7 +187,7 @@ const Common = require("@/Common.vue").default;
 
 export default {
   name: "strumento",
-  props: ["item"],
+  props: ["item", "indexOfStrumento"],
 
   components: {
     //TabPane,
@@ -201,10 +202,13 @@ export default {
       selectedTab: "Descrizione",
       isLoadingImages: true,
       windowWidth: 0,
+      isMobile: false
     };
   },
 
   created() {
+        this.isMobile = isMobile;
+
     this.windowWidth = $(window).width();
 
     $(window).resize(() => {

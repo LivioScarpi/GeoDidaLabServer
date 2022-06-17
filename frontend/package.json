@@ -40,6 +40,7 @@
     "timeline-vuejs": "^1.1.7",
     "v-alert": "0.0.1",
     "v-alert-resource": "^1.0.3",
+    "v-img": "^0.2.0",
     "vue": "^2.6.11",
     "vue-agile": "^2.0.0",
     "vue-awesome-swiper": "^4.1.1",

@@ -237,7 +237,7 @@
             :pagination="{ clickable: true }" style="background-color: hsl(17, 100%, 90%); border-radius: 10px">
             <swiper-slide v-for="(media, index) in item.media" :key="index"
               :style="[isLarge ? { height: '230px' } : { height: '199px' }]">
-              <img :src="media['o:thumbnail_urls']['large']" class="img" />
+              <img v-img="{group: indexOfActivity}" :src="media['o:thumbnail_urls']['large']" :alt="item['o:title']" class="img" />
             </swiper-slide>
 
             <!-- <swiper-slide
@@ -456,11 +456,13 @@ import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 import { isMobile } from "mobile-device-detect";
 
+
+
 const Common = require("@/Common.vue").default;
 
 export default {
   name: "esperimento",
-  props: ["item"],
+  props: ["item", "indexOfActivity"],
 
   components: {
     // TabPane,

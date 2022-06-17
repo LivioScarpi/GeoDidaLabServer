@@ -1,6 +1,8 @@
 <template>
   <div>
+    
     <div class="centerTimePicker text-center pt-4 px-lg-5">
+      <h4>Scegli un nostro itinerario oppure crealo tu</h4>
       <div class="postcardpercorsi light orange mx-4 d-none d-lg-block">
         <!-- <div
           :style="[

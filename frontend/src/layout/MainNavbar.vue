@@ -28,7 +28,7 @@
     <template slot="navbar-menu">
       <li class="nav-item">
           <router-link class="nav-link black-text" to="/timeline">
-            <i class="fa fa-clock-o fa-lg px-1"></i> Timeline
+            <i class="fa fa-clock-o fa-lg px-1"></i> La storia
           </router-link>
       </li>
 

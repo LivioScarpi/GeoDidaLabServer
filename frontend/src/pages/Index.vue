@@ -1,19 +1,18 @@
 <template>
   <div>
-    <div class="page-header clear-filter" filter-color="orange">
+    <div class="page-header clear-filter">
       <!--filter-color="orange"-->
-      <parallax
-        class="page-header-image"
-        :style="{'background-image' : 'url(' + imageUrl + ')'}"
-      >
+      <parallax class="page-header-image" :style="{'background-image' : 'url(' + imageUrl + ')'}">
       </parallax>
       <div class="container">
         <div class="content-center brand">
           <!--<img class="n-logo" src="img/now-logo.png" alt="" />-->
           <h1 class="h1-seo">GEODIDALAB</h1>
-          <h3>{{ description }}</h3>
+          <h3>«se ascolto dimentico, se vedo ricordo, se faccio capisco…..»</h3>
         </div>
+
       </div>
+
     </div>
     <div class="main"></div>
 
@@ -52,7 +51,12 @@
       </div>
     </div>
     -->
+    <div class="container mt-5 pb-0">
+      <div class=" text-center">
+        <h4>{{description}}</h4>
+      </div>
 
+    </div>
     <div class="section">
       <div class="row justify-content-center">
         <div class="card-group justify-content-center">

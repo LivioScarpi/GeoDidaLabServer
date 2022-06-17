@@ -360,7 +360,7 @@
                   </div>
                 </div>
                 <div class="col-lg-12" v-else>
-                  <div class="row">
+                  <div class="row mb-5">
                     <div class="col-lg-12">
                       <h5 class="mt-0">
                         <b>Mappa</b>

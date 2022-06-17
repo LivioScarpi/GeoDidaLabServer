@@ -5,7 +5,7 @@
       <parallax class="page-header-image" :style="{'background-image' : 'url(' + imageUrl + ')'}">
       </parallax>
       <div class="container">
-        <div class="content-center brand">
+        <div class="content-center brand py-4" style="background-color: rgba(0, 0, 0, 0.5);">
           <!--<img class="n-logo" src="img/now-logo.png" alt="" />-->
           <h1 class="h1-seo">GEODIDALAB</h1>
           <h3>«se ascolto dimentico, se vedo ricordo, se faccio capisco…..»</h3>

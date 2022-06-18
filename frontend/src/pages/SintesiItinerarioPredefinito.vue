@@ -296,15 +296,15 @@
                     </div>
                   </div>
 
-                  <div class="col-12" v-if="selectedTab === 'Mappa'">
-                    <l-map style="height: 400px; border-radius: 10px" :zoom="zoom" :center="centerMap"
+                  <div class="col-12 px-0 mx-0" v-if="selectedTab === 'Mappa'">
+                    <l-map style="height: 700px; border-radius: 10px" :zoom="zoom" :center="centerMap"
                       ref="mappaSottoItinerario">
                       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                       <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
                         :key="'marker' + index">
                         <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')"></l-icon>
                         <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')"></l-icon>
-                        <l-popup :options="anchorOptions">
+                        <l-popup :options="anchorOptions" style="max-width : 250px">
                           <div class="px-3">
                             <div class="row">
                               <h5>{{ marker.POItitle }}</h5>

@@ -103,11 +103,7 @@
     </div> -->
 
     <div class="section text-black pt-3">
-      <i
-          class="bi bi-arrow-left ml-3"
-          style="font-size: 2rem; color: black; cursor: pointer"
-          v-on:click="goBack()"
-      ></i>
+      <i class="bi bi-arrow-left ml-3" style="font-size: 2rem; color: black; cursor: pointer" v-on:click="goBack()"></i>
       <div class="container">
         <!-- <div class="row mb-0 text-center">
           <h6 class="px-5 mx-lg-5">
@@ -136,15 +132,13 @@
           <div class="col-lg-4 col-sm-12 px-5" v-if="allLoaded">
             <div style="height: 100%; text-align: left">
               <h5 class="postcardpercorsi__title orange">
-                <b
-                >Dettagli itinerario creato (codice:
+                <b>Dettagli itinerario creato (codice:
                   <template v-if="itineraryCode !== null">{{
-                      itineraryCode
+                    itineraryCode
                     }}
                   </template>
                   <template v-else>Codice non conosciuto</template>
-                  )</b
-                >
+                  )</b>
 
                 <!-- <b v-if="this.itinerario !== null" class="title pt-0">
                   {{ this.itinerario["name"] }}
@@ -156,11 +150,7 @@
                 Il tempo totale include anche gli spostamenti in auto da un'area
                 all'altra.
 
-                <div
-                    class="mt-3"
-                    v-for="(time, index) in travellingTime"
-                    :key="index"
-                >
+                <div class="mt-3" v-for="(time, index) in travellingTime" :key="index">
                   {{ time }} <i class="bi bi-clock mr-2"></i>
                 </div>
               </div>
@@ -202,38 +192,26 @@
 
               <!--TODO: riaggiungere questo-->
               <div>
-                <h6
-                    class="card-title"
-                    v-if="
+                <h6 class="card-title" v-if="
                     parseInt(totalTimeObject.hours) === 1 &&
                     parseInt(totalTimeObject.minutes) === 0
-                  "
-                >
+                  ">
                   <i class="bi bi-clock mr-2"></i>
                   {{ totalTimeObject.hours }} ora
                 </h6>
-                <h6
-                    class="card-title"
-                    v-else-if="parseInt(totalTimeObject.hours) === 1"
-                >
+                <h6 class="card-title" v-else-if="parseInt(totalTimeObject.hours) === 1">
                   <i class="bi bi-clock mr-2"></i>
                   {{ parseInt(totalTimeObject.hours) }} ora e
                   {{ parseInt(totalTimeObject.minutes) }} minuti
                 </h6>
-                <h6
-                    class="card-title"
-                    v-else-if="
+                <h6 class="card-title" v-else-if="
                     parseInt(totalTimeObject.hours) > 0 &&
                     parseInt(totalTimeObject.minutes) === 0
-                  "
-                >
+                  ">
                   <i class="bi bi-clock mr-2"></i>
                   {{ parseInt(totalTimeObject.hours) }} ore
                 </h6>
-                <h6
-                    class="card-title"
-                    v-else-if="parseInt(totalTimeObject.hours) > 0"
-                >
+                <h6 class="card-title" v-else-if="parseInt(totalTimeObject.hours) > 0">
                   <i class="bi bi-clock mr-2"></i>
                   {{ parseInt(totalTimeObject.hours) }} ore e
                   {{ parseInt(totalTimeObject.minutes) }} minuti
@@ -245,12 +223,8 @@
               </div>
               <div v-if="itineraryCode !== null" class="row mt-3">
                 <div class="col-12">
-                  <Button
-                      type="primary"
-                      size="small"
-                      v-on:click="copyItineraryCode()"
-                      class="textButtonColor"
-                  >Copia codice itinerario
+                  <Button type="primary" size="small" v-on:click="copyItineraryCode()" class="textButtonColor">Copia
+                    codice itinerario
                   </Button>
                 </div>
               </div>
@@ -276,30 +250,21 @@
 
               <div v-if="itineraryCode !== null" class="row mt-3">
                 <div class="col-12">
-                  <Button
-                      type="primary"
-                      size="small"
-                      v-on:click="sendEmail()"
-                      class="textButtonColor"
-                  >Prenota Itinerario
+                  <Button type="primary" size="small" v-on:click="sendEmail()" class="textButtonColor">Prenota
+                    Itinerario
                   </Button>
                 </div>
               </div>
 
-              <hr/>
+              <hr />
 
               <ul class="aree__tagbox mb-4">
-                <li
-                    :class="
+                <li :class="
                     selectedArea === index
                       ? 'tag__item__selected'
                       : 'tag__item__unselected'
-                  "
-                    v-for="(sottoitinerario, index) in $store.state
-                    .sottoitinerari"
-                    :key="index"
-                    v-on:click="selectItinerario(index)"
-                >
+                  " v-for="(sottoitinerario, index) in $store.state
+                    .sottoitinerari" :key="index" v-on:click="selectItinerario(index)">
                   <!--<i v-if="item.visitPOI" class="fas fa-check mr-2"></i
                           >-->{{ sottoitinerario.name.substring(11) }}
                 </li>
@@ -323,43 +288,31 @@
                   <h6>
                     Tempo sottoitinerario -
                     {{
-                      $store.state.sottoitinerari[selectedArea].name.substring(
-                          11
-                      )
+                    $store.state.sottoitinerari[selectedArea].name.substring(
+                    11
+                    )
                     }}
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-if="
+                  <h6 class="card-title" v-if="
                       parseInt(totalTimeSelectedArea.hours) === 1 &&
                       parseInt(totalTimeSelectedArea.minutes) === 0
-                    "
-                  >
+                    ">
                     <i class="bi bi-clock mr-2"></i>
                     {{ totalTimeSelectedArea.hours }} ora
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="parseInt(totalTimeSelectedArea.hours) === 1"
-                  >
+                  <h6 class="card-title" v-else-if="parseInt(totalTimeSelectedArea.hours) === 1">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ora e
                     {{ parseInt(totalTimeSelectedArea.minutes) }} minuti
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="
+                  <h6 class="card-title" v-else-if="
                       parseInt(totalTimeSelectedArea.hours) > 0 &&
                       parseInt(totalTimeSelectedArea.minutes) === 0
-                    "
-                  >
+                    ">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ore
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="parseInt(totalTimeSelectedArea.hours) > 0"
-                  >
+                  <h6 class="card-title" v-else-if="parseInt(totalTimeSelectedArea.hours) > 0">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ore e
                     {{ parseInt(totalTimeSelectedArea.minutes) }} minuti
@@ -372,58 +325,33 @@
                 <div class="row">
                   <div class="col-12 d-flex">
                     <ul class="aree__tagbox mb-2 mx-auto mt-0">
-                      <li
-                          :class="
+                      <li :class="
                           selectedTab === 'ElencoAttività'
                             ? 'tag__item__selected'
                             : 'tag__item__unselected'
-                        "
-                          v-on:click="selectedTab = 'ElencoAttività'"
-                      >
+                        " v-on:click="selectedTab = 'ElencoAttività'">
                         Elenco delle attività
                       </li>
-                      <li
-                          :class="
+                      <li :class="
                           selectedTab === 'Mappa'
                             ? 'tag__item__selected'
                             : 'tag__item__unselected'
-                        "
-                          v-on:click="selectedTab = 'Mappa'"
-                      >
+                        " v-on:click="selectedTab = 'Mappa'">
                         Mappa
                       </li>
                     </ul>
                   </div>
 
-                  <div
-                      class="col-12 px-0"
-                      v-if="selectedTab === 'ElencoAttività'"
-                  >
-                    <div
-                        v-if="!showDetails"
-                        style="max-height: 480px; overflow-y: scroll"
-                        class="mb-4"
-                    >
-                      <div
-                          v-for="(poi, index) in this.itinerario.poi"
-                          :key="'poi' + (index + 200)"
-                      >
-                        <div
-                            v-for="(it, ind) in poi.activitiesInPOI"
-                            :key="'availableActivities' + (ind + 200)"
-                            class=""
-                        >
-                          <div
-                              v-if="
+                  <div class="col-12 px-0" v-if="selectedTab === 'ElencoAttività'">
+                    <div v-if="!showDetails" style="max-height: 480px; overflow-y: scroll" class="mb-4">
+                      <div v-for="(poi, index) in this.itinerario.poi" :key="'poi' + (index + 200)">
+                        <div v-for="(it, ind) in poi.activitiesInPOI" :key="'availableActivities' + (ind + 200)"
+                          class="">
+                          <div v-if="
                               poi.poiName !== 'Punto di partenza' &&
                               poi.poiName !== 'Punto di arrivo'
-                            "
-                              class="row border mr-1 mb-3 postcard orange"
-                              style="border-radius: 10px"
-                          >
-                            <div
-                                class="col-2 text-center px-0"
-                                style="
+                            " class="row border mr-1 mb-3 postcard orange" style="border-radius: 10px">
+                            <div class="col-2 text-center px-0" style="
                                 background-color: #4f9bff;
                                 border-top-left-radius: 10px;
                                 border-bottom-left-radius: 10px;
@@ -434,8 +362,7 @@
                                 justify-content: center;
                                 align-items: center;
                                 color: #ffffff;
-                              "
-                            >
+                              ">
                               <h5>{{ getCount(index, ind) }}</h5>
                             </div>
                             <div class="col-10 text-left py-2">
@@ -446,8 +373,7 @@
                               </div>
                               <div class="row">
                                 <div class="col-12">
-                                  <i class="bi bi-pin-map-fill mr-2"></i
-                                  >{{ poi["poiName"] }}
+                                  <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["poiName"] }}
                                 </div>
                               </div>
                               <!-- <div class="row">
@@ -463,23 +389,17 @@
 
                               <div class="row">
                                 <div class="col-12">
-                                  <i class="bi bi-clock mr-2"></i
-                                  >{{ it["serviceDurationMinutes"] }} minuti
+                                  <i class="bi bi-clock mr-2"></i>{{ it["serviceDurationMinutes"] }} minuti
                                 </div>
                               </div>
 
                               <div class="row">
-                                <Button
-                                    type="primary"
-                                    size="small"
-                                    class="m-2 textButtonColor"
-                                    v-on:click="
+                                <Button type="primary" size="small" class="m-2 textButtonColor" v-on:click="
                                     selectMarkerOnMap(
                                       poi['poiName'],
                                       it['activityName']
                                     )
-                                  "
-                                >Visualizza dettagli
+                                  ">Visualizza dettagli
                                 </Button>
                               </div>
 
@@ -502,23 +422,15 @@
                       <div class="row mt-2">
                         <div class="col-12">
                           <!--TODO: sistemare pagine e step-->
-                          <i
-                              class="bi bi-arrow-left ml-3 mb-5"
-                              style="
+                          <i class="bi bi-arrow-left ml-3 mb-5" style="
                               font-size: 1.5rem;
                               color: black;
                               cursor: pointer;
-                            "
-                              v-on:click="showDetails = false"
-                          >
-                            Visualizza elenco attività</i
-                          >
+                            " v-on:click="showDetails = false">
+                            Visualizza elenco attività</i>
                           <div class="mt-4">
-                            <esperimento
-                                class="align-top text-center"
-                                :item="activitySelectedForInfo"
-                                v-if="activitySelectedForInfo !== null"
-                            ></esperimento>
+                            <esperimento class="align-top text-center" :item="activitySelectedForInfo"
+                              v-if="activitySelectedForInfo !== null"></esperimento>
                             <div class="row mx-2 mt-3 mb-4">
                               {{ activityVisitPOISelectedForInfo }}
                             </div>
@@ -529,33 +441,30 @@
                   </div>
 
                   <div class="col-12" v-if="selectedTab === 'Mappa'">
-                    <l-map
-                        style="height: 400px; border-radius: 10px"
-                        :zoom="zoom"
-                        :center="centerMap"
-                        ref="mappaSottoItinerario"
-                    >
-                      <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
-                      ></l-tile-layer>
-                      <l-marker
-                          v-for="(marker, index) in markers"
-                          :lat-lng="marker.marker.getLatLng()"
-                          :key="'marker' + index"
-                      >
-                        <l-icon
-                            v-if="marker.poiSelected"
-                            :icon-url="require('../icons/selectedPOI.png')"
-                        ></l-icon>
-                        <l-icon
-                            v-if="!marker.poiSelected"
-                            :icon-url="require('../icons/unselectedPOI.png')"
-                        ></l-icon>
-                        <l-popup :options="anchorOptions">
+                    <l-map style="height: 400px; border-radius: 10px" :zoom="zoom" :center="centerMap"
+                      ref="mappaSottoItinerario">
+                      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                      <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
+                        :key="'marker' + index">
+                        <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')"></l-icon>
+                        <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')"></l-icon>
+                        <l-popup :options="anchorOptions" style="max-width : 250px">
                           <div class="px-3">
                             <div class="row">
                               <h5>{{ marker.POItitle }}</h5>
+                            </div>
+                            <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
+                              {{ marker.POIdescription }}
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-12 text-center ">
+                                <img v-if="marker.image !== undefined" class="margin-auto" style="border-radius: 5px;"
+                                  :src="
+                                        marker.image
+                                      " alt="Image Title" />
+                                <img v-else class="postcard__img" src="@/assets/images/bg3.jpg"
+                                  style="border-radius: 5px;" alt="Image Title" />
+                              </div>
                             </div>
                           </div>
                         </l-popup>
@@ -564,10 +473,8 @@
                       <l-control>
                         <div class="legend">
                           <h4>Legenda</h4>
-                          <i style="background: #e35747"></i
-                          ><span>Luogo con l'attività selezionata</span><br/>
-                          <i style="background: #437fc5"></i
-                          ><span>Luogo presente nell'itinerario</span><br/>
+                          <i style="background: #e35747"></i><span>Luogo con l'attività selezionata</span><br />
+                          <i style="background: #437fc5"></i><span>Luogo presente nell'itinerario</span><br />
                         </div>
                       </l-control>
                     </l-map>
@@ -579,43 +486,31 @@
                   <h6>
                     Tempo sottoitinerario -
                     {{
-                      $store.state.sottoitinerari[selectedArea].name.substring(
-                          11
-                      )
+                    $store.state.sottoitinerari[selectedArea].name.substring(
+                    11
+                    )
                     }}
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-if="
+                  <h6 class="card-title" v-if="
                       parseInt(totalTimeSelectedArea.hours) === 1 &&
                       parseInt(totalTimeSelectedArea.minutes) === 0
-                    "
-                  >
+                    ">
                     <i class="bi bi-clock mr-2"></i>
                     {{ totalTimeSelectedArea.hours }} ora
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="parseInt(totalTimeSelectedArea.hours) === 1"
-                  >
+                  <h6 class="card-title" v-else-if="parseInt(totalTimeSelectedArea.hours) === 1">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ora e
                     {{ parseInt(totalTimeSelectedArea.minutes) }} minuti
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="
+                  <h6 class="card-title" v-else-if="
                       parseInt(totalTimeSelectedArea.hours) > 0 &&
                       parseInt(totalTimeSelectedArea.minutes) === 0
-                    "
-                  >
+                    ">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ore
                   </h6>
-                  <h6
-                      class="card-title"
-                      v-else-if="parseInt(totalTimeSelectedArea.hours) > 0"
-                  >
+                  <h6 class="card-title" v-else-if="parseInt(totalTimeSelectedArea.hours) > 0">
                     <i class="bi bi-clock mr-2"></i>
                     {{ parseInt(totalTimeSelectedArea.hours) }} ore e
                     {{ parseInt(totalTimeSelectedArea.minutes) }} minuti
@@ -626,32 +521,15 @@
                   </h6>
                 </div>
 
-                <div
-                    v-if="!showDetails"
-                    style="height: 500px; overflow: auto"
-                    class=" mb-4"
-                >
-                  <div >
-                    <div
-                        v-for="(poi, index) in this.itinerario.poi"
-                        :key="'poi' + (index + 200)"
-                    >
-                      <div
-                          v-for="(it, ind) in poi.activitiesInPOI"
-                          :key="'availableActivities' + (ind + 200)"
-                          class=""
-                      >
-                        <div
-                            v-if="
+                <div v-if="!showDetails" style="height: 500px; overflow: auto" class=" mb-4">
+                  <div>
+                    <div v-for="(poi, index) in this.itinerario.poi" :key="'poi' + (index + 200)">
+                      <div v-for="(it, ind) in poi.activitiesInPOI" :key="'availableActivities' + (ind + 200)" class="">
+                        <div v-if="
                             poi.poiName !== 'Punto di partenza' &&
                             poi.poiName !== 'Punto di arrivo'
-                          "
-                            class="row border mr-1 mb-3 postcard orange"
-                            style="border-radius: 10px"
-                        >
-                          <div
-                              class="col-2 text-center px-0"
-                              style="
+                          " class="row border mr-1 mb-3 postcard orange" style="border-radius: 10px">
+                          <div class="col-2 text-center px-0" style="
                               background-color: #4f9bff;
                               border-top-left-radius: 10px;
                               border-bottom-left-radius: 10px;
@@ -662,8 +540,7 @@
                               justify-content: center;
                               align-items: center;
                               color: #ffffff;
-                            "
-                          >
+                            ">
                             <h5>{{ getCount(index, ind) }}</h5>
                           </div>
                           <div class="col-10 text-left py-2">
@@ -674,8 +551,7 @@
                             </div>
                             <div class="row">
                               <div class="col-12">
-                                <i class="bi bi-pin-map-fill mr-2"></i
-                                >{{ poi["poiName"] }}
+                                <i class="bi bi-pin-map-fill mr-2"></i>{{ poi["poiName"] }}
                               </div>
                             </div>
                             <!--
@@ -690,23 +566,17 @@
 
                             <div class="row">
                               <div class="col-12">
-                                <i class="bi bi-clock mr-2"></i
-                                >{{ it["serviceDurationMinutes"] }} minuti
+                                <i class="bi bi-clock mr-2"></i>{{ it["serviceDurationMinutes"] }} minuti
                               </div>
                             </div>
 
                             <div class="row">
-                              <Button
-                                  type="primary"
-                                  size="small"
-                                  v-on:click="
+                              <Button type="primary" size="small" v-on:click="
                                   selectMarkerOnMap(
                                     poi['poiName'],
                                     it['activityName']
                                   )
-                                "
-                                  class="m-2 textButtonColor"
-                              >Visualizza dettagli
+                                " class="m-2 textButtonColor">Visualizza dettagli
                               </Button>
                             </div>
                           </div>
@@ -720,20 +590,13 @@
                   <div class="row mt-2">
                     <div class="col-12">
                       <!--TODO: sistemare pagine e step-->
-                      <i
-                          class="bi bi-arrow-left ml-3"
-                          style="font-size: 1.5rem; color: black; cursor: pointer"
-                          v-on:click="goBackAndResetMarkersIcon()"
-                      >
-                        Visualizza elenco attività</i
-                      >
+                      <i class="bi bi-arrow-left ml-3" style="font-size: 1.5rem; color: black; cursor: pointer"
+                        v-on:click="goBackAndResetMarkersIcon()">
+                        Visualizza elenco attività</i>
 
                       <div class="mt-4">
-                        <esperimento
-                            class="align-top text-center"
-                            :item="activitySelectedForInfo"
-                            v-if="activitySelectedForInfo !== null"
-                        ></esperimento>
+                        <esperimento class="align-top text-center" :item="activitySelectedForInfo"
+                          v-if="activitySelectedForInfo !== null"></esperimento>
                         <div class="row mx-2 mt-3 mb-4">
                           {{ activityVisitPOISelectedForInfo }}
                         </div>
@@ -772,33 +635,29 @@
           <div class="col-lg-8 col-sm-12 pr-3 d-none d-lg-block">
             <div class="row px-4">
               <div class="col-12">
-                <l-map
-                    style="height: 800px; border-radius: 10px"
-                    :zoom="zoomLarge"
-                    :center="centerMap"
-                    ref="mappaSottoItinerario"
-                >
-                  <l-tile-layer
-                      :url="url"
-                      :attribution="attribution"
-                  ></l-tile-layer>
-                  <l-marker
-                      v-for="(marker, index) in markers"
-                      :lat-lng="marker.marker.getLatLng()"
-                      :key="'marker' + index"
-                  >
-                    <l-icon
-                        v-if="marker.poiSelected"
-                        :icon-url="require('../icons/selectedPOI.png')"
-                    ></l-icon>
-                    <l-icon
-                        v-if="!marker.poiSelected"
-                        :icon-url="require('../icons/unselectedPOI.png')"
-                    ></l-icon>
-                    <l-popup :options="anchorOptions">
+                <l-map style="height: 800px; border-radius: 10px" :zoom="zoomLarge" :center="centerMap"
+                  ref="mappaSottoItinerario">
+                  <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                  <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
+                    :key="'marker' + index">
+                    <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')"></l-icon>
+                    <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')"></l-icon>
+                    <l-popup :options="anchorOptions" style="max-width : 250px">
                       <div class="px-3">
                         <div class="row">
                           <h5>{{ marker.POItitle }}</h5>
+                        </div>
+                        <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
+                          {{ marker.POIdescription }}
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-12 text-center ">
+                            <img v-if="marker.image !== undefined" class="margin-auto" style="border-radius: 5px;" :src="
+                                        marker.image
+                                      " alt="Image Title" />
+                            <img v-else class="postcard__img" src="@/assets/images/bg3.jpg" style="border-radius: 5px;"
+                              alt="Image Title" />
+                          </div>
                         </div>
                       </div>
                     </l-popup>
@@ -807,10 +666,8 @@
                   <l-control>
                     <div class="legend">
                       <h4>Legenda</h4>
-                      <i style="background: #e35747"></i
-                      ><span>Luogo con l'attività selezionata</span><br/>
-                      <i style="background: #437fc5"></i
-                      ><span>Luogo presente nell'itinerario</span><br/>
+                      <i style="background: #e35747"></i><span>Luogo con l'attività selezionata</span><br />
+                      <i style="background: #437fc5"></i><span>Luogo presente nell'itinerario</span><br />
                     </div>
                   </l-control>
                 </l-map>
@@ -934,6 +791,10 @@ export default {
 
     console.log("Sotto Itinerari: ");
     console.log(store.state.sottoitinerari);
+
+    this.getDescriptionAndMediaOfPOI();
+
+    
     var self = this;
     this.totalTimeObject = this.msToTime(this.totalTime);
 
@@ -945,6 +806,7 @@ export default {
 
     console.log("this.itinerario");
     console.log(this.itinerario);
+
 
     this.createMarkerArray();
     this.initializeMarkersOfFilteredPOI();
@@ -1007,6 +869,33 @@ export default {
       router.go(-1);
 
       //router.replace({ path: "/percorsi" });
+    },
+
+    getDescriptionAndMediaOfPOI(){
+
+      console.log("POI PIVOT");
+      console.log(store.state.POIpivot);
+
+      Array.prototype.forEach.call(store.state.sottoitinerari, (sottoitinerario) => {
+        Array.prototype.forEach.call(sottoitinerario.poi, (poi) => {
+
+          var filteredPOI = store.state.POIpivot.filter(p => p['geo:Titolo_it'][0]['@value'] === poi.poiName);
+          console.log("POI NAME: " + poi.poiName);
+          console.log(filteredPOI);
+
+          //se non vale questa condizione allora si tratta del Punto di Partenza o del Punto di Arrivo e quindi non sono presenti nei POi pivot
+          if(filteredPOI.length > 0) {
+            poi.poiDescription = filteredPOI[0]["dcterms:description"][0]['@value'];
+            poi.media = filteredPOI[0]['media'];
+          }
+
+          // poi.poiDescription = descr;
+          // poi.media = media;
+        });
+      });
+
+            console.log("SOTTOITINERARI");
+      console.log(store.state.sottoitinerari);
     },
 
     getCount(i, j) {
@@ -1236,6 +1125,10 @@ export default {
             poi["poiName"] === "Punto di partenza" ||
             poi["poiName"] === "Punto di arrivo";
 
+        console.log("STAMPO IL POI");
+        console.log(poi);
+
+
         if (isStartingPoint) {
           this.markers.push({
             marker: L.marker([poi["location"][0], poi["location"][1]]),
@@ -1243,6 +1136,9 @@ export default {
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
             POItitle: poi["poiName"],
+            POIdescription: poi["poiDescription"],
+            image: poi['media'] ? poi['media'][0]['o:thumbnail_urls']['large'] : undefined,
+
             //TODo: aggiungere attributi
             isStartPoint: isStartingPoint,
             poiSelected: false,
@@ -1254,6 +1150,9 @@ export default {
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
             POItitle: poi["poiName"],
+            POIdescription: poi["poiDescription"],
+            image: poi['media'][0] ? poi['media'][0]['o:thumbnail_urls']['large'] : undefined,
+
             //TODo: aggiungere attributi
             isStartPoint: isStartingPoint,
             poiSelected: false,

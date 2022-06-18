@@ -316,6 +316,8 @@ const store = new Vuex.Store({
                     poi.areaDiAppartenenza = pivot["geo:appartiene_a_area"];
 
                     poi['geo:Durata'] = pivot['geo:Durata'];
+
+                    poi['dcterms:description'] = pivot['dcterms:description'];
                 })
             })
 

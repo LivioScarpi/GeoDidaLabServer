@@ -54,10 +54,10 @@
               <h6>
                 Interessi:
                 <span class="font-weight-normal">{{
-                    getInterestList(itinerario["geo:appartiene_a_ambito"]).join(
-                      ", "
-                    )
-                }}</span>
+                  getInterestList(itinerario["geo:appartiene_a_ambito"]).join(
+                  ", "
+                  )
+                  }}</span>
               </h6>
 
               <div class="mt-3" v-if="indexesCostPOI === null && costBetweenPOI === null">
@@ -243,9 +243,9 @@
                                 <div class="col-12">
                                   <i class="bi bi-map mr-2"></i>
                                   {{
-                                      poi["areaDiAppartenenza"][0][
-                                      "display_title"
-                                      ]
+                                  poi["areaDiAppartenenza"][0][
+                                  "display_title"
+                                  ]
                                   }}
                                 </div>
                               </div>
@@ -308,6 +308,19 @@
                           <div class="px-3">
                             <div class="row">
                               <h5>{{ marker.POItitle }}</h5>
+                            </div>
+                            <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
+                              {{ marker.POIdescription }}
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-12 text-center ">
+                                <img v-if="marker.image !== undefined" class="margin-auto" style="border-radius: 5px;"
+                                  :src="
+                                        marker.image
+                                      " alt="Image Title" />
+                                <img v-else class="postcard__img" src="@/assets/images/bg3.jpg"
+                                  style="border-radius: 5px;" alt="Image Title" />
+                              </div>
                             </div>
                           </div>
                         </l-popup>
@@ -435,7 +448,7 @@
                               <div class="col-12">
                                 <i class="bi bi-map mr-2"></i>
                                 {{
-                                    poi["areaDiAppartenenza"][0]["display_title"]
+                                poi["areaDiAppartenenza"][0]["display_title"]
                                 }}
                               </div>
                             </div>
@@ -521,10 +534,22 @@
                     :key="'marker' + index">
                     <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')"></l-icon>
                     <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')"></l-icon>
-                    <l-popup :options="anchorOptions">
+                    <l-popup :options="anchorOptions" style="max-width : 250px">
                       <div class="px-3">
                         <div class="row">
                           <h5>{{ marker.POItitle }}</h5>
+                        </div>
+                        <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
+                          {{ marker.POIdescription }}
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-12 text-center ">
+                            <img v-if="marker.image !== undefined" class="margin-auto" style="border-radius: 5px;" :src="
+                                        marker.image
+                                      " alt="Image Title" />
+                            <img v-else class="postcard__img" src="@/assets/images/bg3.jpg" style="border-radius: 5px;"
+                              alt="Image Title" />
+                          </div>
                         </div>
                       </div>
                     </l-popup>
@@ -809,6 +834,8 @@ export default {
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
             POItitle: poi["geo:Titolo_it"][0]["@value"],
+            POIdescription: poi["dcterms:description"]["@value"],
+            image: poi['media'][0] ? poi['media'][0]['o:thumbnail_urls']['large'] : undefined,
             //TODo: aggiungere attributi
             isStartPoint: isStartingPoint,
             poiSelected: false,
@@ -823,6 +850,9 @@ export default {
             strokeColor: "#1b4f88",
             circleColor: "#ffffff",
             POItitle: poi["geo:Titolo_it"][0]["@value"],
+            POIdescription: poi["dcterms:description"][0]["@value"],
+            image: poi['media'][0] ? poi['media'][0]['o:thumbnail_urls']['large'] : undefined,
+
             //TODo: aggiungere attributi
             isStartPoint: isStartingPoint,
             poiSelected: false,

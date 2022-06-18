@@ -238,7 +238,7 @@ export default {
     console.log(this.timelines);
 
     //TODO: SOLO PER TESTARE L'ELENCO -> decommentare questa riga se si vuole avere l'elenco di più timeline
-    this.timelines.push(this.timelines[0])
+    //this.timelines.push(this.timelines[0])
 
     self.isLoadingTimelines = false;
   },

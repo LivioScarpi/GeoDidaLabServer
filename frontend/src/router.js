@@ -7,6 +7,7 @@ import Profile from './pages/Profile.vue';
 import MainNavbar from './layout/MainNavbar.vue';
 import MainFooter from './layout/MainFooter.vue';
 
+import ElencoTimeline from './pages/ElencoTimeline.vue';
 import Timeline from './pages/Timeline.vue';
 import Strumenti from './pages/Strumenti.vue';
 import Esperimenti from './pages/Esperimenti.vue';
@@ -63,6 +64,15 @@ export default new Router({
       }
     },
     //Pagine aggiunte
+    {
+      path: '/elencotimeline',
+      name: 'elencotimeline',
+      components: { default: ElencoTimeline, header: MainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: 'black' }
+      }
+    },
     {
       path: '/timeline',
       name: 'timeline',

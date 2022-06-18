@@ -1,11 +1,11 @@
 <template>
   <div>
-    
+
     <div class="centerTimePicker text-center pt-4 px-lg-5">
       <h4>Scegli un nostro itinerario oppure crealo tu</h4>
 
 
-<div class="postcardpercorsi light orange mx-4">
+      <div class="postcardpercorsi light orange mx-4">
         <!-- <div
           :style="[
             isLarge
@@ -41,15 +41,9 @@
               itinerario tra i vari itinerari predefiniti già creati
               appositamente, senza il bisogno di doverlo creare da zero.
             </div>
-            <div
-              :class="{ 'text-left mt-5': isLarge, 'text-center': !isLarge }"
-            >
-              <Button
-                size="small"
-                type="primary"
-                v-on:click="selectDefaultPath()"
-                class="textButtonColor mt-5"
-                >Seleziona itinerario
+            <div :class="{ 'text-left mt-5': isLarge, 'text-center': !isLarge }">
+              <Button size="small" type="primary" v-on:click="selectDefaultPath()"
+                class="textButtonColor mt-5">Seleziona itinerario
               </Button>
             </div>
           </div>
@@ -124,49 +118,33 @@
                 Scegli il tempo che hai a disposizione
               </div>
               <ul class="postcardpercorsi__tagbox">
-                <li
-                  :class="
+                <li :class="
                     enabledRadio === '1'
                       ? 'tag__item__selected'
                       : 'tag__item__unselected'
-                  "
-                  v-on:click="enabledRadio = '1'"
-                >
-                  <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
-                  >Mattina
+                  " v-on:click="enabledRadio = '1'">
+                  <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i>Mattina
                 </li>
-                <li
-                  :class="
+                <li :class="
                     enabledRadio === '2'
                       ? 'tag__item__selected'
                       : 'tag__item__unselected'
-                  "
-                  v-on:click="enabledRadio = '2'"
-                >
-                  <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
-                  >Pomeriggio
+                  " v-on:click="enabledRadio = '2'">
+                  <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i>Pomeriggio
                 </li>
-                <li
-                  :class="
+                <li :class="
                     enabledRadio === '3'
                       ? 'tag__item__selected'
                       : 'tag__item__unselected'
-                  "
-                  v-on:click="enabledRadio = '3'"
-                >
-                  <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
-                  >Tutta la giornata
+                  " v-on:click="enabledRadio = '3'">
+                  <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i>Tutta la giornata
                 </li>
-                <li
-                  :class="
+                <li :class="
                     enabledRadio === '4'
                       ? 'tag__item__selected'
                       : 'tag__item__unselected'
-                  "
-                  v-on:click="enabledRadio = '4'"
-                >
-                  <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
-                  >Altro (fascia oraria personalizzata)
+                  " v-on:click="enabledRadio = '4'">
+                  <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i>Altro (fascia oraria personalizzata)
                 </li>
               </ul>
 
@@ -175,10 +153,7 @@
                   <h6 class="col-12">
                     <b>Seleziona il tempo che hai a disposizione</b>
                   </h6>
-                  <div
-                    v-if="!okTimeAvailable"
-                    class="col-12 errorMessage fade-in-text text-center"
-                  >
+                  <div v-if="!okTimeAvailable" class="col-12 errorMessage fade-in-text text-center">
                     <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
                   </div>
                 </div>
@@ -197,20 +172,14 @@
                 <div class="row pt-3">
                   <div class="col-12 text-center">
                     <b>dalle ore</b><br />
-                    <vue-timepicker
-                      v-model="startAvailableTimeValue"
-                      format="HH:mm"
-                    ></vue-timepicker>
+                    <vue-timepicker v-model="startAvailableTimeValue" format="HH:mm"></vue-timepicker>
                   </div>
                 </div>
 
                 <div class="row align-items-center pt-3 pb-3">
                   <div class="col-12 text-center">
                     <b>alle ore</b><br />
-                    <vue-timepicker
-                      v-model="endAvailableTimeValue"
-                      format="HH:mm"
-                    ></vue-timepicker>
+                    <vue-timepicker v-model="endAvailableTimeValue" format="HH:mm"></vue-timepicker>
                   </div>
                 </div>
               </div>
@@ -235,12 +204,8 @@
                   Inserisci qua il codice dell'itinerario che hai creato per
                   poterlo visualizzare!
                 </div>
-                <form-group-input
-                  class="no-border form-control-lg px-0"
-                  placeholder="Codice..."
-                  v-model="pathCodeInserted"
-                  addon-left-icon="now-ui-icons objects_key-25"
-                >
+                <form-group-input class="no-border form-control-lg px-0" placeholder="Codice..."
+                  v-model="pathCodeInserted" addon-left-icon="now-ui-icons objects_key-25">
                 </form-group-input>
                 <!-- <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
                 <Button
@@ -258,23 +223,14 @@
           <div class="row">
             <div class="col-6">
               <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
-                <Button
-                  size="small"
-                  type="primary"
-                  v-on:click="createPath()"
-                  class="textButtonColor mt-3"
-                  >Crea percorso
+                <Button size="small" type="primary" v-on:click="createPath()" class="textButtonColor mt-3">Crea percorso
                 </Button>
               </div>
             </div>
             <div class="col-6">
               <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
-                <Button
-                  size="small"
-                  type="primary"
-                  v-on:click="checkCodeAndGetPath()"
-                  class="textButtonColor mt-3"
-                  >Inserisci codice
+                <Button size="small" type="primary" v-on:click="checkCodeAndGetPath()"
+                  class="textButtonColor mt-3">Inserisci codice
                 </Button>
               </div>
             </div>
@@ -333,49 +289,33 @@
                   Scegli il tempo che hai a disposizione
                 </div>
                 <ul class="postcardpercorsi__tagbox">
-                  <li
-                    :class="
+                  <li :class="
                       enabledRadio === '1'
                         ? 'tag__item__selected'
                         : 'tag__item__unselected'
-                    "
-                    v-on:click="enabledRadio = '1'"
-                  >
-                    <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i
-                    >Mattina
+                    " v-on:click="enabledRadio = '1'">
+                    <i v-if="enabledRadio === '1'" class="fas fa-check mr-2"></i>Mattina
                   </li>
-                  <li
-                    :class="
+                  <li :class="
                       enabledRadio === '2'
                         ? 'tag__item__selected'
                         : 'tag__item__unselected'
-                    "
-                    v-on:click="enabledRadio = '2'"
-                  >
-                    <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i
-                    >Pomeriggio
+                    " v-on:click="enabledRadio = '2'">
+                    <i v-if="enabledRadio === '2'" class="fas fa-check mr-2"></i>Pomeriggio
                   </li>
-                  <li
-                    :class="
+                  <li :class="
                       enabledRadio === '3'
                         ? 'tag__item__selected'
                         : 'tag__item__unselected'
-                    "
-                    v-on:click="enabledRadio = '3'"
-                  >
-                    <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i
-                    >Tutta la giornata
+                    " v-on:click="enabledRadio = '3'">
+                    <i v-if="enabledRadio === '3'" class="fas fa-check mr-2"></i>Tutta la giornata
                   </li>
-                  <li
-                    :class="
+                  <li :class="
                       enabledRadio === '4'
                         ? 'tag__item__selected'
                         : 'tag__item__unselected'
-                    "
-                    v-on:click="enabledRadio = '4'"
-                  >
-                    <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i
-                    >Altro (fascia oraria personalizzata)
+                    " v-on:click="enabledRadio = '4'">
+                    <i v-if="enabledRadio === '4'" class="fas fa-check mr-2"></i>Altro (fascia oraria personalizzata)
                   </li>
                 </ul>
 
@@ -384,10 +324,7 @@
                     <h6 class="col-12">
                       <b>Seleziona il tempo che hai a disposizione</b>
                     </h6>
-                    <div
-                      v-if="!okTimeAvailable"
-                      class="col-12 errorMessage fade-in-text text-center"
-                    >
+                    <div v-if="!okTimeAvailable" class="col-12 errorMessage fade-in-text text-center">
                       <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
                     </div>
                   </div>
@@ -406,20 +343,14 @@
                   <div class="row pt-3">
                     <div class="col-12 text-center">
                       <b>dalle ore</b><br />
-                      <vue-timepicker
-                        v-model="startAvailableTimeValue"
-                        format="HH:mm"
-                      ></vue-timepicker>
+                      <vue-timepicker v-model="startAvailableTimeValue" format="HH:mm"></vue-timepicker>
                     </div>
                   </div>
 
                   <div class="row align-items-center pt-3 pb-3">
                     <div class="col-12 text-center">
                       <b>alle ore</b><br />
-                      <vue-timepicker
-                        v-model="endAvailableTimeValue"
-                        format="HH:mm"
-                      ></vue-timepicker>
+                      <vue-timepicker v-model="endAvailableTimeValue" format="HH:mm"></vue-timepicker>
                     </div>
                   </div>
                 </div>
@@ -438,12 +369,8 @@
             <div class="row">
               <div class="col-12">
                 <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
-                  <Button
-                    size="small"
-                    type="primary"
-                    v-on:click="createPath()"
-                    class="textButtonColor mt-3"
-                    >Crea percorso
+                  <Button size="small" type="primary" v-on:click="createPath()" class="textButtonColor mt-3">Crea
+                    percorso
                   </Button>
                 </div>
               </div>
@@ -464,20 +391,12 @@
                   Inserisci qua il codice dell'itinerario che hai creato per
                   poterlo visualizzare!
                 </div>
-                <form-group-input
-                  class="no-border form-control-lg px-0"
-                  placeholder="Codice..."
-                  v-model="pathCodeInserted"
-                  addon-left-icon="now-ui-icons objects_key-25"
-                >
+                <form-group-input class="no-border form-control-lg px-0" placeholder="Codice..."
+                  v-model="pathCodeInserted" addon-left-icon="now-ui-icons objects_key-25">
                 </form-group-input>
                 <div :class="{ 'text-left': isLarge, 'text-center': !isLarge }">
-                  <Button
-                    size="small"
-                    type="primary"
-                    v-on:click="checkCodeAndGetPath()"
-                    class="textButtonColor mt-3"
-                    >Inserisci codice
+                  <Button size="small" type="primary" v-on:click="checkCodeAndGetPath()"
+                    class="textButtonColor mt-3">Inserisci codice
                   </Button>
                 </div>
               </div>
@@ -502,13 +421,10 @@
 
       <!--Fine component mobile-->
 
-      
 
-      <modal
-        :show.sync="modals.itineraryNotReceivedWithError"
-        headerClasses="justify-content-center"
-        @close="modals.itineraryNotReceivedWithError = false"
-      >
+
+      <modal :show.sync="modals.itineraryNotReceivedWithError" headerClasses="justify-content-center"
+        @close="modals.itineraryNotReceivedWithError = false">
         <h4 slot="header" class="title title-up text-center">Errore!</h4>
         <div class="row">
           <div class="col-12">
@@ -524,21 +440,14 @@
         </div>
 
         <template slot="footer">
-          <Button
-            size="small"
-            type="danger"
-            v-on:click="modals.itineraryNotReceivedWithError = false"
-            class="mx-1"
-            >Chiudi
+          <Button size="small" type="danger" v-on:click="modals.itineraryNotReceivedWithError = false"
+            class="mx-1">Chiudi
           </Button>
         </template>
       </modal>
 
-      <modal
-        :show.sync="modals.itineraryCodeNotValid"
-        headerClasses="justify-content-center"
-        @close="modals.itineraryCodeNotValid = false"
-      >
+      <modal :show.sync="modals.itineraryCodeNotValid" headerClasses="justify-content-center"
+        @close="modals.itineraryCodeNotValid = false">
         <h4 slot="header" class="title title-up text-center">Errore!</h4>
         <div class="row">
           <div class="col-12">
@@ -554,12 +463,7 @@
         </div>
 
         <template slot="footer">
-          <Button
-            size="small"
-            type="danger"
-            v-on:click="modals.itineraryCodeNotValid = false"
-            class="mx-1"
-            >Chiudi
+          <Button size="small" type="danger" v-on:click="modals.itineraryCodeNotValid = false" class="mx-1">Chiudi
           </Button>
         </template>
       </modal>

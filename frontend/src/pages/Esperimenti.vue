@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div class="row mx-3" style="text-align: center" v-for="item in this.$store.state.esperimenti" :key="item.name">
+        <div class="row mx-3" style="text-align: center" v-for="(item, index) in this.$store.state.esperimenti" :key="item.name">
           <div class="col-12  d-block d-lg-none">
             <esperimento
               class="align-top"

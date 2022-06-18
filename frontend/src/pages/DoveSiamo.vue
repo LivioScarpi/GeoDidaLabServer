@@ -24,7 +24,7 @@
             <u><a href="https://www.google.com/maps/dir/?api=1&amp;destination=45.477466179593%2C7.8914880752563">Via
                 Lago S. Michele, 15 10015 Ivrea, Piemonte</a></u>
           </div>
-          <div class="col-12 px-5">
+          <div class="col-12 px-lg-5">
             <l-map style="height: 500px; border-radius: 10px" :zoom="zoom" :center="center">
               <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
 

@@ -44,7 +44,7 @@
         </router-link>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item" v-if="config && config.isGeodidalab">
         <router-link class="nav-link black-text" to="/percorsi">
           <i class="fa fa-map-o fa-lg px-1"></i> Percorsi
         </router-link>
@@ -168,7 +168,9 @@
 
 <script>
 import {DropDown, Navbar, NavLink} from '@/components';
+import { data } from 'dom7';
 import {Popover} from 'element-ui';
+import { config } from "../utils/config";
 
 export default {
   name: 'main-navbar',
@@ -180,6 +182,14 @@ export default {
     //DropDown,
     Navbar,
     [Popover.name]: Popover
+  },
+  data() {
+    return {
+      config: null,
+    }
+  },
+  mounted(){
+    this.config = config;
   }
 };
 </script>

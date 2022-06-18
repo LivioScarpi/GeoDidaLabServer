@@ -1,6 +1,18 @@
 <script src="store.js"></script>
 <script>
-const base = 'https://dev.geodidalab.unito.it/api/';
+import { config } from "./utils/config";
+
+var base = '';
+console.log("config");
+
+console.log(config);
+
+if(config.isGeodidalab) {
+  base = 'https://dev.geodidalab.unito.it/api/';
+} else {
+  base = 'https://dev.istitutomosso.unito.it/api/';
+}
+
 export default {
   PRODUCTION: false,
   DEBUGGING: false,

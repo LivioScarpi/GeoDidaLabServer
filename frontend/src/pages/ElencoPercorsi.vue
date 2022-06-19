@@ -194,6 +194,8 @@ export default {
       this.windowWidth = $(window).width();
     });
 
+    var self = this;
+
     //TODO: remove me
     //console.log("ASYNC CREATED");
 
@@ -202,6 +204,54 @@ export default {
     /**
      * 121 : class id POI_Pivot
      */
+
+    /**
+     * 121 : class id POI_Pivot
+     */
+    Common.getElemsByClass(this, 121, (res) => {
+      store.state.POIpivot = res.body;
+      //self.isLoadingPOIPivot = false;
+      //store.commit('setAllinterestOfPOI');
+
+      console.log(res.body);
+
+      Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
+        if (poi.hasOwnProperty("o-module-mapping:marker")) {
+          // Get module-mapping
+          Common.getElemByUrl(
+            self,
+            poi["o-module-mapping:marker"][0]["@id"],
+            (r2) => {
+              poi.marker = r2.body;
+            }
+          );
+        } else {
+          /*Il POI non ha nessuna coordinata*/
+        }
+
+        poi.visitPOI = false;
+        poi.numberOfActivitiesSelectedInPOI = 0;
+
+        /*chiedo l'immagine dei POI*/
+        Common.getElementImages(this, poi, (mediaList) => {
+          poi.media = mediaList;
+          //self.isLoadingImages = false;
+        });
+      });
+    });
+
+    /**
+     * 132 : class id geo:Area
+     */
+    Common.getElemsByClass(this, 132, (res) => {
+      console.log("HO OTTENUTO TUTTE LE AREE");
+      store.state.aree = res.body;
+      self.isLoadingAree = false;
+      //store.commit('setAllinterestOfPOI');
+      //store.commit("setAreaInPOIPivot");
+
+      console.log(res.body);
+    });
 
     var self = this;
 
@@ -300,6 +350,10 @@ export default {
     },
     goBack() {
       console.log("GO BACK");
+            console.log(window.history.length);
+      console.log(window.history.state);
+
+
       router.go(-1);
 
       //router.replace({ path: "/percorsi" });

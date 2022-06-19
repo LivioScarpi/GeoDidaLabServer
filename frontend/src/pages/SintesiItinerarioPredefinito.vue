@@ -659,6 +659,13 @@ export default {
   },
 
   mounted() {
+
+    console.log(this.$route.params.itinerario);
+
+    if(this.$route.params.itinerario === undefined) {
+      router.push({ path: '/elencopercorsi', replace: true });
+    } else {
+
     this.itinerario = null;
     this.itinerario = JSON.parse(JSON.stringify(this.$route.params.itinerario));
 
@@ -695,6 +702,7 @@ export default {
     this.initializeMarkersOfFilteredPOI();
 
     this.totalTimeObject = this.msToTime(this.totalTime);
+    }
   },
 
   methods: {

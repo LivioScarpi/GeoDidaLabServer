@@ -792,6 +792,9 @@ export default {
     console.log("Sotto Itinerari: ");
     console.log(store.state.sottoitinerari);
 
+    if(store.state.sottoitinerari.length > 0) {
+
+
     this.getDescriptionAndMediaOfPOI();
 
     
@@ -858,6 +861,10 @@ export default {
     }
 
     console.log(this.tempoSpostamenti);
+    } else {
+      //se l'utente carica l'url per la sinstesi dell'itinerario senza aver messo il codice viene mandato alla pagina dei percorsi
+      router.push({ path: '/percorsi', replace: true });
+    }
   },
 
   created() {

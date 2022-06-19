@@ -982,6 +982,16 @@ export default {
      * 121 : class id POI_Pivot
      */
 
+    console.log("STAMPO IL TEMPO");
+    console.log(this.$store.state.timeAvailable);
+
+    if(this.$store.state.timeAvailable === null) {
+      this.$store.state.timeAvailable = {};
+      this.$store.state.timeAvailable.hour = 6;
+      this.$store.state.timeAvailable.milliseconds = 21600000;
+      this.$store.state.timeAvailable.minutes = 0;
+    }
+
     var self = this;
 
     /*
@@ -1040,6 +1050,60 @@ export default {
     //   });
     // });
 
+    //QUery che vengono fatte anche in percorsi, ma se l'utente carica questa pagina vanno fatte qua per la prima volta
+        /**
+     * 121 : class id POI_Pivot
+     */
+    Common.getElemsByClass(this, 121, (res) => {
+      store.state.POIpivot = res.body;
+      self.isLoadingPOIPivot = false;
+      //store.commit('setAllinterestOfPOI');
+
+      console.log(res.body);
+
+      Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
+        if (poi.hasOwnProperty("o-module-mapping:marker")) {
+          // Get module-mapping
+          Common.getElemByUrl(
+            self,
+            poi["o-module-mapping:marker"][0]["@id"],
+            (r2) => {
+              poi.marker = r2.body;
+            }
+          );
+        } else {
+          /*Il POI non ha nessuna coordinata*/
+        }
+
+        poi.visitPOI = false;
+        poi.numberOfActivitiesSelectedInPOI = 0;
+
+        /*chiedo l'immagine dei POI*/
+        Common.getElementImages(this, poi, (mediaList) => {
+          poi.media = mediaList;
+          //self.isLoadingImages = false;
+        });
+      });
+
+
+
+    /**
+     * 132 : class id geo:Area
+     */
+    Common.getElemsByClass(this, 132, (res) => {
+      console.log("HO OTTENUTO TUTTE LE AREE");
+      store.state.aree = res.body;
+      self.isLoadingAree = false;
+      //store.commit('setAllinterestOfPOI');
+      //store.commit("setAreaInPOIPivot");
+
+      console.log(res.body);
+    });
+
+
+
+
+
     /**
      * 118 : class id Misurazione
      * 130 : class id Attivita
@@ -1079,7 +1143,8 @@ export default {
       //console.log(store.state.interestsObject);
       store.commit("setAllinterestOfPOI");
     });
-
+      console.log("FINE POI PIVOT");
+    });
     //     /**
     //  * 132 : class id geo:Area
     //  */

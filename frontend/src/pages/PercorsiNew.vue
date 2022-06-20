@@ -350,6 +350,19 @@
                             </article>
                           </div>
                         </div>
+                        <div v-else-if="this.filteredPOI === null || this.filteredPOI === undefined || filteredPOI.length === 0" class="loader">
+                            <svg class="circular">
+                              <circle
+                                  class="path"
+                                  cx="50"
+                                  cy="50"
+                                  r="20"
+                                  fill="none"
+                                  stroke-width="5"
+                                  stroke-miterlimit="10"
+                              ></circle>
+                            </svg>
+                        </div>
                         <div v-else>
                           Nessuna attività o luogo corrispondente ai filtri
                           selezionati nella zona

@@ -11,11 +11,11 @@
     <context-param>
         <description>account per accedere a DB</description>
         <param-name>user</param-name>
-        <param-value>openalplab_backend</param-value>
+        <param-value>root</param-value>
     </context-param>
     <context-param>
         <description>password di accesso a DB</description>
         <param-name>pwd</param-name>
-        <param-value>CRT_2021_geositlab</param-value>
+        <param-value>root</param-value>
     </context-param>
 </web-app>

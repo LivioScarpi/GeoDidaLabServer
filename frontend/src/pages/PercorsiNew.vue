@@ -365,6 +365,9 @@
                       <h5 class="mt-0">
                         <b>Mappa</b>
                       </h5>
+                      <h6 class="mt-0">
+                        Per selezionare punti di interesse e attività apri il tab “Elenco delle aree e delle attività”
+                      </h6>
                       <div>
                         <l-map style="height: 700px; border-radius: 10px" :zoom="zoom" :center="centerMap">
                           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>

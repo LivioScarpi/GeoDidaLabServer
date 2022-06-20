@@ -30,6 +30,10 @@ const store = new Vuex.Store({
         POI: [],
         aree: [],
 
+        setActivitiesInPOIdone: false,
+        setPOIinItinerario: false,
+
+
         loadedActivitiesInPOIPivot: false,
         timeAvailable: null,
         itinerarioInCreazione: null,
@@ -289,25 +293,26 @@ const store = new Vuex.Store({
 
             Array.prototype.forEach.call(state.POIpivot, pivot => {
 
-                console.log("pivot");
-                console.log(pivot);
+                //console.log("pivot");
+                //console.log(pivot);
 
                 var misurazioniInPivot = pivot.mis;
 
-                console.log("misurazioniInPivot");
-                console.log(misurazioniInPivot);
+                //console.log("misurazioniInPivot");
+                //console.log(misurazioniInPivot);
 
                 var poiInPivot = state.POI.filter(poi => poi["geo:appartiene_a_pivot"][0]["display_title"] === pivot["o:title"]);
 
                 Array.prototype.forEach.call(poiInPivot, poi => {
-                    console.log("POI IN PiVOT");
-                    console.log(pivot);
+                    //console.log("POI IN PiVOT");
+                    //console.log(pivot);
 
                     //recupero i poi che appartengono all'itinerario corrente
                     if(poi.activitiesOfPOIPivot === undefined){
                     poi.activitiesOfPOIPivot = misurazioniInPivot;
                     }
-                    if(poi.marker === undefined) { 
+                    if(poi.marker === undefined) {
+                        console.log("MARKER E' UNDEFINED");
                     poi.marker = pivot.marker;
                     }
 
@@ -323,6 +328,8 @@ const store = new Vuex.Store({
 
             console.log("FINE setActivitiesInPOI");
             console.log(state.POI);
+
+            this.setActivitiesInPOIdone = true;
         },
 
         setTimelines(state) {
@@ -396,6 +403,8 @@ const store = new Vuex.Store({
 
             console.log("FINE setPOIinItinerario");
             console.log(state.itinerari);
+
+            this.setPOIinItinerarioDone = true;
         },
 
         /* CACHE URL */

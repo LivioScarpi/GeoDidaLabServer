@@ -31,20 +31,8 @@
 
         <!--ELENCO PERCORSI:-->
 
-        <div v-if="itinerari === null" class="loader">
-          <svg class="circular">
-            <circle
-              class="path"
-              cx="50"
-              cy="50"
-              r="20"
-              fill="none"
-              stroke-width="5"
-              stroke-miterlimit="10"
-            ></circle>
-          </svg>
-        </div>
-        <div v-else class="px-2 px-lg-5">
+
+        <div v-if="!(itinerari === null) && !isLoadingPOIPivot && activitiesLoaded && !isLoadingAree" class="px-2 px-lg-5">
           <article
             style="overflow: hidden"
             class="postcardpercorsi light orange mx-4"
@@ -138,6 +126,19 @@
             </collapse-item>
           </collapse> -->
         </div>
+        <div v-else class="loader">
+          <svg class="circular">
+            <circle
+                class="path"
+                cx="50"
+                cy="50"
+                r="20"
+                fill="none"
+                stroke-width="5"
+                stroke-miterlimit="10"
+            ></circle>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -184,6 +185,9 @@ export default {
       path: null,
       itinerari: null,
       windowWidth: 0,
+      isLoadingPOIPivot: true,
+      activitiesLoaded: false,
+      isLoadingAree: true,
     };
   },
 
@@ -208,24 +212,28 @@ export default {
     /**
      * 121 : class id POI_Pivot
      */
-    Common.getElemsByClass(this, 121, (res) => {
+    Common.getElemsByClass(self, 121, (res) => {
       store.state.POIpivot = res.body;
-      //self.isLoadingPOIPivot = false;
+
       //store.commit('setAllinterestOfPOI');
 
       console.log(res.body);
 
       Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
         if (poi.hasOwnProperty("o-module-mapping:marker")) {
+          console.log("SONO NELL'IF SETTO IL MARKER DEL POI");
           // Get module-mapping
           Common.getElemByUrl(
             self,
             poi["o-module-mapping:marker"][0]["@id"],
             (r2) => {
+              console.log("SETTO IL MARKER DEL POI");
               poi.marker = r2.body;
             }
           );
         } else {
+          console.log("SONO NELL'ELSE SETTO IL MARKER DEL POI");
+
           /*Il POI non ha nessuna coordinata*/
         }
 
@@ -233,88 +241,105 @@ export default {
         poi.numberOfActivitiesSelectedInPOI = 0;
 
         /*chiedo l'immagine dei POI*/
-        Common.getElementImages(this, poi, (mediaList) => {
+        Common.getElementImages(self, poi, (mediaList) => {
           poi.media = mediaList;
           //self.isLoadingImages = false;
+          self.isLoadingPOIPivot = false;
+        });
+
+
+      });
+
+      //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
+      Common.getElemsByClass(self, 130, (res) => {
+        store.state.esperimenti = res.body;
+        //TODO: remove me
+        //console.log(res.body);
+
+        //store.commit("setActivitiesInPOI");
+
+        this.filteredPOI = store.state.POIpivot;
+        //TODO: remove me
+        //console.log(this.filteredPOI);
+        //this.initializeMarkersOfFilteredPOI();
+        store.state.loadedActivitiesInPOIPivot = true;
+
+        self.activitiesLoaded = true;
+        self.isLoadingEsperimenti = false;
+      });
+
+      /**
+       * 132 : class id geo:Area
+       */
+      Common.getElemsByClass(self, 132, (res) => {
+        console.log("HO OTTENUTO TUTTE LE AREE");
+        store.state.aree = res.body;
+        self.isLoadingAree = false;
+        //store.commit('setAllinterestOfPOI');
+        //store.commit("setAreaInPOIPivot");
+
+        console.log(res.body);
+
+        /**
+         * 117 : class id Itinerario
+         */
+
+        console.log("chiedo gli itinerari");
+        //chiedo gli itinerari
+        Common.getElemsByClass(self, 117, (res) => {
+          store.state.itinerari = res.body;
+          console.log(store.state.itinerari);
+
+          //chiedo i POI
+          console.log("chiedo i POI");
+
+          Common.getElemsByClass(self, 120, (res) => {
+            store.state.POI = res.body;
+            console.log(store.state.POI);
+
+            //store.commit("setPOIinPivot");
+            //store.commit("setPivotinItinerario");
+
+            //da qua
+            if (store.state.loadedActivitiesInPOIPivot) {
+              console.log("TRUE store.state.loadedActivitiesInPOIPivot");
+
+              //TODO: comment qua
+              if(!store.state.setActivitiesInPOIdone) {
+                console.log("setActivitiesInPOIdone VALE : " + store.state.setActivitiesInPOIdone);
+                store.commit("setActivitiesInPOI");
+              }
+
+              if(!store.state.setPOIinItinerarioDone) {
+                console.log("setPOIinItinerarioDone VALE : " + store.state.setPOIinItinerarioDone);
+                store.commit("setPOIinItinerario");
+              }
+            } else {
+              console.log("FALSE store.state.loadedActivitiesInPOIPivot");
+            }
+
+            console.log(store.state.itinerari);
+            self.itinerari = store.state.itinerari;
+
+            //this.filteredPOI = store.state.POIpivot;
+            //this.initializeMarkersOfFilteredPOI();
+          });
+
+          //store.commit("setActivitiesInPOI");
+
+          //this.filteredPOI = store.state.POIpivot;
+          //this.initializeMarkersOfFilteredPOI();
         });
       });
     });
 
-    /**
-     * 132 : class id geo:Area
-     */
-    Common.getElemsByClass(this, 132, (res) => {
-      console.log("HO OTTENUTO TUTTE LE AREE");
-      store.state.aree = res.body;
-      self.isLoadingAree = false;
-      //store.commit('setAllinterestOfPOI');
-      //store.commit("setAreaInPOIPivot");
 
-      console.log(res.body);
-    });
 
     var self = this;
 
-    //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
-    Common.getElemsByClass(this, 130, (res) => {
-      store.state.esperimenti = res.body;
-      //TODO: remove me
-      //console.log(res.body);
 
-      store.commit("setActivitiesInPOI");
 
-      this.filteredPOI = store.state.POIpivot;
-      //TODO: remove me
-      //console.log(this.filteredPOI);
-      //this.initializeMarkersOfFilteredPOI();
-      store.state.loadedActivitiesInPOIPivot = true;
 
-      self.activitiesLoaded = true;
-      self.isLoadingEsperimenti = false;
-    });
-
-    /**
-     * 117 : class id Itinerario
-     */
-
-    console.log("chiedo gli itinerari");
-    //chiedo gli itinerari
-    Common.getElemsByClass(this, 117, (res) => {
-      store.state.itinerari = res.body;
-      console.log(store.state.itinerari);
-
-      //chiedo i POI
-      console.log("chiedo i POI");
-
-      Common.getElemsByClass(this, 120, (res) => {
-        store.state.POI = res.body;
-        console.log(store.state.POI);
-
-        //store.commit("setPOIinPivot");
-        //store.commit("setPivotinItinerario");
-
-        //da qua
-        if (store.state.loadedActivitiesInPOIPivot) {
-          console.log("TRUE store.state.loadedActivitiesInPOIPivot");
-
-          store.commit("setActivitiesInPOI");
-          store.commit("setPOIinItinerario");
-        } else {
-          console.log("FALSE store.state.loadedActivitiesInPOIPivot");
-        }
-
-        console.log(store.state.itinerari);
-        this.itinerari = store.state.itinerari;
-
-        //this.filteredPOI = store.state.POIpivot;
-        //this.initializeMarkersOfFilteredPOI();
-      });
-
-      //store.commit("setActivitiesInPOI");
-
-      //this.filteredPOI = store.state.POIpivot;
-      //this.initializeMarkersOfFilteredPOI();
-    });
 
     var self = this;
 
@@ -385,13 +410,17 @@ export default {
 
   watch: {
     activitiesLoadedInPOIPivot(newValue, oldValue) {
-      console.log("sono nel watch");
+      /*console.log("sono nel watch");
       if (newValue) {
         console.log("new value è true");
 
-        store.commit("setActivitiesInPOI");
-        store.commit("setPOIinItinerario");
-      }
+        if (store.state.loadedActivitiesInPOIPivot) {
+          console.log("TRUE store.state.loadedActivitiesInPOIPivot");
+
+          store.commit("setActivitiesInPOI");
+          store.commit("setPOIinItinerario");
+        }
+      }*/
     },
   },
 };

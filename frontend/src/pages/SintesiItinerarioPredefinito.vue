@@ -660,6 +660,7 @@ export default {
 
   mounted() {
 
+    console.log("MOUNTED SONO IN MOUNTED");
     console.log(this.$route.params.itinerario);
 
     if(this.$route.params.itinerario === undefined) {
@@ -685,7 +686,8 @@ export default {
     });
 
     this.itinerarioLoaded = true;
-    //console.log(store.state.sottoitinerari);
+    console.log("this.itinerario");
+    console.log(this.itinerario);
 
     if (
       this.itinerario["geo:Titolo_it"][0]["@value"].includes("Ivrea Stones")
@@ -807,6 +809,7 @@ export default {
       //this.markersPolylines.push(this.startPoint);
       console.log("createMarkerArray");
       Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+        console.log("STAMPO IL POI QUA");
         console.log(poi);
         var POIlat = poi["marker"]["o-module-mapping:lat"];
         var POIlng = poi["marker"]["o-module-mapping:lng"];
@@ -848,6 +851,8 @@ export default {
             isStartPoint: isStartingPoint,
             poiSelected: false,
           });
+
+          console.log(this.markers);
         } else {
           this.markers.push({
             marker: L.marker([
@@ -865,6 +870,8 @@ export default {
             isStartPoint: isStartingPoint,
             poiSelected: false,
           });
+
+          console.log(this.markers);
         }
       });
 
@@ -922,12 +929,9 @@ export default {
       var k = 0;
       var l = 0;
       for (var x = 0; x <= i; x++) {
-        console.log(
-          "CONTO IL POI CHE HA " +
-          this.itinerario.poi[x].activitiesOfPOIPivot.length
-        );
+        //console.log("CONTO IL POI CHE HA " +this.itinerario.poi[x].activitiesOfPOIPivot.length);
         //countActivities += 1;
-        console.log(this.itinerario.poi[x]);
+        //console.log(this.itinerario.poi[x]);
 
         for (
           var h = 0;
@@ -936,14 +940,14 @@ export default {
         ) {
           if (x === i) {
             if (l < j) {
-              console.log("k: " + k + ", j: " + j);
-              console.log("CONTO L'ATTIVITA " + k);
+              //console.log("k: " + k + ", j: " + j);
+              //console.log("CONTO L'ATTIVITA " + k);
 
               l += 1;
             }
           } else {
-            console.log("ELSE k: " + k + ", j: " + j);
-            console.log("ELSE CONTO L'ATTIVITA " + k);
+            //console.log("ELSE k: " + k + ", j: " + j);
+            //console.log("ELSE CONTO L'ATTIVITA " + k);
 
             k += 1;
           }
@@ -953,13 +957,26 @@ export default {
       k += l;
       //countActivities = countActivities + j;
 
-      console.log("countActivities: " + k);
+      //console.log("countActivities: " + k);
 
       return k + 1;
     },
   },
 
+
+  beforeCreate() {
+    console.log("beforeCreatebeforeCreatebeforeCreate");
+  },
+
+  beforeMount() {
+    console.log("beforeMountbeforeMountbeforeMount");
+  },
+
   created() {
+
+    console.log("SONO IN MOUNTEd");
+
+
     this.windowWidth = $(window).width();
 
     $(window).resize(() => {
@@ -1061,6 +1078,15 @@ export default {
       console.log(newValue);
       console.log(oldValue);
     },
+    itinerario(newValue, oldValue){
+      console.log("itinerario vale: ");
+      console.log(newValue);
+
+      if(newValue !== null) {
+        this.createMarkerArray();
+        this.initializeMarkersOfFilteredPOI();
+      }
+    }
   },
 };
 </script>

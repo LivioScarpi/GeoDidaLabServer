@@ -21,12 +21,23 @@
           <div class="col-12 text-center mb-3">
             <i class="fa fa-map-pin fa-sm px-1" style="color: indianred"></i> Ci
             puoi trovare in
-            <u><a href="https://www.google.com/maps/dir/?api=1&amp;destination=45.477466179593%2C7.8914880752563">Via
-                Lago S. Michele, 15 10015 Ivrea, Piemonte</a></u>
+            <u
+              ><a
+                href="https://www.google.com/maps/dir/?api=1&amp;destination=45.477466179593%2C7.8914880752563"
+                >Via Lago S. Michele, 15 10015 Ivrea, Piemonte</a
+              ></u
+            >
           </div>
           <div class="col-12 px-lg-5">
-            <l-map style="height: 500px; border-radius: 10px" :zoom="zoom" :center="center">
-              <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+            <l-map
+              style="height: 500px; border-radius: 10px"
+              :zoom="zoom"
+              :center="center"
+            >
+              <l-tile-layer
+                :url="url"
+                :attribution="attribution"
+              ></l-tile-layer>
 
               <l-marker :lat-lng="markerLatLng">
                 <l-popup>
@@ -52,15 +63,51 @@
           imagePath="https://thumbs.dreamstime.com/b/panorama-panoramico-della-paris-difensiva-panoramiche-difesa-grattacieli-moderni-contro-il-cielo-azzurro-con-nuvole-bianche-206836216.jpg"
           fileName="panorama-panoramico-della-paris-difensiva-panoramiche-difesa-grattacieli-moderni-contro-il-cielo-azzurro-con-nuvole-bianche-206836216.jpg" /> -->
 
-
-        <tabs tabContentClasses="tab-subcategories" square centered type="primary">
-          <tab-pane v-for="(place, index) in places" :key="index" :title="place">
+        <tabs
+          tabContentClasses="tab-subcategories"
+          square
+          centered
+          type="primary"
+        >
+          <tab-pane
+            v-for="(place, index) in places"
+            :key="index"
+            :title="place"
+          >
             <span slot="label"> {{ place }} </span>
-            <div v-if="isLarge" class="col-md-10 ml-auto mr-auto collections ">
-              <ul style="display: grid; grid-template-columns: repeat(2, 1fr)" class="p-0">
-                <li v-for="(item, index) in filteredMedia(place)" :key="index" style="display: inline" class="m-3">
-                  <img style="height: 100%; width: 100%" v-bind:src="item['thumbnail_display_urls']['large']"
-                    :alt="item['dcterms:description']['@value']" />
+
+            <div
+              class="container my-3 text-center"
+              :class="isLarge ? '' : 'mx-3'"
+            >
+              <h5>Esplora i nostri luoghi a 360 gradi!</h5>
+              <div
+                class="container"
+                :style="isLarge ? 'height: 700px' : 'height: 300px; width: 90%'"
+              >
+                <Pano
+                  source="https://video.360cities.net/mikealbright/01881815_UTAH_SKI_360_2880_compressed-1024x512.jpg"
+                >
+                </Pano>
+              </div>
+            </div>
+
+            <div v-if="isLarge" class="col-md-10 ml-auto mr-auto collections">
+              <ul
+                style="display: grid; grid-template-columns: repeat(2, 1fr)"
+                class="p-0"
+              >
+                <li
+                  v-for="(item, index) in filteredMedia(place)"
+                  :key="index"
+                  style="display: inline"
+                  class="m-3"
+                >
+                  <img
+                    style="height: 100%; width: 100%"
+                    v-bind:src="item['thumbnail_display_urls']['large']"
+                    :alt="item['dcterms:description']['@value']"
+                  />
                 </li>
               </ul>
 
@@ -84,11 +131,18 @@
                 </div>
               </div> -->
             </div>
-            <div v-else class="  collections p-0">
-              <div v-for="(item, index) in filteredMedia(place)" :key="index" style="display: inline"
-                class="row mx-auto">
-                <img style="height: 100%; width: 100%" v-bind:src="item['thumbnail_display_urls']['large']"
-                  :alt="item['dcterms:description']['@value']" />
+            <div v-else class="collections p-0">
+              <div
+                v-for="(item, index) in filteredMedia(place)"
+                :key="index"
+                style="display: inline"
+                class="row mx-auto"
+              >
+                <img
+                  style="height: 100%; width: 100%"
+                  v-bind:src="item['thumbnail_display_urls']['large']"
+                  :alt="item['dcterms:description']['@value']"
+                />
               </div>
             </div>
           </tab-pane>
@@ -172,20 +226,7 @@
               </div>
             </div>
           </tab-pane> -->
-
-
         </tabs>
-
-
-        <div class="container my-3 text-center" :class="isLarge ? '' : 'mx-3'">
-          <h5>Esplora i nostri luoghi a 360 gradi!</h5>
-
-
-        </div>
-        <div class="container" :style="isLarge ? 'height: 700px' : 'height: 300px; width: 90%'">
-          <Pano source="https://video.360cities.net/mikealbright/01881815_UTAH_SKI_360_2880_compressed-1024x512.jpg">
-          </Pano>
-        </div>
       </div>
     </div>
   </div>
@@ -196,8 +237,8 @@ import { LMap, LMarker, LPopup, LTileLayer } from "vue2-leaflet";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFlask } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
- import { Pano } from 'vuejs-vr';
- import { Panorama } from 'vuejs-panorama'
+import { Pano } from "vuejs-vr";
+import { Panorama } from "vuejs-panorama";
 
 const Common = require("@/Common.vue").default;
 
@@ -205,11 +246,11 @@ library.add(faFlask);
 import $ from "jquery";
 
 import Vue from "vue";
-import VueThreeSixty from 'vue-360'
+import VueThreeSixty from "vue-360";
 
-import 'vue-360/dist/css/style.css'
+import "vue-360/dist/css/style.css";
 
-Vue.use(VueThreeSixty)
+Vue.use(VueThreeSixty);
 
 export default {
   name: "profile",
@@ -245,7 +286,6 @@ export default {
   },
 
   created() {
-
     this.windowWidth = $(window).width();
 
     $(window).resize(() => {
@@ -265,14 +305,13 @@ export default {
       self.media = res.body;
       self.allLoaded = true;
     });
-    
   },
 
   computed: {
     places() {
       return [...new Set(this.media.map((place) => place["o:title"]))];
     },
-        isLarge() {
+    isLarge() {
       return this.windowWidth >= 768;
     },
   },

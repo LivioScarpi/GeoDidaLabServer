@@ -141,7 +141,7 @@ export default {
     return {
       cardObject: [
         {
-          title: "Timeline",
+          title: "La storia",
           message: "Questa è la card 1",
           imgSrc: require("@/assets/images/timelineImg2.png"),
           pageDestination: "/timeline",

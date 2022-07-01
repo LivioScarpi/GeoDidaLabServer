@@ -516,6 +516,30 @@
         </Button>
       </template>
     </modal>
+
+
+    <modal :show.sync="modals.timeExceeded" headerClasses="justify-content-center"
+      @close="modals.timeExceeded = false">
+      <h4 slot="header" class="title title-up text-center">
+        Attenzione!
+      </h4>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h6 class="itineraryCode">
+                Per poter selezionare questa attività devi avere più tempo a disposizione! 
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template slot="footer">
+        <Button size="small" type="danger" v-on:click="modals.timeExceeded = false" class="mx-1">Chiudi
+        </Button>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -711,6 +735,7 @@ export default {
         featureDevelopment: false,
         errorGettingSottoitinerario: false,
         loadingVROOMresponse: false,
+        timeExceeded: false,
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -1548,9 +1573,10 @@ export default {
 
               store.state.activitiesSelectedList.unshift(activityTmp);
             } else {
-              alert(
-                "Errore, rimuovi qualche attività per poter inserire questa e stare nei tempi"
-              );
+              self.modals.timeExceeded = true;
+              // alert(
+              //   "Errore, rimuovi qualche attività per poter inserire questa e stare nei tempi"
+              // );
               this.$set(poi, "visitPOI", !poi.visitPOI);
             }
           } else {

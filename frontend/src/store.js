@@ -2,6 +2,9 @@ import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+
+import Cookies from "js-cookie";
+
 // import VuexPersistence from 'vuex-persist'
 
 // const vuexLocal = new VuexPersistence({
@@ -15,6 +18,16 @@ const store = new Vuex.Store({
         key: 'somekey',
         storage: window.localStorage,
     })],
+    // plugins: [
+    //     createPersistedState({
+    //       storage: {
+    //         getItem: (key) => Cookies.get(key),
+    //         setItem: (key, value) =>
+    //           Cookies.set(key, value, { expires: 3, secure: true }),
+    //         removeItem: (key) => Cookies.remove(key)
+    //       }
+    //     })
+    //   ],
     //plugins: [createPersistedState()],
     //plugins: [vuexLocal.plugin],
     state: {

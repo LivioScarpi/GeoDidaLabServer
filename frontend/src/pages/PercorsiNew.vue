@@ -2752,6 +2752,8 @@ export default {
           });
 
           this.$store.state.sottoitinerari = newValue;
+          console.log("PRIMA DEL ROUTER PUSH store.state.sottoitinerari");
+          console.log(this.$store.state.sottoitinerari);
 
           router.push({
             name: "sintesiitinerario",

@@ -35,7 +35,7 @@
               Seleziona un itinerario predefinito
             </h1>
 
-            <div class="postcardpercorsi__bar" style="height: 4px"></div>
+            <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
             <div class="postcardpercorsi__preview-txt">
               Selezionando questa opzione hai la possibilità di scegliere un
               itinerario tra i vari itinerari predefiniti già creati
@@ -106,9 +106,9 @@
           <div class="row" v-if="enabledRadioCreatePathOrInsertCode === '1'">
             <div class="col-6">
               <h1 class="postcardpercorsi__title orange">
-                Crea un nuovo percorso
+                Crea un nuovo percorso 
               </h1>
-              <div class="postcardpercorsi__bar" style="height: 4px"></div>
+              <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
               <div class="postcardpercorsi__preview-txt mb-3">
                 Creando un nuovo percorso hai la possibilità di inserire le
                 attività che più ti interessano e i posti che più vuoi visitare
@@ -199,7 +199,7 @@
                   Inserisci il codice del tuo itinerario
                 </h1>
 
-                <div class="postcardpercorsi__bar" style="height: 4px"></div>
+                <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
                 <div class="postcardpercorsi__preview-txt mb-3">
                   Inserisci qua il codice dell'itinerario che hai creato per
                   poterlo visualizzare!
@@ -278,7 +278,7 @@
                 <h1 class="postcardpercorsi__title orange">
                   Crea un nuovo percorso
                 </h1>
-                <div class="postcardpercorsi__bar" style="height: 4px"></div>
+                <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
                 <div class="postcardpercorsi__preview-txt mb-3">
                   Creando un nuovo percorso hai la possibilità di inserire le
                   attività che più ti interessano e i posti che più vuoi
@@ -386,7 +386,7 @@
                   Inserisci il codice del tuo itinerario
                 </h1>
 
-                <div class="postcardpercorsi__bar" style="height: 4px"></div>
+                <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
                 <div class="postcardpercorsi__preview-txt mb-3">
                   Inserisci qua il codice dell'itinerario che hai creato per
                   poterlo visualizzare!

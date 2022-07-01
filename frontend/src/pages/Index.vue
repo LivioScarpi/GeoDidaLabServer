@@ -144,7 +144,7 @@ export default {
           title: "La storia",
           message: "Questa è la card 1",
           imgSrc: require("@/assets/images/timelineImg2.png"),
-          pageDestination: "/timeline",
+          pageDestination: "/elencotimeline",
         },
         {
           title: "Percorsi",

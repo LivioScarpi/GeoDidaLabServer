@@ -38,6 +38,7 @@
             class="postcardpercorsi light orange mx-4"
             v-for="(itinerario, index) in itinerari"
             :key="'itinerario' + index"
+            v-on:click="!isLarge ? goToItinerarioPredefinitoPage(index) : null"
           >
             <a class="postcardpercorsi__img_link">
               <img
@@ -56,7 +57,7 @@
                   <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
                 </time>
               </div>-->
-                <div class="postcardpercorsi__bar" style="height: 5px"></div>
+                <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 5px"></div>
                 <div
                   class="postcardpercorsi__preview-txt mb-3"
                   v-if="itinerario['dcterms:description'] !== undefined"
@@ -350,7 +351,7 @@ export default {
       //console.log(event.currentTarget.attributes[2].value);
 
       //emit event to child component
-      if (event.currentTarget.attributes[2].value === "#collapseItinerario") {
+      if (event.currentTarget.attributes[2] !== undefined && event.currentTarget.attributes[2].value === "#collapseItinerario") {
         console.log("EMITTO L'EVENTO");
         self.$root.$emit("invalidateMapSize");
       }
@@ -386,6 +387,13 @@ export default {
     goToItinerarioPredefinitoPage(index) {
       //TODO: navigo alla pagina dell'itinerario predefinito
       var itinerario = this.itinerari[index];
+
+      
+      store.state.itinerarioPredefinito = this.itinerari[index];
+      
+      console.log("SALVO NELLO STORE");
+      console.log(store.state.itinerarioPredefinito);
+
       router.push({
         name: "sintesiitinerariopredefinito",
         params: {

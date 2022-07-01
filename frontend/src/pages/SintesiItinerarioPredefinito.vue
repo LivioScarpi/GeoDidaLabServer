@@ -61,7 +61,7 @@
               </h6>
 
               <div class="mt-3" v-if="indexesCostPOI === null && costBetweenPOI === null">
-                <h6><i class="bi bi-clock mr-2"></i> Tempo non conosciuto</h6>
+                <h6><i class="bi bi-clock mr-2"></i> Durata non disponibile</h6>
               </div>
               <div v-else class="mt-3">
                 <h6 class="card-title" v-if="
@@ -287,9 +287,13 @@
                           <div class="mt-4">
                             <esperimento class="align-top text-center" :item="activitySelectedForInfo"
                               v-if="activitySelectedForInfo !== null"></esperimento>
-                            <div class="row mx-2 mt-3 mb-4">
+
+                            <visita class="align-top text-center" :item="activityVisitPOISelectedForInfo"
+                              v-if="activityVisitPOISelectedForInfo !== null"></visita>
+
+                            <!-- <div class="row mx-2 mt-3 mb-4">
                               {{ activityVisitPOISelectedForInfo }}
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>
@@ -489,9 +493,11 @@
                       <div class="mt-4">
                         <esperimento class="align-top text-center" :item="activitySelectedForInfo"
                           v-if="activitySelectedForInfo !== null"></esperimento>
-                        <div class="row mx-2 mt-3 mb-4">
+                                                    <visita class="align-top text-center" :item="activityVisitPOISelectedForInfo"
+                              v-if="activityVisitPOISelectedForInfo !== null"></visita>
+                        <!-- <div class="row mx-2 mt-3 mb-4">
                           {{ activityVisitPOISelectedForInfo }}
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -527,7 +533,7 @@
           <div class="col-lg-8 col-sm-12 pr-3 d-none d-lg-block">
             <div class="row px-4">
               <div class="col-12">
-                <l-map style="height: 700px; border-radius: 10px" :zoom="zoomLarge" :center="centerMap"
+                <l-map style="height: 830px; border-radius: 10px" :zoom="zoomLarge" :center="centerMap"
                   ref="mappaSottoItinerario">
                   <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
                   <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
@@ -592,6 +598,8 @@ import {
   LControl,
 } from "vue2-leaflet";
 import esperimento from "../components/customComponents/esperimento";
+import visita from "../components/customComponents/visita";
+
 import router from "../router";
 
 const Common = require("@/Common.vue").default;
@@ -619,6 +627,7 @@ export default {
     Button,
     //infoEsperimento,
     esperimento,
+    visita
   },
   data() {
     return {
@@ -662,13 +671,17 @@ export default {
 
     console.log("MOUNTED SONO IN MOUNTED");
     console.log(this.$route.params.itinerario);
+    console.log("STAMPO QUA");
+    console.log(store.state.itinerarioPredefinito);
+    console.log(store.state);
 
-    if(this.$route.params.itinerario === undefined) {
+    if(store.state.itinerarioPredefinito === null) {
+      console.log("SONO NELL'IF");
       router.push({ path: '/elencopercorsi', replace: true });
     } else {
 
     this.itinerario = null;
-    this.itinerario = JSON.parse(JSON.stringify(this.$route.params.itinerario));
+    this.itinerario = JSON.parse(JSON.stringify(store.state.itinerarioPredefinito));
 
     console.log("Itinerario ricevuto: ");
     console.log(this.itinerario);
@@ -679,6 +692,7 @@ export default {
 
       visit["o:title"] = "Visita del luogo";
       visit["geo:Durata"] = poi["geo:Durata"];
+      //visit.media = poi.media;
 
       console.log(visit);
 
@@ -705,6 +719,9 @@ export default {
 
     this.totalTimeObject = this.msToTime(this.totalTime);
     }
+
+    console.log("FINE MOUNTED this.itinerario");
+    console.log(this.itinerario);
   },
 
   methods: {
@@ -738,8 +755,22 @@ export default {
     },
 
     showInfoAtivity(poiName, activityName, areaname) {
-      console.log("SONO IN showInfoAtivity: " + activityName + "; " + areaname);
 
+      //TODO: SISTEMARE -> soluzione approssimata per i media dei POI
+
+      Array.prototype.forEach.call(this.itinerario.poiGroupedByArea[areaname], (poiInArea) => {
+        Array.prototype.forEach.call(this.itinerario.poi, (poi) => {
+          console.log("CICLO PER TROVARE IL POSTO");
+         if(poiInArea["geo:Titolo_it"][0]["@value"] === poi["geo:Titolo_it"][0]["@value"]) {
+          console.log("POSTO TROVATO!");
+          console.log(poi.media);
+          poiInArea.mediaImages = poi.media;
+         }
+        });
+      });
+
+      console.log("SONO IN showInfoAtivity: " + activityName + "; " + areaname);
+      console.log(this.itinerario);
       if (activityName !== "Visita del luogo") {
         console.log(this.itinerario.poiGroupedByArea[areaname]);
 
@@ -766,10 +797,31 @@ export default {
 
         console.log(this.activitySelectedForInfo);
       } else {
-        this.activityVisitPOISelectedForInfo =
-          "La visita del " +
-          poiName +
-          " consiste in una visita del luogo guidati da una persona che spiegherà tutto il necessario";
+
+        console.log("SONO QUA");
+        //TODO creare oggetto da passare a visita 
+
+        this.activityVisitPOISelectedForInfo = null;
+
+        console.log("STAMPO THIS ITINERARIO");
+        console.log(this.itinerario);
+
+        Array.prototype.forEach.call(
+          this.itinerario.poiGroupedByArea[areaname],
+          (poi) => {
+            console.log(poi);
+            if (poi["geo:Titolo_it"][0]["@value"] === poiName) {
+                  this.activityVisitPOISelectedForInfo = poi;
+                  console.log("Activity trovata");
+                }
+          });
+
+          console.log(this.activityVisitPOISelectedForInfo);
+
+        // this.activityVisitPOISelectedForInfo =
+        //   "La visita del " +
+        //   poiName +
+        //   " consiste in una visita del luogo guidati da una persona che spiegherà tutto il necessario";
 
         this.activitySelectedForInfo = null;
       }
@@ -974,7 +1026,7 @@ export default {
 
   created() {
 
-    console.log("SONO IN MOUNTEd");
+    console.log("SONO IN created");
 
 
     this.windowWidth = $(window).width();

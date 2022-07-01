@@ -2,14 +2,21 @@ import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+// import VuexPersistence from 'vuex-persist'
 
+// const vuexLocal = new VuexPersistence({
+//     storage: window.localStorage
+//   })
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     plugins: [createPersistedState({
-        storage: window.sessionStorage,
+        key: 'somekey',
+        storage: window.localStorage,
     })],
+    //plugins: [createPersistedState()],
+    //plugins: [vuexLocal.plugin],
     state: {
         count: 1,
         urlCache: {}, // Url => Obj
@@ -38,6 +45,8 @@ const store = new Vuex.Store({
         timeAvailable: null,
         itinerarioInCreazione: null,
         totalTimeSelected: 0,
+
+        itinerarioPredefinito: null,
 
         areasWithSomethingSelected: [],
 
@@ -367,6 +376,7 @@ const store = new Vuex.Store({
             Array.prototype.forEach.call(state.itinerari, itinerario => {
                 //recupero i poi che appartengono all'itinerario corrente
 
+                console.log("CIAO ECCOMI!");
                 console.log(state.POI);
 
                 var filteredPOI = state.POI.filter(x => x["geo:appartiene_a_itinerario"] !== undefined && x["geo:Posizione_itinerario"] !== undefined);
@@ -386,7 +396,7 @@ const store = new Vuex.Store({
                 //aggiungo i poi all'itinerario
                 itinerario.poi = poiInItinerario;
 
-                var poiGroupedByArea = itinerario.poi.reduce(function (r, a) {
+                var poiGroupedByArea = poiInItinerario.reduce(function (r, a) {
                     console.log("SONO QUA");
                     console.log(a);
                     r[a['areaDiAppartenenza'][0]['display_title']] = r[a['areaDiAppartenenza'][0]['display_title']] || [];

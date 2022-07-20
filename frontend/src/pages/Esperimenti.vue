@@ -40,6 +40,9 @@ import esperimento from "../components/customComponents/esperimento";
 import store from "../store";
 import $ from "jquery";
 
+import { config } from "../utils/config";
+
+
 const Common = require("@/Common.vue").default;
 
 export default {
@@ -99,7 +102,7 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 130, (res) => {
+    Common.getElemsByClass(this, config.omekaIDattivita, (res) => {
       store.state.esperimenti = res.body;
       self.allLoaded = true;
     });

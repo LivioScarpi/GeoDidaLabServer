@@ -101,6 +101,7 @@ import store from "../store";
 import Vuex from "vuex";
 import { Button } from "element-ui";
 import router from "../router";
+import { config } from "../utils/config";
 
 import {
   Checkbox,

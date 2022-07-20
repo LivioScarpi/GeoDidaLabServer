@@ -594,6 +594,7 @@ import svgScuolaSecondariaSecondoGrado from "../components/customComponents/svg/
 import svgUniversita from "../components/customComponents/svg/svgUniversita";
 import svgPerTutti from "../components/customComponents/svg/svgPerTutti";
 import { costMatrixAreas } from "../utils/costMatricesAreas";
+import { config } from "../utils/config";
 
 export default {
   name: "PercorsiNew",
@@ -1095,7 +1096,7 @@ export default {
         /**
      * 121 : class id POI_Pivot
      */
-    Common.getElemsByClass(this, 121, (res) => {
+    Common.getElemsByClass(this, config.omekaIDpoiPIVOT, (res) => {
       store.state.POIpivot = res.body;
       self.isLoadingPOIPivot = false;
       //store.commit('setAllinterestOfPOI');
@@ -1131,7 +1132,7 @@ export default {
     /**
      * 132 : class id geo:Area
      */
-    Common.getElemsByClass(this, 132, (res) => {
+    Common.getElemsByClass(this, config.omekaIDarea, (res) => {
       console.log("HO OTTENUTO TUTTE LE AREE");
       store.state.aree = res.body;
       self.isLoadingAree = false;
@@ -1151,7 +1152,7 @@ export default {
      */
 
     //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
-    Common.getElemsByClass(this, 130, (res) => {
+    Common.getElemsByClass(this, config.omekaIDattivita, (res) => {
       store.state.esperimenti = res.body;
       //TODO: remove me
       //console.log(res.body);
@@ -1168,7 +1169,7 @@ export default {
     });
 
     //chiedo i livelli di difficoltà
-    Common.getElemsByClass(this, 129, (res) => {
+    Common.getElemsByClass(this, config.omekaIDlivelliDifficolta, (res) => {
       store.state.difficultyLevels = res.body;
 
       //TODO: remove me
@@ -1177,7 +1178,7 @@ export default {
     });
 
     //chiedo gli interessi
-    Common.getElemsByClass(this, 128, (res) => {
+    Common.getElemsByClass(this, config.omekaIDinteressi, (res) => {
       store.state.interestsObject = res.body;
 
       //TODO: remove me
@@ -2727,6 +2728,9 @@ export default {
           this.percent < 100 &&
           !(timeCheck <= this.$store.state.timeAvailable.milliseconds)
         ) {
+          console.log("TIME CHECK: " + timeCheck);
+          console.log("TIME AV MILL: " + this.$store.state.timeAvailable.milliseconds);
+
           alert(
             "Rimuovere qualche attività per poter selezionare quest'ultima."
           );

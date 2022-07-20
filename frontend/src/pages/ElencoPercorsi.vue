@@ -154,6 +154,8 @@ import $ from "jquery";
 
 import Itinerario from "../components/customComponents/Itinerario.vue";
 import { Button } from "element-ui";
+import { config } from "../utils/config";
+
 
 import {
   Checkbox,
@@ -213,7 +215,7 @@ export default {
     /**
      * 121 : class id POI_Pivot
      */
-    Common.getElemsByClass(self, 121, (res) => {
+    Common.getElemsByClass(self, config.omekaIDpoiPIVOT, (res) => {
       store.state.POIpivot = res.body;
 
       //store.commit('setAllinterestOfPOI');
@@ -252,7 +254,7 @@ export default {
       });
 
       //chiedo gli esperimenti perchè magari non sono mai andato nella pagina dedicata a loro prima d'ora, ma mi servono qua
-      Common.getElemsByClass(self, 130, (res) => {
+      Common.getElemsByClass(self, config.omekaIDattivita, (res) => {
         store.state.esperimenti = res.body;
         //TODO: remove me
         //console.log(res.body);
@@ -272,7 +274,7 @@ export default {
       /**
        * 132 : class id geo:Area
        */
-      Common.getElemsByClass(self, 132, (res) => {
+      Common.getElemsByClass(self, config.omekaIDarea, (res) => {
         console.log("HO OTTENUTO TUTTE LE AREE");
         store.state.aree = res.body;
         self.isLoadingAree = false;
@@ -287,14 +289,14 @@ export default {
 
         console.log("chiedo gli itinerari");
         //chiedo gli itinerari
-        Common.getElemsByClass(self, 117, (res) => {
+        Common.getElemsByClass(self, config.omekaIDitinerario, (res) => {
           store.state.itinerari = res.body;
           console.log(store.state.itinerari);
 
           //chiedo i POI
           console.log("chiedo i POI");
 
-          Common.getElemsByClass(self, 120, (res) => {
+          Common.getElemsByClass(self, config.omekaIDpoi, (res) => {
             store.state.POI = res.body;
             console.log(store.state.POI);
 

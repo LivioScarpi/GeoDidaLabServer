@@ -44,6 +44,7 @@ import Vuex from "vuex";
 import router from "../router";
 import ItinerarioVROOM from "../components/customComponents/ItinerarioVROOM.vue";
 const Common = require("@/Common.vue").default;
+import { config } from "../utils/config";
 
 export default {
   name: "PercorsoVROOM",

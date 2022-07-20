@@ -1018,6 +1018,7 @@ import router from "../router";
 const Common = require("@/Common.vue").default;
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "leaflet.awesome-markers";
+import { config } from "../utils/config";
 
 import $ from "jquery";
 import axios from "axios";

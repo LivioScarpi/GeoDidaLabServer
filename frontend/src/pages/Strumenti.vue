@@ -38,6 +38,7 @@
 import strumento from "../components/customComponents/strumento";
 import $ from "jquery";
 import store from "../store";
+import { config } from "../utils/config";
 
 const Common = require("@/Common.vue").default;
 
@@ -86,7 +87,7 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 123, (res) => {
+    Common.getElemsByClass(this, config.omekaIDstrumenti, (res) => {
       store.state.strumenti = res.body;
       self.allLoaded = true;
     });

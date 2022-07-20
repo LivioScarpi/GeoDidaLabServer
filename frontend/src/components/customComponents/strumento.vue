@@ -183,6 +183,9 @@ import { isMobile } from "mobile-device-detect";
 import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
 import "swiper/swiper-bundle.css";
 
+import { config } from "../../utils/config";
+
+
 const Common = require("@/Common.vue").default;
 
 export default {

@@ -281,6 +281,9 @@ import Slide from "vue-ssr-carousel";
 
 import ssrCarouselCss from "vue-ssr-carousel/index.css";
 
+import { config } from "../../utils/config";
+
+
 // import { Carousel, Slide } from "vue-carousel";
 
 import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";

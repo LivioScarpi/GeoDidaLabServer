@@ -131,6 +131,9 @@ import { Button } from "element-ui";
 import router from "../router";
 import $ from "jquery";
 
+import { config } from "../utils/config";
+
+
 import {
   Checkbox,
   Collapse,
@@ -200,12 +203,12 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 124, (res) => {
+    Common.getElemsByClass(this, config.omekaIDtimeline, (res) => {
       store.state.timelines = res.body;
       
     });
 
-    Common.getElemsByClass(this, 127, (res) => {
+    Common.getElemsByClass(this, config.omekaIDeventi, (res) => {
       store.state.events = res.body;
 
       Array.prototype.forEach.call(store.state.events, (i) => {

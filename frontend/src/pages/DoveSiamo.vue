@@ -173,6 +173,9 @@ import VueThreeSixty from "vue-360";
 
 import "vue-360/dist/css/style.css";
 
+
+import { config } from "../utils/config";
+
 Vue.use(VueThreeSixty);
 
 export default {
@@ -225,7 +228,7 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, 134, (res) => {
+    Common.getElemsByClass(this, config.omekaIDluoghi, (res) => {
       self.media = res.body;
       self.allLoaded = true;
     });

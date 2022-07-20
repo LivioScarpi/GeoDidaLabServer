@@ -489,6 +489,7 @@ import "vue2-timepicker/dist/VueTimepicker.css";
 import store from "../store";
 import Vuex from "vuex";
 import router from "../router";
+import { config } from "../utils/config";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -615,7 +616,7 @@ export default {
     /**
      * 121 : class id POI_Pivot
      */
-    Common.getElemsByClass(this, 121, (res) => {
+    Common.getElemsByClass(this, config.omekaIDpoiPIVOT, (res) => {
       store.state.POIpivot = res.body;
       self.isLoadingPOIPivot = false;
       //store.commit('setAllinterestOfPOI');
@@ -650,7 +651,7 @@ export default {
     /**
      * 132 : class id geo:Area
      */
-    Common.getElemsByClass(this, 132, (res) => {
+    Common.getElemsByClass(this, config.omekaIDarea, (res) => {
       console.log("HO OTTENUTO TUTTE LE AREE");
       store.state.aree = res.body;
       self.isLoadingAree = false;

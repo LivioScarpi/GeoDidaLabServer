@@ -584,7 +584,7 @@ import $ from "jquery";
 import TabPane from "../components/Tabs/Tab.vue";
 import Tabs from "../components/Tabs/Tabs.vue";
 import "../utils/costMatrices";
-import { costMatrix } from "../utils/costMatrices";
+//import { costMatrix } from "../utils/costMatrices";
 import KProgress from "k-progress";
 import elencoAttivitaSelezionate from "../components/customComponents/elencoAttivitaSelezionate";
 import svgScuolaInfanzia from "../components/customComponents/svg/svgScuolaInfanzia";
@@ -593,7 +593,7 @@ import svgScuolaSecondariaPrimoGrado from "../components/customComponents/svg/sv
 import svgScuolaSecondariaSecondoGrado from "../components/customComponents/svg/svgScuolaSecondariaSecondoGrado";
 import svgUniversita from "../components/customComponents/svg/svgUniversita";
 import svgPerTutti from "../components/customComponents/svg/svgPerTutti";
-import { costMatrixAreas } from "../utils/costMatricesAreas";
+//import { costMatrixAreas } from "../utils/costMatricesAreas";
 import { config } from "../utils/config";
 
 export default {
@@ -1374,8 +1374,8 @@ var self = this;
               ],
               matrices: {
                 car: {
-                  durations: costMatrix,
-                  costs: costMatrix,
+                  durations: store.state.costMatricesTimeBetweenPOI,
+                  costs: store.state.costMatricesTimeBetweenPOI,
                 },
               },
             };

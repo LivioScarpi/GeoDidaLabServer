@@ -73,7 +73,10 @@ const store = new Vuex.Store({
 
         media: {
             mediaEsperimenti: [],
-        }
+        },
+
+        costMatricesTimeBetweenPOI: null,
+        costMatricesTimeBetweenAreas: null,
     },
     mutations: {
         increment(state) {

@@ -11,8 +11,7 @@ var config = {
     omekaIDlivelliDifficolta: 129,
     omekaIDinteressi: 128,
     omekaIDstrumenti: 123,
-
-
+    omekaIDmatriciSpostamenti: 31,
 }
 
 export {config};

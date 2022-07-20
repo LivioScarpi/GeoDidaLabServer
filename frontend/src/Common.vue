@@ -55,6 +55,25 @@ export default {
     }
   },
 
+    getElemsByClassNoCache: function (vueObj, id, callback, errorCallback = this.defaultError) {
+    var url = this.baseUrl_itemsOfClass + id
+    // if (vueObj.$store.getters.getCached[url] !== undefined) {
+    //   callback(vueObj.$store.getters.getCached[url])
+    // } else {
+      vueObj.$http.get(url).then(
+          response => {
+            //vueObj.$store.commit('addCachedUrl', [url, response]);
+            console.log("PRIMA DI CALLBACK");
+            callback(response);
+
+          },
+          response => {
+            errorCallback(vueObj, response);
+          }
+      );
+    //}
+  },
+
 
   /**
    * Gets an item given its id.

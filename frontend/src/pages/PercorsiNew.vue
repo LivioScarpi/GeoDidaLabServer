@@ -1,251 +1,253 @@
 <template>
   <div>
-    <div class="row mt-2">
-      <div class="col-12">
-        <i class="bi bi-arrow-left ml-3" style="font-size: 2rem; color: black; cursor: pointer"
-          v-on:click="goBack()"></i>
-        <h4 class="text-center mt-0">
-          <b>{{ stepTitle[currentStep].pageTitle }}</b>
-        </h4>
+    <div v-if="costMatricesLoaded">
+      <div class="row mt-2">
+        <div class="col-12">
+          <i class="bi bi-arrow-left ml-3" style="font-size: 2rem; color: black; cursor: pointer"
+            v-on:click="goBack()"></i>
+          <h4 class="text-center mt-0">
+            <b>{{ stepTitle[currentStep].pageTitle }}</b>
+          </h4>
+        </div>
       </div>
-    </div>
 
-    <div v-if="currentStep === 1">
-      <div class="row px-3 mb-3">
-        <div class="col-2 text-center"></div>
-        <div class="col-8 text-center">
-          <!-- <h6>
+      <div v-if="currentStep === 1">
+        <div class="row px-3 mb-3">
+          <div class="col-2 text-center"></div>
+          <div class="col-8 text-center">
+            <!-- <h6>
             <b>Tempo a disposizione: </b>
             {{ $store.state.timeAvailable.hour }} ore e
             {{ $store.state.timeAvailable.minutes }} minuti
           </h6> -->
-          <!-- {{ this.$store.state.totalTimeSelected }} -->
+            <!-- {{ this.$store.state.totalTimeSelected }} -->
 
-          <!-- {{ this.$store.state.areasWithSomethingSelected }}
+            <!-- {{ this.$store.state.areasWithSomethingSelected }}
           {{ setAreasSelected }}
           {{ timeBetweenAreas }} -->
-          <h6 class="card-title text-center">
-            Il tempo occupato include anche gli spostamenti in auto da un'area
-            all'altra.
-          </h6>
+            <h6 class="card-title text-center">
+              Il tempo occupato include anche gli spostamenti in auto da un'area
+              all'altra.
+            </h6>
 
-          <h6>Tempo a disposizione occupato</h6>
+            <h6>Tempo a disposizione occupato</h6>
 
-          <k-progress :percent="percent" color="#389e0d"></k-progress>
+            <k-progress :percent="percent" color="#389e0d"></k-progress>
+          </div>
+          <div class="col-2 text-center"></div>
         </div>
-        <div class="col-2 text-center"></div>
-      </div>
-      <div class="row my-3">
-        <div class="col-12">
-          <Button v-if="currentStep >= 1" size="large" round type="primary" v-on:click="incrementStep()"
-            class="buttonAlignRight m-2 ">Avanti
-          </Button>
+        <div class="row my-3">
+          <div class="col-12">
+            <Button v-if="currentStep >= 1" size="large" round type="primary" v-on:click="incrementStep()"
+              class="buttonAlignRight m-2 ">Avanti
+            </Button>
 
-          <Button v-if="currentStep >= 1" size="large" type="warning" round v-on:click="goBack()"
-            class="buttonAlignLeft m-2 textButtonColor" style="background-color: #f09b56cc;">Indietro
-          </Button>
+            <Button v-if="currentStep >= 1" size="large" type="warning" round v-on:click="goBack()"
+              class="buttonAlignLeft m-2 textButtonColor" style="background-color: #f09b56cc;">Indietro
+            </Button>
 
 
+          </div>
         </div>
-      </div>
 
-      <div class="row px-3">
-        <div class="col-lg-3 border-right">
-          <h5><b>Menu</b></h5>
-          <div class="row">
-            <div class="col-lg-12">
-              <!--Interessi-->
-              <collapse>
-                <collapse-item title="Interessi" name="interests">
-                  <div class="row">
-                    <div class="col-12">
-                      <Button v-if="selectAllInterests" size="small" type="primary"
-                        v-on:click="selectAllInterestsFunctions()" class="mx-1 blueButton">Deseleziona Tutto
-                      </Button>
-                      <Button v-if="!selectAllInterests" size="small" v-on:click="selectAllInterestsFunctions()"
-                        class="mx-1 blueButton">Seleziona Tutto
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-12">
-                      <div style="max-height: 200px; overflow-y: auto" class="mt-2">
-                        <div class="form-radio text-left px-1">
-                          <n-checkbox v-for="(item, index) in this.$store.state.interests" :key="'interest' + index"
-                            v-model="item.interestSelected" @input="checkInterest(index, item.interestName)">
-                            {{ item.interestName }}
-                          </n-checkbox>
-                        </div>
+        <div class="row px-3">
+          <div class="col-lg-3 border-right">
+            <h5><b>Menu</b></h5>
+            <div class="row">
+              <div class="col-lg-12">
+                <!--Interessi-->
+                <collapse>
+                  <collapse-item title="Interessi" name="interests">
+                    <div class="row">
+                      <div class="col-12">
+                        <Button v-if="selectAllInterests" size="small" type="primary"
+                          v-on:click="selectAllInterestsFunctions()" class="mx-1 blueButton">Deseleziona Tutto
+                        </Button>
+                        <Button v-if="!selectAllInterests" size="small" v-on:click="selectAllInterestsFunctions()"
+                          class="mx-1 blueButton">Seleziona Tutto
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                </collapse-item>
-              </collapse>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <!--Difficoltà-->
-              <collapse>
-                <collapse-item title="Difficoltà" name="difficultyLevels">
-                  <div class="row">
-                    <div class="col-12">
-                      <Button v-if="selectAllDifficulties" size="small" type="primary"
-                        v-on:click="selectAllDifficultiesFunctions()" class="mx-1 blueButton">Deseleziona Tutto
-                      </Button>
-                      <Button v-if="!selectAllDifficulties" size="small" type="primary"
-                        v-on:click="selectAllDifficultiesFunctions()" class="mx-1 blueButton">Seleziona Tutto
-                      </Button>
-                    </div>
-                  </div>
 
-                  <div class="row">
-                    <div class="col-12">
-                      <div style="max-height: 200px; overflow-y: auto" class="mt-2">
-                        <div class="row">
-                          <div class="form-radio text-left col-12 ml-1">
-                            <n-checkbox v-for="(item, index) in this.$store.state
-                            .expertiseLevels" :key="'difficulty' + index" v-model="item.expertiseLevelSelected" @input="
-    checkDifficulty(index, item.expertiseLevelName)
-  ">
-                              <div class="row">
-                                <div class="col-12">
-                                  {{ item.expertiseLevelName }}
-                                  <!--(-->
-                                  <svgScuolaInfanzia v-if="
-                                    item.expertiseLevelName ===
-                                    'Scuola dell\'Infanzia'
-                                  " />
-                                  <svgScuolaPrimaria v-if="
-                                    item.expertiseLevelName ===
-                                    'Scuola Primaria'
-                                  " />
-                                  <svgScuolaSecondariaPrimoGrado v-if="
-                                    item.expertiseLevelName ===
-                                    'Scuola Secondaria di Primo Grado'
-                                  " />
-                                  <svgScuolaSecondariaSecondoGrado v-if="
-                                    item.expertiseLevelName ===
-                                    'Scuola Secondaria di Secondo Grado'
-                                  " />
-                                  <svgUniversita v-if="
-                                    item.expertiseLevelName === 'Università'
-                                  " />
-                                  <svgPerTutti v-if="
-                                    item.expertiseLevelName === 'Per Tutti'
-                                  " />
-                                </div>
-                              </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div style="max-height: 200px; overflow-y: auto" class="mt-2">
+                          <div class="form-radio text-left px-1">
+                            <n-checkbox v-for="(item, index) in this.$store.state.interests" :key="'interest' + index"
+                              v-model="item.interestSelected" @input="checkInterest(index, item.interestName)">
+                              {{ item.interestName }}
                             </n-checkbox>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </collapse-item>
-              </collapse>
+                  </collapse-item>
+                </collapse>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <!--Difficoltà-->
+                <collapse>
+                  <collapse-item title="Difficoltà" name="difficultyLevels">
+                    <div class="row">
+                      <div class="col-12">
+                        <Button v-if="selectAllDifficulties" size="small" type="primary"
+                          v-on:click="selectAllDifficultiesFunctions()" class="mx-1 blueButton">Deseleziona Tutto
+                        </Button>
+                        <Button v-if="!selectAllDifficulties" size="small" type="primary"
+                          v-on:click="selectAllDifficultiesFunctions()" class="mx-1 blueButton">Seleziona Tutto
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-12">
+                        <div style="max-height: 200px; overflow-y: auto" class="mt-2">
+                          <div class="row">
+                            <div class="form-radio text-left col-12 ml-1">
+                              <n-checkbox v-for="(item, index) in this.$store.state
+                            .expertiseLevels" :key="'difficulty' + index" v-model="item.expertiseLevelSelected" @input="
+    checkDifficulty(index, item.expertiseLevelName)
+  ">
+                                <div class="row">
+                                  <div class="col-12">
+                                    {{ item.expertiseLevelName }}
+                                    <!--(-->
+                                    <svgScuolaInfanzia v-if="
+                                    item.expertiseLevelName ===
+                                    'Scuola dell\'Infanzia'
+                                  " />
+                                    <svgScuolaPrimaria v-if="
+                                    item.expertiseLevelName ===
+                                    'Scuola Primaria'
+                                  " />
+                                    <svgScuolaSecondariaPrimoGrado v-if="
+                                    item.expertiseLevelName ===
+                                    'Scuola Secondaria di Primo Grado'
+                                  " />
+                                    <svgScuolaSecondariaSecondoGrado v-if="
+                                    item.expertiseLevelName ===
+                                    'Scuola Secondaria di Secondo Grado'
+                                  " />
+                                    <svgUniversita v-if="
+                                    item.expertiseLevelName === 'Università'
+                                  " />
+                                    <svgPerTutti v-if="
+                                    item.expertiseLevelName === 'Per Tutti'
+                                  " />
+                                  </div>
+                                </div>
+                              </n-checkbox>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </collapse-item>
+                </collapse>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <h5 class="mt-0"><b>Attività selezionate</b></h5>
+
+                <elencoAttivitaSelezionate @changeSelection="changeSelection"
+                  @changeSelectionVisitPOI="changeSelectionVisitPOI" />
+
+                <div v-if="someActivitiesSelected" class="mb-4"></div>
+                <div v-else class="mb-4">Nessuna attività selezionata</div>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <h5 class="mt-0"><b>Attività selezionate</b></h5>
 
-              <elencoAttivitaSelezionate @changeSelection="changeSelection"
-                @changeSelectionVisitPOI="changeSelectionVisitPOI" />
-
-              <div v-if="someActivitiesSelected" class="mb-4"></div>
-              <div v-else class="mb-4">Nessuna attività selezionata</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-9">
-          <div class="row">
-            <div class="col-lg-12">
-              <ul class="aree__tagbox mb-2">
-                <li :class="
+          <div class="col-lg-9">
+            <div class="row">
+              <div class="col-lg-12">
+                <ul class="aree__tagbox mb-2">
+                  <li :class="
                   selectedTab === 'ElencoPercorsi'
                     ? 'tag__item__selected'
                     : 'tag__item__unselected'
                 " v-on:click="selectedTab = 'ElencoPercorsi'">
-                  Elenco delle aree e delle attività
-                </li>
-                <li :class="
+                    Elenco delle aree e delle attività
+                  </li>
+                  <li :class="
                   selectedTab === 'Mappa'
                     ? 'tag__item__selected'
                     : 'tag__item__unselected'
                 " v-on:click="selectedTab = 'Mappa'">
-                  Mappa
-                </li>
-              </ul>
-              <div class="row">
-                <div class="col-lg-12" v-if="selectedTab === 'ElencoPercorsi'">
-                  <div class="row mb-5">
-                    <div class="col-12">
-                      <h5 class="mt-0">
-                        <b>Elenco delle aree e delle attività</b>
-                      </h5>
-                      <ul class="aree__tagbox mb-4">
-                        <li :class="
+                    Mappa
+                  </li>
+                </ul>
+                <div class="row">
+                  <div class="col-lg-12" v-if="selectedTab === 'ElencoPercorsi'">
+                    <div class="row mb-5">
+                      <div class="col-12">
+                        <h5 class="mt-0">
+                          <b>Elenco delle aree e delle attività</b>
+                        </h5>
+                        <ul class="aree__tagbox mb-4">
+                          <li :class="
                           selectedArea === area['o:title']
                             ? 'tag__item__selected'
                             : 'tag__item__unselected'
                         " v-for="(area, index) in $store.state.aree" :key="index"
-                          v-on:click="selectedArea = area['o:title']">
-                          {{ area["o:title"] }}
-                        </li>
-                      </ul>
-                      <div>
-                        <div v-if="somePOIVisibleInCurrentArea">
-                          <div v-for="(item, index) in this.filteredPOI" :key="'filteredPOI' + (index + 300)">
-                            <article class="postcard light orange" v-if="
+                            v-on:click="selectedArea = area['o:title']">
+                            {{ area["o:title"] }}
+                          </li>
+                        </ul>
+                        <div>
+                          <div v-if="somePOIVisibleInCurrentArea">
+                            <div v-for="(item, index) in this.filteredPOI" :key="'filteredPOI' + (index + 300)">
+                              <article class="postcard light orange" v-if="
                               selectedArea ===
                               item['geo:appartiene_a_area'][0][
                               'display_title'
                               ] && item.poiVisibleWithFilters
                             ">
-                              <a class="postcard__img_link">
-                                <img v-if="item.media.length > 0" class="postcard__img" :src="
+                                <a class="postcard__img_link">
+                                  <img v-if="item.media.length > 0" class="postcard__img" :src="
                                   item['media'][0]['o:thumbnail_urls'][
                                   'large'
                                   ]
                                 " alt="Image Title" />
-                                <img v-else class="postcard__img" src="@/assets/images/bg3.jpg" alt="Image Title" />
-                              </a>
-                              <div class="postcard__text">
-                                <h1 class="postcard__title red">
-                                  <a>{{
+                                  <img v-else class="postcard__img" src="@/assets/images/bg3.jpg" alt="Image Title" />
+                                </a>
+                                <div class="postcard__text">
+                                  <h1 class="postcard__title red">
+                                    <a>{{
                                       item["geo:Titolo_it"][0]["@value"]
-                                  }}</a>
-                                </h1>
+                                      }}</a>
+                                  </h1>
 
-                                <div class="postcard__bar"></div>
-                                <div class="postcard__preview-txt">
-                                  {{ item["dcterms:description"][0]["@value"] }}
-                                </div>
+                                  <div class="postcard__bar"></div>
+                                  <div class="postcard__preview-txt">
+                                    {{ item["dcterms:description"][0]["@value"] }}
+                                  </div>
 
-                                <h6>
-                                  Interessi:
-                                  <span class="font-weight-normal">{{
+                                  <h6>
+                                    Interessi:
+                                    <span class="font-weight-normal">{{
                                       getInterestList(
-                                        item["geo:ha_interesse"]
+                                      item["geo:ha_interesse"]
                                       ).join(", ")
-                                  }}</span>
-                                </h6>
+                                      }}</span>
+                                  </h6>
 
-                                <ul class="postcard__tagbox">
-                                  <li class="tag__item__title mr-3">
-                                    <i class="bi bi-clock mr-2"></i> Tempo di
-                                    visita:
+                                  <ul class="postcard__tagbox">
+                                    <li class="tag__item__title mr-3">
+                                      <i class="bi bi-clock mr-2"></i> Tempo di
+                                      visita:
 
-                                    <template v-if="item['geo:Durata'] !== undefined">{{ item["geo:Durata"][0]["@value"]
-                                    }}
-                                      minuti
-                                    </template>
-                                    <template v-else>10 minuti </template>
-                                  </li>
-                                  <li :class="
+                                      <template v-if="item['geo:Durata'] !== undefined">{{
+                                        item["geo:Durata"][0]["@value"]
+                                        }}
+                                        minuti
+                                      </template>
+                                      <template v-else>10 minuti </template>
+                                    </li>
+                                    <li :class="
                                     item.visitPOI
                                       ? 'tag__item__selected'
                                       : 'tag__item__selected'
@@ -254,46 +256,46 @@
     item['geo:Titolo_it'][0]['@value']
   )
 ">
-                                    <!-- <i
+                                      <!-- <i
                                       v-if="item.visitPOI"
                                       class="fas fa-check mr-2"
                                     ></i
                                     > -->
-                                    <template v-if="!item.visitPOI">Seleziona la visita del luogo</template>
-                                    <template v-else>Deseleziona la visita del luogo</template>
-                                  </li>
-                                </ul>
-                                <div v-if="item['mis'].length > 0">
-                                  <collapse>
-                                    <collapse-item title="Aggiungi attività" name="1" class="mt-3">
-                                      <div v-if="item['mis'].length > 0">
-                                        <div v-if="
+                                      <template v-if="!item.visitPOI">Seleziona la visita del luogo</template>
+                                      <template v-else>Deseleziona la visita del luogo</template>
+                                    </li>
+                                  </ul>
+                                  <div v-if="item['mis'].length > 0">
+                                    <collapse>
+                                      <collapse-item title="Aggiungi attività" name="1" class="mt-3">
+                                        <div v-if="item['mis'].length > 0">
+                                          <div v-if="
                                           item.poiHasSomeActivitiesVisible
                                         ">
-                                          <div v-for="(it, ind) in item.mis" :key="
+                                            <div v-for="(it, ind) in item.mis" :key="
                                             'filteredPOIactivities' +
                                             (ind + 300)
                                           " class="pl-3">
-                                            <div v-if="
+                                              <div v-if="
                                               it.activityVisibleWithDifficultiesFilters &&
                                               it.activityVisibleWithInterestsFilters
                                             ">
-                                              <div class="
+                                                <div class="
                                                   row
                                                   mt-0
                                                   py-2
                                                   text-center
                                                   align-items-center
                                                 ">
-                                                <div class="col-lg-9 col-9 pl-0">
-                                                  <activitiesOfPOI :it="it" />
-                                                </div>
-                                                <div class="col-lg-3 col-3">
-                                                  <ul class="
+                                                  <div class="col-lg-9 col-9 pl-0">
+                                                    <activitiesOfPOI :it="it" />
+                                                  </div>
+                                                  <div class="col-lg-3 col-3">
+                                                    <ul class="
                                                       activity__tagbox
                                                       float-right
                                                     ">
-                                                    <li v-if="it.selected" class="
+                                                      <li v-if="it.selected" class="
                                                         tag__item__selected
                                                       " v-on:click="
                                                         changeSelection(
@@ -303,9 +305,9 @@
                                                           it['o:title']
                                                         )
                                                       ">
-                                                      Deseleziona
-                                                    </li>
-                                                    <li v-else class="
+                                                        Deseleziona
+                                                      </li>
+                                                      <li v-else class="
                                                         tag__item__selected
                                                       " v-on:click="
                                                         changeSelection(
@@ -315,120 +317,117 @@
                                                           it['o:title']
                                                         )
                                                       ">
-                                                      Seleziona
-                                                    </li>
-                                                  </ul>
-                                                </div>
+                                                        Seleziona
+                                                      </li>
+                                                    </ul>
+                                                  </div>
 
-                                                <hr v-if="
+                                                  <hr v-if="
                                                   ind < item.mis.length - 1
                                                 " style="
                                                     width: 100%;
                                                     text-align: center;
                                                   " class="my-0 py-0" />
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
+                                          <div v-else>
+                                            Nessuna attività disponibile in base
+                                            ai filtri selezionati
+                                          </div>
                                         </div>
                                         <div v-else>
-                                          Nessuna attività disponibile in base
-                                          ai filtri selezionati
+                                          Non ci sono attività disponibili in
+                                          questo luogo
                                         </div>
-                                      </div>
-                                      <div v-else>
-                                        Non ci sono attività disponibili in
-                                        questo luogo
-                                      </div>
-                                    </collapse-item>
-                                  </collapse>
+                                      </collapse-item>
+                                    </collapse>
+                                  </div>
+                                  <div v-else class="my-3">
+                                    Non ci sono attività disponibili in questo
+                                    luogo
+                                  </div>
                                 </div>
-                                <div v-else class="my-3">
-                                  Non ci sono attività disponibili in questo
-                                  luogo
-                                </div>
-                              </div>
-                            </article>
+                              </article>
+                            </div>
                           </div>
-                        </div>
-                        <div v-else-if="this.filteredPOI === null || this.filteredPOI === undefined || filteredPOI.length === 0" class="loader">
+                          <div
+                            v-else-if="this.filteredPOI === null || this.filteredPOI === undefined || filteredPOI.length === 0"
+                            class="loader">
                             <svg class="circular">
-                              <circle
-                                  class="path"
-                                  cx="50"
-                                  cy="50"
-                                  r="20"
-                                  fill="none"
-                                  stroke-width="5"
-                                  stroke-miterlimit="10"
-                              ></circle>
+                              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5"
+                                stroke-miterlimit="10"></circle>
                             </svg>
-                        </div>
-                        <div v-else>
-                          Nessuna attività o luogo corrispondente ai filtri
-                          selezionati nella zona
-                          <b>{{ selectedArea.toUpperCase() }}</b>
+                          </div>
+                          <div v-else>
+                            Nessuna attività o luogo corrispondente ai filtri
+                            selezionati nella zona
+                            <b>{{ selectedArea.toUpperCase() }}</b>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-12" v-else>
-                  <div class="row mb-5">
-                    <div class="col-lg-12">
-                      <h5 class="mt-0">
-                        <b>Mappa</b>
-                      </h5>
-                      <h6 class="mt-0">
-                        Per selezionare punti di interesse e attività apri il tab “Elenco delle aree e delle attività”
-                      </h6>
-                      <div>
-                        <l-map style="height: 700px; border-radius: 10px" :zoom="zoom" :center="centerMap">
-                          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-                          <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
-                            :key="'marker' + index">
-                            <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')"></l-icon>
-                            <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')">
-                            </l-icon>
-                            <l-popup :options="anchorOptions" style="max-width : 250px">
-                              <div class="px-3">
-                                <div class="row">
-                                  <h5>{{ marker.POItitle }}</h5>
-                                </div>
-                                <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
-                                  {{ marker.description }}
-                                </div>
-                                <div class="row mt-3">
-                                  <div class="col-12 text-center ">
-                                    <img v-if="marker.image !== undefined" class="margin-auto"
-                                      style="border-radius: 5px;" :src="
+                  <div class="col-lg-12" v-else>
+                    <div class="row mb-5">
+                      <div class="col-lg-12">
+                        <h5 class="mt-0">
+                          <b>Mappa</b>
+                        </h5>
+                        <h6 class="mt-0">
+                          Per selezionare punti di interesse e attività apri il tab “Elenco delle aree e delle attività”
+                        </h6>
+                        <div>
+                          <l-map style="height: 700px; border-radius: 10px" :zoom="zoom" :center="centerMap">
+                            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+                            <l-marker v-for="(marker, index) in markers" :lat-lng="marker.marker.getLatLng()"
+                              :key="'marker' + index">
+                              <l-icon v-if="marker.poiSelected" :icon-url="require('../icons/selectedPOI.png')">
+                              </l-icon>
+                              <l-icon v-if="!marker.poiSelected" :icon-url="require('../icons/unselectedPOI.png')">
+                              </l-icon>
+                              <l-popup :options="anchorOptions" style="max-width : 250px">
+                                <div class="px-3">
+                                  <div class="row">
+                                    <h5>{{ marker.POItitle }}</h5>
+                                  </div>
+                                  <div class="row text-justify fadeeffect" style="max-height: 100px; overflow:scroll; ">
+                                    {{ marker.description }}
+                                  </div>
+                                  <div class="row mt-3">
+                                    <div class="col-12 text-center ">
+                                      <img v-if="marker.image !== undefined" class="margin-auto"
+                                        style="border-radius: 5px;" :src="
                                         marker.image
                                       " alt="Image Title" />
-                                    <img v-else class="postcard__img" src="@/assets/images/bg3.jpg"
-                                      style="border-radius: 5px;" alt="Image Title" />
+                                      <img v-else class="postcard__img" src="@/assets/images/bg3.jpg"
+                                        style="border-radius: 5px;" alt="Image Title" />
+                                    </div>
                                   </div>
                                 </div>
+                              </l-popup>
+                            </l-marker>
+
+                            <l-circle-marker :lat-lng="circle.center" :radius="circle.radius" :color="circle.color">
+                              <l-popup>Tu sei qui!</l-popup>
+                            </l-circle-marker>
+
+                            <l-control>
+                              <div class="legend">
+                                <h4>Legenda</h4>
+                                <i style="background: #e35747"></i><span>Luogo selezionato</span><br />
+                                <i style="background: #437fc5"></i><span>Luogo non selezionato</span><br />
                               </div>
-                            </l-popup>
-                          </l-marker>
+                            </l-control>
 
-                          <l-circle-marker :lat-lng="circle.center" :radius="circle.radius" :color="circle.color">
-                            <l-popup>Tu sei qui!</l-popup>
-                          </l-circle-marker>
-
-                          <l-control>
-                            <div class="legend">
-                              <h4>Legenda</h4>
-                              <i style="background: #e35747"></i><span>Luogo selezionato</span><br />
-                              <i style="background: #437fc5"></i><span>Luogo non selezionato</span><br />
-                            </div>
-                          </l-control>
-
-                          <!-- <l-geo-json
+                            <!-- <l-geo-json
                             v-for="(geoj, index) in geoJsonArray"
                             :key="index"
                             :geojson="geoj"
                           ></l-geo-json> -->
-                        </l-map>
+                          </l-map>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -437,109 +436,110 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div v-if="!okTimeAvailable" class="col-12 errorMessage fade-in-text text-center">
-          <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+        <div class="row">
+          <div v-if="!okTimeAvailable" class="col-12 errorMessage fade-in-text text-center">
+            <h5><b>Devi inserire una fascia oraria corretta!</b></h5>
+          </div>
         </div>
       </div>
+
+      <modal :show.sync="modals.featureDevelopment" headerClasses="justify-content-center"
+        @close="modals.featureDevelopment = false">
+        <h4 slot="header" class="title title-up text-center">Attenzione!</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Seleziona almeno una delle attività proposte oppure esplora uno
+                  degli itinerari predefiniti!
+                </h6>
+                <Button size="small" type="primary" v-on:click="goToItinerariPredefinitiPage()"
+                  class="mx-1 mt-4">Esplora
+                  itinerari predefiniti
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button size="small" type="danger" v-on:click="modals.featureDevelopment = false" class="mx-1">Chiudi
+          </Button>
+        </template>
+      </modal>
+
+      <modal :show.sync="modals.errorGettingSottoitinerario" headerClasses="justify-content-center"
+        @close="modals.errorGettingSottoitinerario = false">
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Si è verificato un errore nella creazione del tuo itinerario,
+                  riprova più tardi.
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button size="small" type="danger" v-on:click="modals.errorGettingSottoitinerario = false" class="mx-1">Chiudi
+          </Button>
+        </template>
+      </modal>
+
+      <modal :show.sync="modals.loadingVROOMresponse" headerClasses="justify-content-center"
+        @close="modals.loadingVROOMresponse = false">
+        <h4 slot="header" class="title title-up text-center">
+          Caricamento in corso
+        </h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <svg class="circular">
+                  <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10">
+                  </circle>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button size="small" type="danger" v-on:click="modals.loadingVROOMresponse = false" class="mx-1">Chiudi
+          </Button>
+        </template>
+      </modal>
+
+
+      <modal :show.sync="modals.timeExceeded" headerClasses="justify-content-center"
+        @close="modals.timeExceeded = false">
+        <h4 slot="header" class="title title-up text-center">
+          Attenzione!
+        </h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Per poter selezionare questa attività devi avere più tempo a disposizione!
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button size="small" type="danger" v-on:click="modals.timeExceeded = false" class="mx-1">Chiudi
+          </Button>
+        </template>
+      </modal>
     </div>
-
-    <modal :show.sync="modals.featureDevelopment" headerClasses="justify-content-center"
-      @close="modals.featureDevelopment = false">
-      <h4 slot="header" class="title title-up text-center">Attenzione!</h4>
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12 text-center">
-              <h6 class="itineraryCode">
-                Seleziona almeno una delle attività proposte oppure esplora uno
-                degli itinerari predefiniti!
-              </h6>
-              <Button size="small" type="primary" v-on:click="goToItinerariPredefinitiPage()" class="mx-1 mt-4">Esplora
-                itinerari predefiniti
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <template slot="footer">
-        <Button size="small" type="danger" v-on:click="modals.featureDevelopment = false" class="mx-1">Chiudi
-        </Button>
-      </template>
-    </modal>
-
-    <modal :show.sync="modals.errorGettingSottoitinerario" headerClasses="justify-content-center"
-      @close="modals.errorGettingSottoitinerario = false">
-      <h4 slot="header" class="title title-up text-center">Errore!</h4>
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12 text-center">
-              <h6 class="itineraryCode">
-                Si è verificato un errore nella creazione del tuo itinerario,
-                riprova più tardi.
-              </h6>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <template slot="footer">
-        <Button size="small" type="danger" v-on:click="modals.errorGettingSottoitinerario = false" class="mx-1">Chiudi
-        </Button>
-      </template>
-    </modal>
-
-    <modal :show.sync="modals.loadingVROOMresponse" headerClasses="justify-content-center"
-      @close="modals.loadingVROOMresponse = false">
-      <h4 slot="header" class="title title-up text-center">
-        Caricamento in corso
-      </h4>
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12 text-center">
-              <svg class="circular">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10">
-                </circle>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <template slot="footer">
-        <Button size="small" type="danger" v-on:click="modals.loadingVROOMresponse = false" class="mx-1">Chiudi
-        </Button>
-      </template>
-    </modal>
-
-
-    <modal :show.sync="modals.timeExceeded" headerClasses="justify-content-center"
-      @close="modals.timeExceeded = false">
-      <h4 slot="header" class="title title-up text-center">
-        Attenzione!
-      </h4>
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12 text-center">
-              <h6 class="itineraryCode">
-                Per poter selezionare questa attività devi avere più tempo a disposizione! 
-              </h6>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <template slot="footer">
-        <Button size="small" type="danger" v-on:click="modals.timeExceeded = false" class="mx-1">Chiudi
-        </Button>
-      </template>
-    </modal>
   </div>
 </template>
 
@@ -824,6 +824,8 @@ export default {
         },
       ],
 
+      costMatricesLoaded: false,
+
       totalItinerary: [],
 
       anchorOptions: { offset: L.point(0, -30) },
@@ -1020,9 +1022,57 @@ export default {
 
     // eseguo la query per gli strumenti solo la prima volta che apro la pagina degli Strumenti
 
+
+var self = this;
     /**
-     * 121 : class id POI_Pivot
+     * 31 : class id spostamento tra POI o Aree
      */
+    Common.getElemsByClassNoCache(this, config.omekaIDmatriciSpostamenti, (res) => {
+      console.log("HO OTTENUTO LE MATRICI DI SPOSTAMENTO: " + config.omekaIDmatriciSpostamenti);
+      store.state.costMatricesTimeBetweenPOI = res.body;
+      console.log(res.body);
+      Array.prototype.forEach.call(store.state.costMatricesTimeBetweenPOI, (matrix) => {
+        console.log("CCICLO LE MATRICI");
+              if (matrix["o:title"] === "SpostamentiTraPOI") {
+                console.log("ECCOMI QUA");
+                var matrix = matrix["geo:Valore"][0]["@value"];
+                                console.log(matrix);
+
+                var newStr = matrix.replace('\n', '');
+
+                console.log(newStr);
+
+                console.log(JSON.parse(newStr));
+                store.state.costMatricesTimeBetweenPOI = JSON.parse(newStr);
+
+                console.log("MATRIX");
+                                console.log(store.state.costMatricesTimeBetweenPOI);
+
+              } else if (matrix["o:title"] === "SpostamentiTraAree") {
+                console.log("ECCOMI QUA");
+                var matrix = matrix["geo:Valore"][0]["@value"];
+                                console.log(matrix);
+
+                var newStr = matrix.replace('\n', '');
+
+                console.log(newStr);
+
+                console.log(JSON.parse(newStr));
+                store.state.costMatricesTimeBetweenAreas = JSON.parse(newStr);
+
+                console.log("MATRIX");
+                                console.log(store.state.costMatricesTimeBetweenAreas);
+
+              }
+            });
+
+      self.costMatricesLoaded = true;
+      //store.commit('setAllinterestOfPOI');
+      //store.commit("setAreaInPOIPivot");
+
+
+    });
+
 
     console.log("STAMPO IL TEMPO");
     console.log(this.$store.state.timeAvailable);
@@ -2631,10 +2681,10 @@ export default {
             "; TO AREA INDEX: " +
             toAreaIndex
           );
-          console.log(costMatrixAreas[fromAreaIndex][toAreaIndex]);
-          console.log(costMatrixAreas);
+          console.log(store.state.costMatricesTimeBetweenAreas[fromAreaIndex][toAreaIndex]);
+          console.log(store.state.costMatricesTimeBetweenAreas);
 
-          time += costMatrixAreas[fromAreaIndex][toAreaIndex] * 60000; //nella matrice i valori sono espressi in minuti!
+          time += store.state.costMatricesTimeBetweenAreas[fromAreaIndex][toAreaIndex] * 60000; //nella matrice i valori sono espressi in minuti!
         }
         console.log(permutation[k]);
 
@@ -2677,7 +2727,7 @@ export default {
             indexNextArea
           );
 
-          cost += costMatrixAreas[indexStartArea][indexNextArea];
+          cost += store.state.costMatricesTimeBetweenAreas[indexStartArea][indexNextArea];
         }
 
         console.log(

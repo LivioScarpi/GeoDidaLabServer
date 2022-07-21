@@ -972,12 +972,20 @@ export default {
           ) {
             poi.visitPOI = true;
           }
+          // else {
+          //   poi.visitPOI = false;
+          // }
 
           Array.prototype.forEach.call(poi.mis, (activity) => {
             if (actListItem["o:title"] === activity["o:title"]) {
               activity.selected = true;
               poi.poiHasActivitiesSelected = true;
-            }
+            } 
+            // else {
+            //   //TODO capire se funziona bene qua
+            //   activity.selected = false;
+            //   poi.poiHasActivitiesSelected = false;
+            // }
           });
         });
       }
@@ -988,6 +996,7 @@ export default {
       console.log(poi);
 
       if (poi.visitPOI) {
+        
         this.$store.state.totalTimeSelected +=
           parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
 
@@ -2536,6 +2545,9 @@ var self = this;
       console.log(this.bestPath);
       //totalTimeSelected : x = millisecondiTotali : 100
 
+      console.log("PERCENT");
+      console.log(this.$store.state.totalTimeSelected);
+
       var perc =
         (this.$store.state.totalTimeSelected * 100) /
         this.$store.state.timeAvailable.milliseconds;
@@ -2624,6 +2636,9 @@ var self = this;
     bestPath() {
       var bestTime = 9999999999;
       var areas = [...new Set(this.$store.state.areasWithSomethingSelected)];
+
+      console.log("AREAS WIT SOMETHING SELECTED");
+      console.log(this.$store.state.areasWithSomethingSelected);
 
       var permutation = this.permute(areas);
 

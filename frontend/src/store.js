@@ -56,6 +56,9 @@ const store = new Vuex.Store({
 
         loadedActivitiesInPOIPivot: false,
         timeAvailable: null,
+
+        oldTimeAvailable: null, //utile per capire se l'utente diminuisce il tempo che aveva messo a disposizione
+
         itinerarioInCreazione: null,
         totalTimeSelected: 0,
 

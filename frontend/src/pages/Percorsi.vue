@@ -106,7 +106,7 @@
           <div class="row" v-if="enabledRadioCreatePathOrInsertCode === '1'">
             <div class="col-6">
               <h1 class="postcardpercorsi__title orange">
-                Crea un nuovo percorso 
+                Crea un nuovo percorso
               </h1>
               <div v-if="isLarge" class="postcardpercorsi__bar" style="height: 4px"></div>
               <div class="postcardpercorsi__preview-txt mb-3">
@@ -467,6 +467,34 @@
           </Button>
         </template>
       </modal>
+
+      <modal :show.sync="modals.confirmLessTimeAndRecreatePath" headerClasses="justify-content-center"
+        @close="modals.confirmLessTimeAndRecreatePath = false">
+        <h4 slot="header" class="title title-up text-center">Errore!</h4>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h6 class="itineraryCode">
+                  Attenzione!
+                </h6>
+                <p>Il tempo a disposizione inserito è inferiore rispetto a prima, se prosegue perderà l'itinerario
+                  creato.</p>
+                <p>Proseguire?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <template slot="footer">
+          <Button size="small" type="danger" v-on:click="modals.confirmLessTimeAndRecreatePath = false"
+            class="mx-1">Chiudi
+          </Button>
+          <Button size="small" type="primary" v-on:click="initPathAndGoToCreatePath()"
+            class="mx-1">Prosegui
+          </Button>
+        </template>
+      </modal>
     </div>
   </div>
 </template>
@@ -552,6 +580,7 @@ export default {
         insertCodeModal: false,
         itineraryNotReceivedWithError: false,
         itineraryCodeNotValid: false,
+        confirmLessTimeAndRecreatePath: false, // modal che chiede all'utente se è sicuro di voler diminuire il tempo e perdere l'itinerario
       },
 
       pathCodeInserted: "", //variabile usata per contenere il codice del percorso inserito dell'utente
@@ -668,6 +697,45 @@ export default {
     createPath() {
       console.log("createPath");
 
+      if(this.$store.state.oldTimeAvailable !== null && this.oldTimeIsMoreThanNew()) {
+        //alert("Se prosegui l'itinerario che stavi creando andrà perso");
+
+        this.modals.confirmLessTimeAndRecreatePath = true;
+
+        //TODO: mettere un modal per chiedere se proseguire o no!
+      } else {
+        this.goToCreatePath();
+      }
+      
+    },
+
+    oldTimeIsMoreThanNew(){
+      var oldHourToMillis = this.$store.state.oldTimeAvailable.hour * 3600000; //1 ora corrisponde a 3600000
+      var oldMinToMillis = this.$store.state.oldTimeAvailable.minutes * 60000;
+      var oldTimeMillis = oldHourToMillis + oldMinToMillis;
+
+      var newHourToMillis = null; //1 ora corrisponde a 3600000
+      var newMinToMillis = null;
+      var newTimeMillis = null;
+
+      if (this.enabledRadio === "1") {
+        newTimeMillis = 6 * 3600000;
+      } else if (this.enabledRadio === "2") {
+        newTimeMillis = 1 * 3600000;
+      } else if (this.enabledRadio === "3") {
+        newTimeMillis = 12 * 3600000;
+      } else if (this.enabledRadio === "4") {
+        var humanReadable = this.getCustomTime();
+
+        newHourToMillis = humanReadable.hours * 3600000;
+        newMinToMillis = humanReadable.minutes * 60000;
+        newTimeMillis = newHourToMillis + newMinToMillis;
+      }
+
+      return oldTimeMillis > newTimeMillis;
+    },
+
+    goToCreatePath(){
       if (this.enabledRadio === "1") {
         var timeMinutes = 6 * 60; //6 ore in minuti
         var timeAvailable = {
@@ -677,6 +745,7 @@ export default {
         };
 
         this.$store.state.timeAvailable = timeAvailable;
+        this.$store.state.oldTimeAvailable = timeAvailable;
 
         router.push({
           name: "creapercorso",
@@ -690,6 +759,7 @@ export default {
         };
 
         this.$store.state.timeAvailable = timeAvailable;
+        this.$store.state.oldTimeAvailable = timeAvailable;
 
         router.push({
           name: "creapercorso",
@@ -703,12 +773,74 @@ export default {
         };
 
         this.$store.state.timeAvailable = timeAvailable;
+        this.$store.state.oldTimeAvailable = timeAvailable;
 
         router.push({
           name: "creapercorso",
         });
       } else if (this.enabledRadio === "4") {
-        var timeStartHourAndMinutes =
+        var humanReadable = this.getCustomTime();
+
+        var hAvailable = humanReadable.hours;
+        var minAvailable = humanReadable.minutes;
+
+        console.log("hAvailable: " + hAvailable);
+        console.log("minAvailable: " + minAvailable);
+
+        if (hAvailable > 0 || (hAvailable === 0 && minAvailable >= 10)) {
+          this.okTimeAvailable = true;
+
+          var timeMinutes = hAvailable * 60 + minAvailable; //converto l'orario inserito in minuti
+          var timeAvailable = {
+            hour: hAvailable,
+            minutes: minAvailable,
+            milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
+          };
+
+          this.$store.state.timeAvailable = timeAvailable;
+        this.$store.state.oldTimeAvailable = timeAvailable;
+
+          router.push({
+            name: "creapercorso",
+          });
+        } else {
+          this.okTimeAvailable = false;
+        }
+      }
+
+    },
+
+    initPathAndGoToCreatePath(){
+      //SINCRONIZZO I FILTERED POI CON LA LISTA DELLE ATTIVITA SELEZIONATE
+
+      store.state.activitiesSelectedList = [];  //inizializzo la lista di ttività selezionate
+
+
+        Array.prototype.forEach.call(store.state.POIpivot, (poi) => {
+            poi.visitPOI = false;
+
+
+          Array.prototype.forEach.call(poi.mis, (activity) => {
+              activity.selected = false;
+              poi.poiHasActivitiesSelected = false;
+          
+          });
+
+      }
+
+
+    );
+
+    this.$store.state.totalTimeSelected = 0;
+    this.$store.state.areasWithSomethingSelected = [];
+    console.log("this.$store.state.totalTimeSelected");
+    console.log(this.$store.state.totalTimeSelected); 
+
+      this.goToCreatePath();
+    },
+
+    getCustomTime(){
+              var timeStartHourAndMinutes =
           this.startAvailableTimeValue.HH +
           ":" +
           this.startAvailableTimeValue.mm +
@@ -735,33 +867,9 @@ export default {
         var humanReadable = {};
         humanReadable.hours = Math.floor(hDiff);
         humanReadable.minutes = minDiff - 60 * humanReadable.hours;
-        console.log(humanReadable); //{hours: 0, minutes: 30}
+      console.log(humanReadable); //{hours: 0, minutes: 30}
 
-        var hAvailable = humanReadable.hours;
-        var minAvailable = humanReadable.minutes;
-
-        console.log("hAvailable: " + hAvailable);
-        console.log("minAvailable: " + minAvailable);
-
-        if (hAvailable > 0 || (hAvailable === 0 && minAvailable >= 10)) {
-          this.okTimeAvailable = true;
-
-          var timeMinutes = hAvailable * 60 + minAvailable; //converto l'orario inserito in minuti
-          var timeAvailable = {
-            hour: hAvailable,
-            minutes: minAvailable,
-            milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
-          };
-
-          this.$store.state.timeAvailable = timeAvailable;
-
-          router.push({
-            name: "creapercorso",
-          });
-        } else {
-          this.okTimeAvailable = false;
-        }
-      }
+      return humanReadable;
     },
 
     insertPathCode() {

@@ -65,9 +65,9 @@
             <div class="row">
               <div class="container my-3 text-center" :class="isLarge ? '' : 'mx-3'">
                 <h5>Esplora i nostri luoghi a 360 gradi!</h5>
-                <div class="container" :style="isLarge ? 'height: 700px' : 'height: 300px; width: 90%'">
+                <div v-if="panorama !== null" class="container" :style="isLarge ? 'height: 700px' : 'height: 300px; width: 90%'">
                   <Pano
-                    :source="selectedTab === 'Geodidalab' ? 'https://video.360cities.net/mikealbright/01881815_UTAH_SKI_360_2880_compressed-1024x512.jpg' : 'https://cdn.eso.org/images/publicationjpg/aca-dawn-pano2-ext.jpg'">
+                    :source="panorama">
                   </Pano>
                 </div>
               </div>
@@ -102,11 +102,13 @@
                 </div>
               </div> -->
               </div>
-              <div v-else class="collections p-0">
+              <div v-else class="">
                 <div v-for="(item, index) in filteredMedia(place)" :key="index" style="display: inline"
                   class="row mx-auto">
-                  <img style="height: 100%; width: 100%" v-bind:src="item['thumbnail_display_urls']['large']"
+                  <div class="col-12 text-center mb-4">
+                  <img style="width: 90%;" v-bind:src="item['thumbnail_display_urls']['large']"
                     :alt="item['dcterms:description']['@value']" />
+                    </div>
                 </div>
               </div>
             </div>
@@ -228,14 +230,20 @@ export default {
 
     var self = this;
 
-    Common.getElemsByClass(this, config.omekaIDluoghi, (res) => {
+    Common.getElemsByClassNoCache(this, config.omekaIDluoghi, (res) => {
       self.media = res.body;
+      //.filter(media => media["geo:Tipologia"][0]["@value"] === "NORMALE");
       self.allLoaded = true;
+
+      console.log("MEDIA");
+      console.log(self.media);
+
+      this.selectedTab = this.places[0];
     });
   },
 
   mounted(){
-    this.selectedTab = this.places[0];
+    
   },
 
   computed: {
@@ -245,11 +253,22 @@ export default {
     isLarge() {
       return this.windowWidth >= 768;
     },
+    panorama() {
+      var p = this.media.filter(media => media["geo:Tipologia"][0]["@value"] === "PANORAMICA").filter(m => m["o:title"] === this.selectedTab);
+
+      if(p.length > 0){
+return p[0]['thumbnail_display_urls']['large'];
+      } else {
+        return null;
+        //return "https://video.360cities.net/mikealbright/01881815_UTAH_SKI_360_2880_compressed-1024x512.jpg";
+      }
+      
+    }
   },
 
   methods: {
     filteredMedia(place) {
-      return this.media.filter((pl) => pl["o:title"] === place);
+      return this.media.filter(media => media["geo:Tipologia"][0]["@value"] === "NORMALE").filter((pl) => pl["o:title"] === place);
     },
   },
 };

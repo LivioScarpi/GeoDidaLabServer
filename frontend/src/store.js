@@ -16,7 +16,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     plugins: [createPersistedState({
         key: 'somekey',
-        storage: window.localStorage,
+        storage: window.sessionStorage, //localStorage
     })],
     // plugins: [
     //     createPersistedState({

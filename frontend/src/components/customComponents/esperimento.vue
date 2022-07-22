@@ -194,7 +194,7 @@
                   <i class="bi bi-pin-map-fill mr-2"></i>
                 </h6>
               </div>
-              <div class="row mx-1">
+              <div class="row mx-1 mb-2">
                 <h6 class="mr-2">Strumenti usati:</h6>
                 <div v-if="item['geo:usa_strumento'] !== undefined">
                   <template v-for="(strumento, index) in item['geo:usa_strumento']" style="display: inline-block">
@@ -221,6 +221,15 @@
                 >
                   {{ item["geo:usa_strumento"][0]["display_title"] }}
                 </h6> -->
+              </div>
+              <div class="row mx-1 mb-2">
+                <h6 class="mr-2">Tipologia:</h6>
+                <h6 class="font-weight-normal" v-if="item['geo:ha_tipologia_attivita']">
+                  {{ item["geo:ha_tipologia_attivita"][0]["display_title"] }}
+                </h6>
+                <h6 class="font-weight-normal" v-else>
+                  Non disponibile
+                </h6>
               </div>
             </div>
           </div>

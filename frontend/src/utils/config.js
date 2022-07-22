@@ -12,6 +12,9 @@ var config = {
     omekaIDinteressi: 128,
     omekaIDstrumenti: 123,
     omekaIDmatriciSpostamenti: 31,
+    availableTimeMorning: 6, //hours
+    availableTimeAfternoon: 1, //hours
+    availableTimeAllDay: 12, //hours
 }
 
 export {config};

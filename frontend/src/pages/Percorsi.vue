@@ -719,11 +719,11 @@ export default {
       var newTimeMillis = null;
 
       if (this.enabledRadio === "1") {
-        newTimeMillis = 6 * 3600000;
+        newTimeMillis = config.availableTimeMorning * 3600000;
       } else if (this.enabledRadio === "2") {
-        newTimeMillis = 1 * 3600000;
+        newTimeMillis = config.availableTimeAfternoon * 3600000;
       } else if (this.enabledRadio === "3") {
-        newTimeMillis = 12 * 3600000;
+        newTimeMillis = config.availableTimeAllDay * 3600000;
       } else if (this.enabledRadio === "4") {
         var humanReadable = this.getCustomTime();
 
@@ -737,9 +737,9 @@ export default {
 
     goToCreatePath(){
       if (this.enabledRadio === "1") {
-        var timeMinutes = 6 * 60; //6 ore in minuti
+        var timeMinutes = config.availableTimeMorning * 60; //6 ore in minuti
         var timeAvailable = {
-          hour: 6,
+          hour: config.availableTimeMorning,
           minutes: 0,
           milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
         };
@@ -751,9 +751,9 @@ export default {
           name: "creapercorso",
         });
       } else if (this.enabledRadio === "2") {
-        var timeMinutes = 1 * 60; //6 ore in minuti
+        var timeMinutes = config.availableTimeAfternoon * 60; //6 ore in minuti
         var timeAvailable = {
-          hour: 1,
+          hour: config.availableTimeAfternoon,
           minutes: 0,
           milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
         };
@@ -765,9 +765,9 @@ export default {
           name: "creapercorso",
         });
       } else if (this.enabledRadio === "3") {
-        var timeMinutes = 12 * 60; //6 ore in minuti
+        var timeMinutes = config.availableTimeAllDay * 60; //6 ore in minuti
         var timeAvailable = {
-          hour: 12,
+          hour: config.availableTimeAllDay,
           minutes: 0,
           milliseconds: timeMinutes * 60000, //converto i minuti in millisecondi
         };

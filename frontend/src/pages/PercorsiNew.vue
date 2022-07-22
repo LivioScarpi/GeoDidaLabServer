@@ -923,6 +923,11 @@ export default {
         "GeoDidaLab - Ivrea": 2,
         "Anfiteatro Morenico d'Ivrea": 3,
       },
+
+      lastActivityOrVisitSelected: {
+        type: null, // type appartiene a {"Visit", "Activity"}
+        name: null,
+      },
     };
   },
 
@@ -1632,6 +1637,10 @@ var self = this;
               activityTmp.isVisit = true;
 
               store.state.activitiesSelectedList.unshift(activityTmp);
+
+              this.lastActivityOrVisitSelected.type = "Visit";
+              this.lastActivityOrVisitSelected.name = poi["geo:Titolo_it"][0]["@value"];
+
             } else {
               self.modals.timeExceeded = true;
               // alert(
@@ -1639,6 +1648,8 @@ var self = this;
               // );
               this.$set(poi, "visitPOI", !poi.visitPOI);
             }
+
+
           } else {
             this.$store.state.totalTimeSelected -=
               parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //rimuovo la durata della visita del POI
@@ -1713,10 +1724,13 @@ var self = this;
             //   poi["geo:appartiene_a_area"][0]["display_title"]
             // );
           } else {
+            console.log("TEMPO PRIMA -> " + this.$store.state.totalTimeSelected);
+
             this.$store.state.totalTimeSelected -=
               parseInt(poi["geo:Durata"][0]["@value"]) * 60000; //rimuovo la durata della visita del POI
 
             console.log("ELIMINO -> " + poiName);
+            console.log("TEMPO DOPO -> " + this.$store.state.totalTimeSelected);
 
             //TODO: RIMUOVERE QUA
 
@@ -1834,6 +1848,11 @@ var self = this;
 
                 if (activity.selected) {
                   console.log("SIAMO QUA!!!!! : " + activity["o:title"]);
+
+                  this.lastActivityOrVisitSelected.type = "Activity";
+                  this.lastActivityOrVisitSelected.name = activity["o:title"];
+
+
                   if (
                     poi.numberOfActivitiesSelectedInPOI === 0 &&
                     !poi.visitPOI
@@ -2548,6 +2567,13 @@ var self = this;
       console.log("PERCENT");
       console.log(this.$store.state.totalTimeSelected);
 
+      // var totalTimeMillis = 0;
+      // Array.prototype.forEach.call(this.$store.state.activitiesSelectedList, (activity) => {
+      //   var durata = parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+      //   totalTimeMillis += durata;
+      // });
+      
+
       var perc =
         (this.$store.state.totalTimeSelected * 100) /
         this.$store.state.timeAvailable.milliseconds;
@@ -2793,12 +2819,56 @@ var self = this;
           this.percent < 100 &&
           !(timeCheck <= this.$store.state.timeAvailable.milliseconds)
         ) {
+          // se sono qua ho cercato di mettere un'attività / visita in un'area, ma il tempo massimo non basta
+          // bisogna annullare la selezione dell'attività / visita 
+
+      //imposto se il POI ha delle attività selezionate
+      Array.prototype.forEach.call(this.filteredPOI, (poi) => {
+
+        console.log("CICLO QUA NEL FOR");
+
+        if(this.lastActivityOrVisitSelected.type === "Visit" && this.lastActivityOrVisitSelected.name === poi["geo:Titolo_it"][0]["@value"]) {
+          poi.visitPOI = false;
+
+                console.log("SOTTRAGGO TEMPO VISIT: " + this.$store.state.totalTimeSelected);
+               this.$store.state.totalTimeSelected -= parseInt(poi["geo:Durata"][0]["@value"]) * 60000;
+                               console.log("TEMPO SOTTRATTO VISIT: " + this.$store.state.totalTimeSelected);
+        }
+
+        if(this.lastActivityOrVisitSelected.type === "Activity") {
+
+          Array.prototype.forEach.call(poi.mis, (activity) => {
+
+                    console.log("CICLO QUA NEL FOR ACTIVITY");
+
+
+            if(this.lastActivityOrVisitSelected.name === activity["o:title"]) {
+              activity.selected = false;
+
+                console.log("SOTTRAGGO TEMPO ACTIVITY: " + this.$store.state.totalTimeSelected);
+               this.$store.state.totalTimeSelected -=  parseInt(activity["geo:Durata"][0]["@value"]) * 60000;
+                               console.log("TEMPO SOTTRATTO ACTIVITY: " + this.$store.state.totalTimeSelected);
+
+            }
+          });
+        }
+
+      });
+
+console.log(this.$store.state.activitiesSelectedList);
+this.$store.state.activitiesSelectedList.shift();
+
+      
+
+
           console.log("TIME CHECK: " + timeCheck);
           console.log("TIME AV MILL: " + this.$store.state.timeAvailable.milliseconds);
 
           alert(
             "Rimuovere qualche attività per poter selezionare quest'ultima."
           );
+
+          
         }
       }
 
